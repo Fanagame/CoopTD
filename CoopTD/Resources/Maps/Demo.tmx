@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="50" height="50" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="DesertSet" tilewidth="32" tileheight="32" spacing="1" margin="1">
+  <image source="tmw_desert_spacing.png" width="265" height="199"/>
+ </tileset>
+ <layer name="Map" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJzt2LEVgCAMRVE2YAPdwP3Hs6WQo2LyE3Ne8Vr4t4SttbYZdwxZn62sD0VvwYEjWzhyhSNXOHL1R0e/KXrfyuaVKhjUnqt7d4NUDq/9M4/K4WHAsebwMuDAgQMHDhw4cODAgcPOUeX9UcnhYanw16AyzBwWHqXhieVLqv3etmjDW1/0Jhw4soQjVzhyFeU4ATpVFRo=
+  </data>
+ </layer>
+ <objectgroup name="MetaObjects" width="50" height="50">
+  <object name="StartPoint" type="SpawnPoint" x="641" y="1571" width="157" height="27"/>
+  <object name="DestinationPoint" type="DestinationPoint" x="674" y="1" width="91" height="30"/>
+ </objectgroup>
+</map>

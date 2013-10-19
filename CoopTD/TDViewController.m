@@ -7,7 +7,8 @@
 //
 
 #import "TDViewController.h"
-#import "TDMyScene.h"
+#import "TDMainMenuScene.h"
+#import "TDGameScene.h"
 
 @implementation TDViewController
 
@@ -21,7 +22,7 @@
     skView.showsNodeCount = YES;
     
     // Create and configure the scene.
-    SKScene * scene = [TDMyScene sceneWithSize:skView.bounds.size];
+    SKScene * scene = [TDGameScene sceneWithSize:skView.bounds.size];
     scene.scaleMode = SKSceneScaleModeAspectFill;
     
     // Present the scene.

@@ -1,0 +1,3 @@
+[submodule "3rd-party/JSTileMap"]
+	path = 3rd-party/JSTileMap
+	url = https://github.com/slycrel/JSTileMap.git

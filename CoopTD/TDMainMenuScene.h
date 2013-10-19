@@ -8,6 +8,6 @@
 
 #import <SpriteKit/SpriteKit.h>
 
-@interface TDMyScene : SKScene
+@interface TDMainMenuScene : SKScene
 
 @end

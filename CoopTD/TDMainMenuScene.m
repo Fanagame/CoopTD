@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Remy Bardou Corp. All rights reserved.
 //
 
-#import "TDMyScene.h"
+#import "TDMainMenuScene.h"
 
-@implementation TDMyScene
+@implementation TDMainMenuScene
 
 -(id)initWithSize:(CGSize)size {    
     if (self = [super initWithSize:size]) {
@@ -18,11 +18,10 @@
         
         SKLabelNode *myLabel = [SKLabelNode labelNodeWithFontNamed:@"Chalkduster"];
         
-        myLabel.text = @"Hello, World!";
+        myLabel.text = @"-- Coop TD --";
         myLabel.fontSize = 30;
         myLabel.position = CGPointMake(CGRectGetMidX(self.frame),
                                        CGRectGetMidY(self.frame));
-        
         [self addChild:myLabel];
     }
     return self;

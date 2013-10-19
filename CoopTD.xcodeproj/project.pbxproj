@@ -7,6 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4406EF981812425700BA102D /* TDGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 4406EF971812425700BA102D /* TDGameScene.m */; };
+		4406EFA1181242BF00BA102D /* TDMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 4406EFA0181242BF00BA102D /* TDMap.m */; };
+		4406EFA4181242E100BA102D /* PathFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4406EFA3181242E100BA102D /* PathFinder.m */; };
+		4406EFA71812477100BA102D /* TDAssetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4406EFA61812477100BA102D /* TDAssetManager.m */; };
+		4406EFB51812513900BA102D /* JSTileMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 4406EFB41812513900BA102D /* JSTileMap.m */; };
+		4406EFB8181253D200BA102D /* LFCGzipUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 4406EFB7181253D200BA102D /* LFCGzipUtility.m */; };
+		4406EFBB181253F900BA102D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4406EFBA181253F900BA102D /* libz.dylib */; };
+		4406EFBE181257FE00BA102D /* Demo.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 4406EFBD181257FE00BA102D /* Demo.tmx */; };
+		4406EFC718125D6700BA102D /* sample.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 4406EFC618125D6700BA102D /* sample.tmx */; };
+		4406EFCE18125E5B00BA102D /* cobbleset-64_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 4406EFCB18125E5B00BA102D /* cobbleset-64_0.png */; };
+		4406EFCF18125E5B00BA102D /* meta_tiles.png in Resources */ = {isa = PBXBuildFile; fileRef = 4406EFCC18125E5B00BA102D /* meta_tiles.png */; };
+		4406EFD018125E5B00BA102D /* tmw_desert_spacing.png in Resources */ = {isa = PBXBuildFile; fileRef = 4406EFCD18125E5B00BA102D /* tmw_desert_spacing.png */; };
+		4406EFD3181271F900BA102D /* TDUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 4406EFD2181271F900BA102D /* TDUnit.m */; };
 		72D99A741811038C00AB5B9D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D99A731811038C00AB5B9D /* Foundation.framework */; };
 		72D99A761811038C00AB5B9D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D99A751811038C00AB5B9D /* CoreGraphics.framework */; };
 		72D99A781811038C00AB5B9D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D99A771811038C00AB5B9D /* UIKit.framework */; };
@@ -17,7 +30,7 @@
 		72D99A891811038C00AB5B9D /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72D99A871811038C00AB5B9D /* Main_iPhone.storyboard */; };
 		72D99A8C1811038C00AB5B9D /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72D99A8A1811038C00AB5B9D /* Main_iPad.storyboard */; };
 		72D99A8F1811038C00AB5B9D /* TDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 72D99A8E1811038C00AB5B9D /* TDViewController.m */; };
-		72D99A921811038C00AB5B9D /* TDMyScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 72D99A911811038C00AB5B9D /* TDMyScene.m */; };
+		72D99A921811038C00AB5B9D /* TDMainMenuScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 72D99A911811038C00AB5B9D /* TDMainMenuScene.m */; };
 		72D99A941811038C00AB5B9D /* Spaceship.png in Resources */ = {isa = PBXBuildFile; fileRef = 72D99A931811038C00AB5B9D /* Spaceship.png */; };
 		72D99A961811038C00AB5B9D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72D99A951811038C00AB5B9D /* Images.xcassets */; };
 		72D99A9D1811038C00AB5B9D /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D99A9C1811038C00AB5B9D /* XCTest.framework */; };
@@ -38,6 +51,26 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4406EF961812425700BA102D /* TDGameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDGameScene.h; sourceTree = "<group>"; };
+		4406EF971812425700BA102D /* TDGameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDGameScene.m; sourceTree = "<group>"; };
+		4406EF9F181242BF00BA102D /* TDMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDMap.h; sourceTree = "<group>"; };
+		4406EFA0181242BF00BA102D /* TDMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDMap.m; sourceTree = "<group>"; };
+		4406EFA2181242E100BA102D /* PathFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PathFinder.h; sourceTree = "<group>"; };
+		4406EFA3181242E100BA102D /* PathFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PathFinder.m; sourceTree = "<group>"; };
+		4406EFA51812477100BA102D /* TDAssetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAssetManager.h; sourceTree = "<group>"; };
+		4406EFA61812477100BA102D /* TDAssetManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDAssetManager.m; sourceTree = "<group>"; };
+		4406EFB31812513900BA102D /* JSTileMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSTileMap.h; path = "3rd-party/JSTileMap/TMXMapSample/JSTileMap.h"; sourceTree = SOURCE_ROOT; };
+		4406EFB41812513900BA102D /* JSTileMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSTileMap.m; path = "3rd-party/JSTileMap/TMXMapSample/JSTileMap.m"; sourceTree = SOURCE_ROOT; };
+		4406EFB6181253D200BA102D /* LFCGzipUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LFCGzipUtility.h; path = "3rd-party/JSTileMap/LFCGzipUtility.h"; sourceTree = SOURCE_ROOT; };
+		4406EFB7181253D200BA102D /* LFCGzipUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LFCGzipUtility.m; path = "3rd-party/JSTileMap/LFCGzipUtility.m"; sourceTree = SOURCE_ROOT; };
+		4406EFBA181253F900BA102D /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		4406EFBD181257FE00BA102D /* Demo.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Demo.tmx; path = Resources/Maps/Demo.tmx; sourceTree = "<group>"; };
+		4406EFC618125D6700BA102D /* sample.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = sample.tmx; path = Resources/Maps/sample.tmx; sourceTree = "<group>"; };
+		4406EFCB18125E5B00BA102D /* cobbleset-64_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cobbleset-64_0.png"; path = "Resources/Maps/cobbleset-64_0.png"; sourceTree = "<group>"; };
+		4406EFCC18125E5B00BA102D /* meta_tiles.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = meta_tiles.png; path = Resources/Maps/meta_tiles.png; sourceTree = "<group>"; };
+		4406EFCD18125E5B00BA102D /* tmw_desert_spacing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tmw_desert_spacing.png; path = Resources/Maps/tmw_desert_spacing.png; sourceTree = "<group>"; };
+		4406EFD1181271F900BA102D /* TDUnit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDUnit.h; sourceTree = "<group>"; };
+		4406EFD2181271F900BA102D /* TDUnit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDUnit.m; sourceTree = "<group>"; };
 		72D99A701811038B00AB5B9D /* CoopTD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoopTD.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72D99A731811038C00AB5B9D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		72D99A751811038C00AB5B9D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -53,8 +86,8 @@
 		72D99A8B1811038C00AB5B9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		72D99A8D1811038C00AB5B9D /* TDViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TDViewController.h; sourceTree = "<group>"; };
 		72D99A8E1811038C00AB5B9D /* TDViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TDViewController.m; sourceTree = "<group>"; };
-		72D99A901811038C00AB5B9D /* TDMyScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TDMyScene.h; sourceTree = "<group>"; };
-		72D99A911811038C00AB5B9D /* TDMyScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TDMyScene.m; sourceTree = "<group>"; };
+		72D99A901811038C00AB5B9D /* TDMainMenuScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TDMainMenuScene.h; sourceTree = "<group>"; };
+		72D99A911811038C00AB5B9D /* TDMainMenuScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TDMainMenuScene.m; sourceTree = "<group>"; };
 		72D99A931811038C00AB5B9D /* Spaceship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spaceship.png; sourceTree = "<group>"; };
 		72D99A951811038C00AB5B9D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		72D99A9B1811038C00AB5B9D /* CoopTDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoopTDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -69,6 +102,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4406EFBB181253F900BA102D /* libz.dylib in Frameworks */,
 				72D99A761811038C00AB5B9D /* CoreGraphics.framework in Frameworks */,
 				72D99A781811038C00AB5B9D /* UIKit.framework in Frameworks */,
 				72D99A7A1811038C00AB5B9D /* SpriteKit.framework in Frameworks */,
@@ -89,6 +123,115 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4406EF991812426200BA102D /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				72D99A871811038C00AB5B9D /* Main_iPhone.storyboard */,
+				72D99A8A1811038C00AB5B9D /* Main_iPad.storyboard */,
+				72D99A8D1811038C00AB5B9D /* TDViewController.h */,
+				72D99A8E1811038C00AB5B9D /* TDViewController.m */,
+			);
+			name = Root;
+			sourceTree = "<group>";
+		};
+		4406EF9A1812427400BA102D /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				72D99A901811038C00AB5B9D /* TDMainMenuScene.h */,
+				72D99A911811038C00AB5B9D /* TDMainMenuScene.m */,
+				4406EF961812425700BA102D /* TDGameScene.h */,
+				4406EF971812425700BA102D /* TDGameScene.m */,
+			);
+			name = Scenes;
+			sourceTree = "<group>";
+		};
+		4406EF9B1812428600BA102D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4406EFCA18125E5200BA102D /* Tilesets */,
+				4406EFBC181257F000BA102D /* Maps */,
+				4406EF9C1812428D00BA102D /* Images */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		4406EF9C1812428D00BA102D /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				72D99A931811038C00AB5B9D /* Spaceship.png */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+		4406EF9D1812429D00BA102D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4406EF9F181242BF00BA102D /* TDMap.h */,
+				4406EFA0181242BF00BA102D /* TDMap.m */,
+				4406EFD1181271F900BA102D /* TDUnit.h */,
+				4406EFD2181271F900BA102D /* TDUnit.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		4406EF9E181242A400BA102D /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				4406EFB21812510A00BA102D /* Homemade */,
+				4406EFB11812510300BA102D /* External */,
+			);
+			name = Libraries;
+			sourceTree = "<group>";
+		};
+		4406EFB11812510300BA102D /* External */ = {
+			isa = PBXGroup;
+			children = (
+				4406EFB9181253D600BA102D /* JSFileMap */,
+			);
+			name = External;
+			sourceTree = "<group>";
+		};
+		4406EFB21812510A00BA102D /* Homemade */ = {
+			isa = PBXGroup;
+			children = (
+				4406EFA2181242E100BA102D /* PathFinder.h */,
+				4406EFA3181242E100BA102D /* PathFinder.m */,
+				4406EFA51812477100BA102D /* TDAssetManager.h */,
+				4406EFA61812477100BA102D /* TDAssetManager.m */,
+			);
+			name = Homemade;
+			sourceTree = "<group>";
+		};
+		4406EFB9181253D600BA102D /* JSFileMap */ = {
+			isa = PBXGroup;
+			children = (
+				4406EFB6181253D200BA102D /* LFCGzipUtility.h */,
+				4406EFB7181253D200BA102D /* LFCGzipUtility.m */,
+				4406EFB31812513900BA102D /* JSTileMap.h */,
+				4406EFB41812513900BA102D /* JSTileMap.m */,
+			);
+			name = JSFileMap;
+			sourceTree = "<group>";
+		};
+		4406EFBC181257F000BA102D /* Maps */ = {
+			isa = PBXGroup;
+			children = (
+				4406EFC618125D6700BA102D /* sample.tmx */,
+				4406EFBD181257FE00BA102D /* Demo.tmx */,
+			);
+			name = Maps;
+			sourceTree = "<group>";
+		};
+		4406EFCA18125E5200BA102D /* Tilesets */ = {
+			isa = PBXGroup;
+			children = (
+				4406EFCB18125E5B00BA102D /* cobbleset-64_0.png */,
+				4406EFCC18125E5B00BA102D /* meta_tiles.png */,
+				4406EFCD18125E5B00BA102D /* tmw_desert_spacing.png */,
+			);
+			name = Tilesets;
+			sourceTree = "<group>";
+		};
 		72D99A671811038B00AB5B9D = {
 			isa = PBXGroup;
 			children = (
@@ -111,6 +254,7 @@
 		72D99A721811038C00AB5B9D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4406EFBA181253F900BA102D /* libz.dylib */,
 				72D99A731811038C00AB5B9D /* Foundation.framework */,
 				72D99A751811038C00AB5B9D /* CoreGraphics.framework */,
 				72D99A771811038C00AB5B9D /* UIKit.framework */,
@@ -123,15 +267,13 @@
 		72D99A7B1811038C00AB5B9D /* CoopTD */ = {
 			isa = PBXGroup;
 			children = (
+				4406EF9E181242A400BA102D /* Libraries */,
+				4406EF9D1812429D00BA102D /* Model */,
+				4406EF9B1812428600BA102D /* Resources */,
+				4406EF9A1812427400BA102D /* Scenes */,
+				4406EF991812426200BA102D /* Root */,
 				72D99A841811038C00AB5B9D /* TDAppDelegate.h */,
 				72D99A851811038C00AB5B9D /* TDAppDelegate.m */,
-				72D99A871811038C00AB5B9D /* Main_iPhone.storyboard */,
-				72D99A8A1811038C00AB5B9D /* Main_iPad.storyboard */,
-				72D99A8D1811038C00AB5B9D /* TDViewController.h */,
-				72D99A8E1811038C00AB5B9D /* TDViewController.m */,
-				72D99A901811038C00AB5B9D /* TDMyScene.h */,
-				72D99A911811038C00AB5B9D /* TDMyScene.m */,
-				72D99A931811038C00AB5B9D /* Spaceship.png */,
 				72D99A951811038C00AB5B9D /* Images.xcassets */,
 				72D99A7C1811038C00AB5B9D /* Supporting Files */,
 			);
@@ -246,9 +388,14 @@
 			files = (
 				72D99A941811038C00AB5B9D /* Spaceship.png in Resources */,
 				72D99A961811038C00AB5B9D /* Images.xcassets in Resources */,
+				4406EFBE181257FE00BA102D /* Demo.tmx in Resources */,
+				4406EFD018125E5B00BA102D /* tmw_desert_spacing.png in Resources */,
 				72D99A8C1811038C00AB5B9D /* Main_iPad.storyboard in Resources */,
 				72D99A891811038C00AB5B9D /* Main_iPhone.storyboard in Resources */,
+				4406EFCF18125E5B00BA102D /* meta_tiles.png in Resources */,
 				72D99A801811038C00AB5B9D /* InfoPlist.strings in Resources */,
+				4406EFCE18125E5B00BA102D /* cobbleset-64_0.png in Resources */,
+				4406EFC718125D6700BA102D /* sample.tmx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,9 +414,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4406EFA1181242BF00BA102D /* TDMap.m in Sources */,
 				72D99A8F1811038C00AB5B9D /* TDViewController.m in Sources */,
+				4406EF981812425700BA102D /* TDGameScene.m in Sources */,
+				4406EFB51812513900BA102D /* JSTileMap.m in Sources */,
+				4406EFD3181271F900BA102D /* TDUnit.m in Sources */,
 				72D99A861811038C00AB5B9D /* TDAppDelegate.m in Sources */,
-				72D99A921811038C00AB5B9D /* TDMyScene.m in Sources */,
+				4406EFA4181242E100BA102D /* PathFinder.m in Sources */,
+				4406EFB8181253D200BA102D /* LFCGzipUtility.m in Sources */,
+				72D99A921811038C00AB5B9D /* TDMainMenuScene.m in Sources */,
+				4406EFA71812477100BA102D /* TDAssetManager.m in Sources */,
 				72D99A821811038C00AB5B9D /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -491,6 +645,7 @@
 				72D99AAE1811038C00AB5B9D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		72D99AAF1811038C00AB5B9D /* Build configuration list for PBXNativeTarget "CoopTDTests" */ = {
 			isa = XCConfigurationList;
@@ -499,6 +654,7 @@
 				72D99AB11811038C00AB5B9D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
