@@ -77,10 +77,6 @@ CGFloat const kCameraZoomLevel_Min = 0.05;
                 }
             }
         }
-        
-        // Set camera with the right position
-        [self.tileMap setScale:[self bestScaleForDevice]];
-        [self pointCameraToDefaultElement];
     }
 }
 
@@ -198,8 +194,7 @@ CGFloat const kCameraZoomLevel_Min = 0.05;
 }
 
 - (void) setCameraZoomLevel:(CGFloat)newDesiredScale {
-    self.tileMap.xScale = MIN(kCameraZoomLevel_Max, MAX(newDesiredScale, self.bestScaleForDevice));
-    self.tileMap.yScale = self.tileMap.yScale;
+    [self.tileMap setScale:MIN(kCameraZoomLevel_Max, MAX(newDesiredScale, self.bestScaleForDevice))];
 }
 
 - (CGFloat) cameraZoomLevel {
