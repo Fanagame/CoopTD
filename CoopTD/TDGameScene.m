@@ -8,6 +8,8 @@
 
 #import "TDGameScene.h"
 #import "TDMap.h"
+#import "TDUnit.h"
+#import "SKButton.h"
 #import "JSTileMap.h"
 
 @implementation TDGameScene
@@ -17,6 +19,10 @@
     
     if (self) {
         [self loadMapNamed:@"Demo.tmx"];
+        [self loadUnits];
+        
+        // do it last to be on top
+        [self loadHUD];
     }
     
     return self;
@@ -32,11 +38,23 @@
     [self.view addGestureRecognizer:pinchRecognizer];
 }
 
+#pragma mark - Main init functions 
+
+- (void) loadHUD {
+    SKButton *backButton = [[SKButton alloc] initWithImageNamedNormal:@"redButton" selected:@"redButtonActivated"];
+    backButton.position = CGPointMake(75, self.size.height - 30);
+    backButton.size = CGSizeMake(150, 30);
+    [backButton.title setText:@"Reset game"];
+    [backButton.title setFontSize:20.0];
+    [backButton setTouchUpInsideTarget:self action:@selector(didTapReset)];
+    [self addChild:backButton];
+}
+
+- (void) didTapReset {
+    [self.currentMap resetUnits];
+}
+
 - (void) loadMapNamed:(NSString *)mapName {
-    // reset current view
-    self.currentMap.tileMap.position = CGPointZero;
-    [self.currentMap.tileMap setScale:0.5];
-    
     // remove previous map from screen
     [self.currentMap.tileMap removeFromParent];
     
@@ -44,17 +62,20 @@
     self.currentMap = [[TDMap alloc] initMapNamed:mapName];
     
     if (self.currentMap.tileMap) {
-        [self.currentMap.tileMap setScale:0.5];
-        
-        CGRect mapBounds = [self.currentMap.tileMap calculateAccumulatedFrame];
-        self.currentMap.tileMap.position = [self boundedLayerPosition:CGPointMake(-mapBounds.size.width/2.0, -mapBounds.size.height/2.0)];
-        
         [self addChild:self.currentMap.tileMap];
     }
 }
 
+- (void) loadUnits {
+    TDUnit *unit = [[TDUnit alloc] init];
+    [self.currentMap addUnit:unit];
+}
+
+#pragma mark - Game Logic
+
 -(void)update:(CFTimeInterval)currentTime {
     /* Called before each frame is rendered */
+    [self.currentMap update:currentTime];
 }
 
 #pragma mark - Helper methods
@@ -87,31 +108,16 @@
     [pan setTranslation:CGPointZero inView:pan.view];
 }
 
-//TODO: fix this, it's not working atm
+//TODO: figure out a clean way to limit the zoom by the map limits and also make the zoom centered on fixed position
 - (void) handlePinch:(UIPinchGestureRecognizer *)pinch {
-//    if([pinch state] == UIGestureRecognizerStateBegan) {
-//        // Reset the last scale, necessary if there are multiple objects with different scales
-//        _lastScale = [pinch scale];
-//    }
-//    
-//    if ([pinch state] == UIGestureRecognizerStateBegan ||
-//        [pinch state] == UIGestureRecognizerStateChanged) {
-//        
-//        CGFloat currentScale = self.currentMap.tileMap.xScale;
-//        
-//        // Constants to adjust the max/min values of zoom
-////        const CGFloat kMaxScale = 2.0;
-////        const CGFloat kMinScale = 0.5;
-//        const CGFloat kSpeed = 0.75;
-//
-//        CGFloat newScale = 1 -  (_lastScale - [pinch scale]) * (kSpeed);
-////        newScale = MIN(newScale, kMaxScale / currentScale);
-////        newScale = MAX(newScale, kMinScale / currentScale);
-//        
-//        [self.currentMap.tileMap setScale:newScale];
-//        
-//        _lastScale = [pinch scale];  // Store the previous scale factor for the next pinch gesture call
-//    }
+    static CGFloat startScale = 1;
+    if (pinch.state == UIGestureRecognizerStateBegan)
+    {
+        startScale = self.currentMap.tileMap.xScale;
+    }
+    CGFloat newScale = startScale * pinch.scale;
+    self.currentMap.tileMap.xScale = MIN(2.0, MAX(newScale, .05));
+    self.currentMap.tileMap.yScale = self.currentMap.tileMap.xScale;
 }
 
 @end

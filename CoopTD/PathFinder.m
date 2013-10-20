@@ -52,6 +52,13 @@
 
 #pragma mark - Public API -
 
+- (void)pathInExplorableWorld:(id<ExplorableWorldDelegate>)world fromA:(CGPoint)pointA toB:(CGPoint)pointB usingDiagonal:(BOOL)useDiagonal onSuccess:(void (^)(NSArray *path))onSuccess {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        NSArray *path = [self pathInExplorableWorld:world fromA:pointA toB:pointB usingDiagonal:useDiagonal];
+        onSuccess(path);
+    });
+}
+
 - (NSArray *)pathInExplorableWorld:(id<ExplorableWorldDelegate>)world fromA:(CGPoint)pointA toB:(CGPoint)pointB usingDiagonal:(BOOL)useDiagonal {
 	
 	NSArray *path = nil;

@@ -2,6 +2,21 @@
 <map version="1.0" orientation="orthogonal" width="50" height="50" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="DesertSet" tilewidth="32" tileheight="32" spacing="1" margin="1">
   <image source="tmw_desert_spacing.png" width="265" height="199"/>
+  <tile id="29">
+   <properties>
+    <property name="Constructable" value="YES"/>
+    <property name="Walkable" value="NO"/>
+   </properties>
+  </tile>
+  <tile id="30">
+   <properties>
+    <property name="Constructable" value="YES"/>
+    <property name="Walkable" value="NO"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="49" name="Walkability" tilewidth="32" tileheight="32" spacing="1" margin="1">
+  <image source="meta_tiles.png" width="67" height="34"/>
  </tileset>
  <layer name="Map" width="50" height="50">
   <data encoding="base64" compression="zlib">
@@ -12,4 +27,9 @@
   <object name="StartPoint" type="SpawnPoint" x="641" y="1571" width="157" height="27"/>
   <object name="DestinationPoint" type="DestinationPoint" x="674" y="1" width="91" height="30"/>
  </objectgroup>
+ <layer name="MetaLayer" width="50" height="50" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztz7EJwEAQA8Fryf0358jg+DnxIGZAuXYGAABo9Szspo3/t3sSDTrOpBp0nNGhI0GHjgQdOhJ06Eho6ZiFvzr2NTR8Ghr+GhoAALa90AxkTQ==
+  </data>
+ </layer>
 </map>
