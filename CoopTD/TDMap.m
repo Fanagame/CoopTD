@@ -23,7 +23,8 @@ NSString * const kMapLayerName_Meta = @"MetaLayer";
 NSString * const kMapTilePropertyName_Walkable = @"Walkable";
 NSString * const kMapTilePropertyName_Constructable = @"Constructable";
 
-CGFloat const kDefaultScale = 0.25f;
+CGFloat const kCameraZoomLevel_Max = 3.0f;
+CGFloat const kCameraZoomLevel_Min = 0.05;
 
 @interface TDMap()
 
@@ -78,7 +79,7 @@ CGFloat const kDefaultScale = 0.25f;
         }
         
         // Set camera with the right position
-        [self.tileMap setScale:kDefaultScale];
+        [self.tileMap setScale:[self bestScaleForDevice]];
         [self pointCameraToDefaultElement];
     }
 }
@@ -143,6 +144,17 @@ CGFloat const kDefaultScale = 0.25f;
 
 #pragma mark - Camera management
 
+//TODO: cache the value for best performance?
+- (CGFloat) bestScaleForDevice {
+    CGSize winSize = self.tileMap.scene.size;
+    CGSize actualMapSize = CGSizeMake(self.tileMap.mapSize.width * self.tileMap.tileSize.width, self.tileMap.mapSize.height * self.tileMap.tileSize.height);
+    
+    CGFloat bestXScale = winSize.width / actualMapSize.width;
+    CGFloat bestYScale = winSize.height / actualMapSize.height;
+    
+    return (bestXScale > bestYScale ? bestXScale : bestYScale);
+}
+
 - (CGPoint) boundedLayerPosition:(CGPoint)newPos {
     CGSize winSize = self.tileMap.scene.size;
     CGSize mapSize = self.tileMap.calculateAccumulatedFrame.size;
@@ -180,6 +192,20 @@ CGFloat const kDefaultScale = 0.25f;
         [self pointCameraToSpawn:spawn];
 }
 
+- (void) setCameraToDefaultZoomLevel {
+    CGFloat newScale = [self bestScaleForDevice];
+    [self.tileMap setScale:newScale];
+}
+
+- (void) setCameraZoomLevel:(CGFloat)newDesiredScale {
+    self.tileMap.xScale = MIN(kCameraZoomLevel_Max, MAX(newDesiredScale, self.bestScaleForDevice));
+    self.tileMap.yScale = self.tileMap.yScale;
+}
+
+- (CGFloat) cameraZoomLevel {
+    return self.tileMap.xScale;
+}
+
 #pragma mark - Handle internal logic
 
 - (void) update:(CFTimeInterval)currentTime {
@@ -209,7 +235,12 @@ CGFloat const kDefaultScale = 0.25f;
                 unit.status = TDUnitStatus_CalculatingPath;
                 
                 __weak TDMap *weakSelf = self;
-                [[PathFinder sharedInstance] pathInExplorableWorld:self fromA:[self tileCoordinatesForPosition:unit.spriteNode.position] toB:[self tileCoordinatesForPosition:goal.frame.origin] usingDiagonal:YES onSuccess:^(NSArray *path) {
+                
+                CGPoint coordA = [self tileCoordinatesForPosition:unit.spriteNode.position];
+                CGPoint coordB = [self tileCoordinatesForPosition:goal.frame.origin];
+                
+                NSLog(@"Finding way from (%f,%f) to (%f,%f)", coordA.x, coordA.y, coordB.x, coordB.y);
+                [[PathFinder sharedInstance] pathInExplorableWorld:self fromA:coordA toB:coordB usingDiagonal:YES onSuccess:^(NSArray *path) {
                     [weakSelf convertCoordinatesArrayToPositions:path];
                     
                     unit.status = TDUnitStatus_Moving;

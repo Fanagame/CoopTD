@@ -63,6 +63,9 @@
     
     if (self.currentMap.tileMap) {
         [self addChild:self.currentMap.tileMap];
+        
+        [self.currentMap pointCameraToDefaultElement];
+        [self.currentMap setCameraToDefaultZoomLevel];
     }
 }
 
@@ -78,21 +81,6 @@
     [self.currentMap update:currentTime];
 }
 
-#pragma mark - Helper methods
-
-- (CGPoint) boundedLayerPosition:(CGPoint)newPos {
-    CGSize winSize = self.size;
-    CGSize mapSize = self.currentMap.tileMap.calculateAccumulatedFrame.size;
-    
-    CGPoint retval = newPos;
-    retval.x = MIN(retval.x, 0);
-    retval.x = MAX(retval.x, -mapSize.width + winSize.width);
-    retval.y = MIN(retval.y, 0);
-    retval.y = MAX(retval.y, -mapSize.height + winSize.height);
-    
-    return retval;
-}
-
 #pragma mark - UIGestureRecognizer
 
 - (void) handlePan:(UIPanGestureRecognizer *)pan {
@@ -102,22 +90,20 @@
     // calculate the new map position
     CGPoint pos = self.currentMap.tileMap.position;
     CGPoint newPos = CGPointMake(pos.x + trans.x, pos.y - trans.y);
-    self.currentMap.tileMap.position = [self boundedLayerPosition:newPos];
+    [self.currentMap pointCameraToPoint:newPos];
     
     // "reset" the translation
     [pan setTranslation:CGPointZero inView:pan.view];
 }
 
-//TODO: figure out a clean way to limit the zoom by the map limits and also make the zoom centered on fixed position
 - (void) handlePinch:(UIPinchGestureRecognizer *)pinch {
     static CGFloat startScale = 1;
     if (pinch.state == UIGestureRecognizerStateBegan)
     {
-        startScale = self.currentMap.tileMap.xScale;
+        startScale = self.currentMap.cameraZoomLevel;
     }
     CGFloat newScale = startScale * pinch.scale;
-    self.currentMap.tileMap.xScale = MIN(2.0, MAX(newScale, .05));
-    self.currentMap.tileMap.yScale = self.currentMap.tileMap.xScale;
+    self.currentMap.cameraZoomLevel = newScale;
 }
 
 @end

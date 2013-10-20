@@ -10,7 +10,7 @@
 #import "PathFinder.h"
 
 @class JSTileMap;
-@class TDUnit;
+@class TDUnit, TDSpawn;
 
 @interface TDMap : NSObject<ExplorableWorldDelegate>
 
@@ -26,6 +26,16 @@
 - (id) initMapNamed:(NSString *)mapName;
 - (void) update:(CFTimeInterval)currentTime;
 
+- (void) pointCameraToDefaultElement;
+- (void) pointCameraToPoint:(CGPoint)position;
+- (void) pointCameraToSpawn:(TDSpawn *)spawn;
+- (void) pointCameraToUnit:(TDUnit *)unit;
+
+- (void) setCameraToDefaultZoomLevel;
+- (void) setCameraZoomLevel:(CGFloat)newDesiredScale;
+- (CGFloat) cameraZoomLevel;
+
+// Methods that should probably be removed/cleaned later
 - (void) addUnit:(TDUnit *)unit;
 - (void) resetUnits;
 
