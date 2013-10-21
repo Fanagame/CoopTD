@@ -10,12 +10,8 @@
 
 @implementation TDUltimateGoal
 
-- (SKSpriteNode *)spriteNode {
-    if (!_spriteNode) {
-        _spriteNode = [[SKSpriteNode alloc] initWithColor:[UIColor greenColor] size:self.frame.size];
-        _spriteNode.position = CGPointMake(self.frame.origin.x + self.frame.size.width * 0.5, self.frame.origin.y + self.frame.size.height * 0.5);
-    }
-    return _spriteNode;
+- (void) setup {
+    self.color = [UIColor greenColor];
 }
 
 @end

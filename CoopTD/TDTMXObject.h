@@ -6,13 +6,13 @@
 //  Copyright (c) 2013 Remy Bardou Corp. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "TDMapObject.h"
 
-@interface TDObject : NSObject
+@class TDArtificialIntelligence;
 
-@property (nonatomic, assign) CGRect frame;
-@property (nonatomic, assign, readonly) CGPoint position;
+@interface TDTMXObject : TDMapObject
 
 - (id)initWithDictionary:(NSDictionary *)dictionary;
+- (void)setup;
 
 @end

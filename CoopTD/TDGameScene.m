@@ -21,8 +21,8 @@
         [self loadMapNamed:@"Demo.tmx"];
         [self loadUnits];
         
-        // do it last to be on top
         [self loadHUD];
+        [self loadDebug];
     }
     
     return self;
@@ -38,9 +38,23 @@
     [self.view addGestureRecognizer:pinchRecognizer];
 }
 
+- (void) didSimulatePhysics {
+    SKNode *camera = [self childNodeWithName:@"//camera"];
+    
+    [self centerOnNode:camera];
+}
+
+- (void) centerOnNode: (SKNode *) node
+{
+    CGPoint cameraPositionInScene = [node.scene convertPoint:node.position fromNode:node.parent];
+    node.parent.position = CGPointMake(node.parent.position.x - cameraPositionInScene.x, node.parent.position.y - cameraPositionInScene.y);
+}
+
 #pragma mark - Main init functions 
 
 - (void) loadHUD {
+    self.hudNode = [SKNode node];
+    
     SKButton *backButton = [[SKButton alloc] initWithImageNamedNormal:@"redButton" selected:@"redButtonActivated"];
     backButton.position = CGPointMake(75, self.size.height - 30);
     backButton.size = CGSizeMake(150, 30);
@@ -48,62 +62,92 @@
     [backButton.title setFontSize:20.0];
     [backButton setTouchUpInsideTarget:self action:@selector(didTapReset)];
     [self addChild:backButton];
+    
+    backButton = [[SKButton alloc] initWithImageNamedNormal:@"redButton" selected:@"redButtonActivated"];
+    backButton.position = CGPointMake(75, 100);
+    backButton.size = CGSizeMake(150, 30);
+    [backButton.title setText:@"Zoom on unit"];
+    [backButton.title setFontSize:20.0];
+    [backButton setTouchUpInsideTarget:self action:@selector(didTapZoom)];
+    [self addChild:backButton];
+}
+
+- (void) loadDebug {
+    self.debugNode = [SKNode node];
 }
 
 - (void) didTapReset {
-    [self.currentMap resetUnits];
+    [self.world resetUnits];
+}
+
+- (void) didTapZoom {
+    [self.world pointCameraToUnit:self.world.units[0]];
 }
 
 - (void) loadMapNamed:(NSString *)mapName {
     // remove previous map from screen
-    [self.currentMap.tileMap removeFromParent];
+    [self.world.tileMap removeFromParent];
     
     // load the new one
-    self.currentMap = [[TDMap alloc] initMapNamed:mapName];
+    self.world = [[TDMap alloc] initMapNamed:mapName];
     
-    if (self.currentMap.tileMap) {
-        [self addChild:self.currentMap.tileMap];
+    if (self.world.tileMap) {
+        [self addChild:self.world.tileMap];
         
-        [self.currentMap pointCameraToDefaultElement];
-        [self.currentMap setCameraToDefaultZoomLevel];
+//        [self.world pointCameraToDefaultElement];
+//        [self.world setCameraToDefaultZoomLevel];
+        
+        // new camera
+        SKNode *camera = [SKNode node];
+        camera.name = @"camera";
+        [self.world.tileMap addChild:camera];
     }
 }
 
 - (void) loadUnits {
     TDUnit *unit = [[TDUnit alloc] init];
-    [self.currentMap addUnit:unit];
+    [self.world addUnit:unit];
 }
 
 #pragma mark - Game Logic
 
 -(void)update:(CFTimeInterval)currentTime {
     /* Called before each frame is rendered */
-    [self.currentMap update:currentTime];
+    [self.world update:currentTime];
 }
 
 #pragma mark - UIGestureRecognizer
 
 - (void) handlePan:(UIPanGestureRecognizer *)pan {
+    // get the camera
+    SKNode *camera = [self childNodeWithName:@"//camera"];
+    
     // get the translation info
     CGPoint trans = [pan translationInView:pan.view];
     
     // calculate the new map position
-    CGPoint pos = self.currentMap.tileMap.position;
-    CGPoint newPos = CGPointMake(pos.x + trans.x, pos.y - trans.y);
-    [self.currentMap pointCameraToPoint:newPos];
+    CGPoint pos = camera.position;
+    CGPoint newPos = CGPointMake(pos.x - trans.x, pos.y + trans.y);
+//    [self.world pointCameraToPoint:newPos];
+    camera.position = newPos;
     
     // "reset" the translation
     [pan setTranslation:CGPointZero inView:pan.view];
 }
 
 - (void) handlePinch:(UIPinchGestureRecognizer *)pinch {
+    SKNode *camera = [self childNodeWithName:@"//camera"];
+    
     static CGFloat startScale = 1;
     if (pinch.state == UIGestureRecognizerStateBegan)
     {
-        startScale = self.currentMap.cameraZoomLevel;
+//        startScale = self.world.cameraZoomLevel;
+        startScale = camera.xScale;
     }
     CGFloat newScale = startScale * pinch.scale;
-    self.currentMap.cameraZoomLevel = newScale;
+//    self.world.cameraZoomLevel = newScale;
+    camera.xScale = newScale;
+    camera.yScale = newScale;
 }
 
 @end

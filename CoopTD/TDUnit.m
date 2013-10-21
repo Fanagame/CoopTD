@@ -8,6 +8,7 @@
 
 #import "TDUnit.h"
 #import "PathFinder.h"
+#import "TDBaseUnitAI.h"
 
 CGFloat const kUnitMovingSpeed = 0.3f;
 
@@ -20,34 +21,42 @@ CGFloat const kUnitMovingSpeed = 0.3f;
 @implementation TDUnit
 
 - (id) init {
-    self = [super init];
+    self = [super initWithImageNamed:@"pikachu-32"];
     
     if (self) {
         self.displayName = @"Pikachu";
+        self.intelligence = [[TDBaseUnitAI alloc] initWithCharacter:self andTarget:nil];
     }
     
     return self;
 }
 
-- (SKSpriteNode *)spriteNode {
-    if (!_spriteNode) {
-        _spriteNode = [[SKSpriteNode alloc] initWithImageNamed:@"pikachu-32"];
-    }
-    
-    return _spriteNode;
-}
-
-
 /// @description Change the unit status. Going to standby cancels any of its ongoing actions.
 - (void) setStatus:(TDUnitStatus)status {
     if (status == TDUnitStatus_Standy || status == TDUnitStatus_CalculatingPath) {
         self.path = nil;
-        [self.spriteNode removeAllActions];
+        [self removeAllActions];
     }
     
     _status = status;
 }
 
+- (void) moveTowards:(CGPoint)mapPosition withTimeInterval:(CFTimeInterval)interval {
+    if (self.status != TDUnitStatus_CalculatingPath) {
+        self.status = TDUnitStatus_CalculatingPath;
+        
+        CGPoint selfCoord = [self.gameScene tileCoordinatesForPosition:self.position];
+        CGPoint destCoord = [self.gameScene tileCoordinatesForPosition:mapPosition];
+        
+        __weak TDUnit *weakSelf = self;
+        [[PathFinder sharedInstance] pathInExplorableWorld:self.gameScene fromA:selfCoord toB:destCoord usingDiagonal:YES onSuccess:^(NSArray *path)
+        {
+            [self.gameScene convertCoordinatesArrayToPositionsArray:path];
+            [weakSelf followArrayPath:path];
+            weakSelf.status = TDUnitStatus_Moving;
+        }];
+    }
+}
 
 /// @description Makes a unit follow a path from point A to point B
 - (void) followArrayPath:(NSArray *)path withCompletionHandler:(void (^)())onComplete {
@@ -59,7 +68,7 @@ CGFloat const kUnitMovingSpeed = 0.3f;
         [moveActions addObject:action];
     }
     
-    [self.spriteNode runAction:[SKAction sequence:moveActions] completion:onComplete];
+    [self runAction:[SKAction sequence:moveActions] completion:onComplete];
 }
 
 /// @description Makes a unit follow a path from point A to point B

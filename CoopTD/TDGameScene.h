@@ -14,6 +14,8 @@
     CGFloat _lastScale;
 }
 
-@property (nonatomic, strong) TDMap *currentMap;
+@property (nonatomic, strong) TDMap *world;
+@property (nonatomic, strong) SKNode *hudNode;
+@property (nonatomic, strong) SKNode *debugNode;
 
 @end

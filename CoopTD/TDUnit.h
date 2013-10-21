@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <SpriteKit/SpriteKit.h>
+#import "TDMapObject.h"
 
 typedef enum TDUnitStatus : NSUInteger {
     TDUnitStatus_Standy,
@@ -15,9 +16,7 @@ typedef enum TDUnitStatus : NSUInteger {
     TDUnitStatus_Moving
 } TDUnitStatus;
 
-@interface TDUnit : NSObject
-
-@property (nonatomic, strong) SKSpriteNode *spriteNode;
+@interface TDUnit : TDMapObject
 
 @property (nonatomic, assign) NSInteger unitID;
 @property (nonatomic, strong) NSString *displayName;
@@ -28,6 +27,7 @@ typedef enum TDUnitStatus : NSUInteger {
 @property (nonatomic, assign) TDUnitStatus status;
 @property (nonatomic, strong, readonly) NSArray *path;
 
+- (void) moveTowards:(CGPoint)mapPosition withTimeInterval:(CFTimeInterval)interval;
 - (void) followArrayPath:(NSArray *)path withCompletionHandler:(void (^)())onComplete;
 - (void) followArrayPath:(NSArray *)path;
 

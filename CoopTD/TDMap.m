@@ -70,10 +70,10 @@ CGFloat const kCameraZoomLevel_Min = 0.05;
             for (NSDictionary *object in self.objectsGroup.objects) {
                 if ([object[@"type"] isEqualToString:kMapObjectType_Spawn]) {
                     [self.spawnPoints addObject:[[TDSpawn alloc] initWithDictionary:object]];
-                    [self.tileMap addChild:[self.spawnPoints.lastObject spriteNode]];
+                    [self.tileMap addChild:self.spawnPoints.lastObject];
                 } else if ([object[@"type"] isEqualToString:kMapObjectType_Destination]) {
                     [self.destinationPoints addObject:[[TDUltimateGoal alloc] initWithDictionary:object]];
-                    [self.tileMap addChild:[self.destinationPoints.lastObject spriteNode]];
+                    [self.tileMap addChild:self.destinationPoints.lastObject];
                 }
             }
         }
@@ -85,19 +85,19 @@ CGFloat const kCameraZoomLevel_Min = 0.05;
     
     for (TDUnit *unit in self.units) {
         unit.status = TDUnitStatus_Standy;
-        unit.spriteNode.position = CGPointMake(sp.position.x + 150, sp.position.y + unit.spriteNode.size.height * 0.5);
+        unit.position = CGPointMake(sp.position.x + 150, sp.position.y + unit.size.height * 0.5);
     }
 }
 
 - (void) addUnit:(TDUnit *)unit {
     // Configure the unit (find out where to put it
     TDSpawn *sp = [self nextSpawn];
-    unit.spriteNode.position = CGPointMake(sp.position.x + 150, sp.position.y + unit.spriteNode.size.height * 0.5);
+    unit.position = CGPointMake(sp.position.x + 150, sp.position.y + unit.size.height * 0.5);
 //    unit.spriteNode.position = sp.position;
     
     // Then add it to the map
     [self.units addObject:unit];
-    [self.tileMap addChild:unit.spriteNode];
+    [self.tileMap addChild:unit];
 }
 
 - (TDSpawn *) nextSpawn {
@@ -148,7 +148,7 @@ CGFloat const kCameraZoomLevel_Min = 0.05;
     CGFloat bestXScale = winSize.width / actualMapSize.width;
     CGFloat bestYScale = winSize.height / actualMapSize.height;
     
-    return (bestXScale > bestYScale ? bestXScale : bestYScale);
+    return MAX(bestXScale, bestYScale);
 }
 
 - (CGPoint) boundedLayerPosition:(CGPoint)newPos {
@@ -174,7 +174,8 @@ CGFloat const kCameraZoomLevel_Min = 0.05;
 
 - (void) pointCameraToUnit:(TDUnit *)unit {
     //TODO: make it follow the unit at the same time?
-    [self pointCameraToPoint:unit.spriteNode.position];
+    [self zoomOnObjectWithRect:unit.frame withDesiredSpaceOccupation:0.2]; // 20%
+    //[self pointCameraToPoint:unit.spriteNode.position];
 }
 
 - (void) pointCameraToBuilding:(id)building {
@@ -186,6 +187,32 @@ CGFloat const kCameraZoomLevel_Min = 0.05;
     
     if (spawn)
         [self pointCameraToSpawn:spawn];
+}
+
+- (void) zoomOnObjectWithRect:(CGRect)objectRect withDesiredSpaceOccupation:(CGFloat)spaceOccupationDesired {
+    CGSize winSize = self.tileMap.scene.size;
+    
+    // we want the object to occupy 20% of the screen
+    // 0.2 = desiredSize / winSize
+    
+    CGFloat desiredWidth = winSize.width * spaceOccupationDesired;
+    CGFloat desiredHeight = winSize.height * spaceOccupationDesired;
+    
+    CGFloat bestXScale = winSize.width / desiredWidth;
+    CGFloat bestYScale = winSize.height / desiredHeight;
+    
+    CGFloat newScale = MIN(bestXScale, bestYScale);
+    
+    //
+    // We now have our optimal scale to zoom on that object
+    // Let's zoom on it
+    //
+    
+    [self setCameraZoomLevel:newScale];
+    
+    CGRect r = self.tileMap.calculateAccumulatedFrame;
+    self.tileMap.position = CGPointMake(0, 0);
+//    [self pointCameraToPoint:objectRect.origin];
 }
 
 - (void) setCameraToDefaultZoomLevel {
@@ -209,11 +236,11 @@ CGFloat const kCameraZoomLevel_Min = 0.05;
         
         // Has any unit reached the destination point?
         for (TDUltimateGoal *goal in self.destinationPoints) {
-            if (CGRectIntersectsRect(unit.spriteNode.frame, goal.frame)) {
+            if (CGRectIntersectsRect(unit.frame, goal.frame)) {
                 //TODO: decrease score and all that shit
                 TDSpawn *spawn = [self nextSpawn];
                 if (spawn) {
-                    unit.spriteNode.position = CGPointMake(spawn.position.x + 150, spawn.position.y + unit.spriteNode.size.height * 0.5);;
+                    unit.position = CGPointMake(spawn.position.x + 150, spawn.position.y + unit.size.height * 0.5);;
                     unit.status = TDUnitStatus_Standy;
                 }
             }
@@ -231,7 +258,7 @@ CGFloat const kCameraZoomLevel_Min = 0.05;
                 
                 __weak TDMap *weakSelf = self;
                 
-                CGPoint coordA = [self tileCoordinatesForPosition:unit.spriteNode.position];
+                CGPoint coordA = [self tileCoordinatesForPosition:unit.position];
                 CGPoint coordB = [self tileCoordinatesForPosition:goal.frame.origin];
                 
                 NSLog(@"Finding way from (%f,%f) to (%f,%f)", coordA.x, coordA.y, coordB.x, coordB.y);

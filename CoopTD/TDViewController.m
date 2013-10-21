@@ -9,24 +9,46 @@
 #import "TDViewController.h"
 #import "TDMainMenuScene.h"
 #import "TDGameScene.h"
+#import "TDNewGameScene.h"
 
 @implementation TDViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    
     // Configure the view.
     SKView * skView = (SKView *)self.view;
     skView.showsFPS = YES;
     skView.showsNodeCount = YES;
     
     // Create and configure the scene.
-    SKScene * scene = [TDGameScene sceneWithSize:skView.bounds.size];
-    scene.scaleMode = SKSceneScaleModeAspectFill;
-    
-    // Present the scene.
-    [skView presentScene:scene];
+    [TDNewGameScene loadSceneAssetsWithCompletionHandler:^{
+        [self hideInterface];
+        
+        SKScene * scene = [TDNewGameScene sceneWithSize:skView.bounds.size];
+        scene.scaleMode = SKSceneScaleModeAspectFill;
+        
+        // Present the scene.
+        [skView presentScene:scene];
+    }];
+}
+
+- (void) hideInterface {
+    for (UIView *view in self.view.subviews) {
+        if (![view isKindOfClass:[SKScene class]]) {
+            view.hidden = YES;
+        }
+    }
+}
+
+- (void) showInterface {
+    for (UIView *view in self.view.subviews) {
+        if (![view isKindOfClass:[SKScene class]]) {
+            view.hidden = NO;
+        }
+    }
 }
 
 - (BOOL)shouldAutorotate

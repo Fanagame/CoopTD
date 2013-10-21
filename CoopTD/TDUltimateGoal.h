@@ -7,10 +7,8 @@
 //
 
 #import <SpriteKit/SpriteKit.h>
-#import "TDObject.h"
+#import "TDTMXObject.h"
 
-@interface TDUltimateGoal : TDObject
-
-@property (nonatomic, strong) SKSpriteNode *spriteNode;
+@interface TDUltimateGoal : TDTMXObject
 
 @end

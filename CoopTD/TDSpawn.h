@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import <SpriteKit/SpriteKit.h>
-#import "TDObject.h"
+#import "TDTMXObject.h"
 
-@interface TDSpawn : TDObject
+@interface TDSpawn : TDTMXObject
 
-@property (nonatomic, strong) SKSpriteNode *spriteNode;
+@property (nonatomic, strong) NSMutableArray *units;
+
+- (void) spawnNextUnit;
 
 @end
