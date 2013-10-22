@@ -10,6 +10,12 @@
 #import "TDUnit.h"
 #import "TDSpawn.h"
 
+@interface TDCamera ()
+
+@property (nonatomic, weak) SKNode *trackedElement;
+
+@end
+
 @implementation TDCamera
 
 CGFloat const kCameraZoomLevel_Max = 5.0f;
@@ -36,6 +42,8 @@ static TDCamera *_sharedCamera;
 }
 
 - (CGPoint) boundedLayerPosition:(CGPoint)newPos {
+    return newPos;
+    
     CGSize winSize = self.world.scene.size;
     CGSize mapSize = self.world.calculateAccumulatedFrame.size;
     
@@ -53,32 +61,65 @@ static TDCamera *_sharedCamera;
 }
 
 - (void) moveCameraBy:(CGPoint)trans {
-    trans = CGPointMake(self.world.position.x + trans.x, self.world.position.y - trans.y);
+    [self disableTracking];
     
+    trans = CGPointMake(self.world.position.x + trans.x, self.world.position.y - trans.y);
     self.world.position = [self boundedLayerPosition:trans];
 }
 
 - (void) pointCameraToPoint:(CGPoint)position {
     // center the world on that position
-//    position = CGPointMake(-(position.x) + CGRectGetMidX(self.world.scene.frame),
-//                           -(position.y) + CGRectGetMidY(self.world.scene.frame));
+    CGPoint cameraPositionInScene = [self.world.scene convertPoint:position fromNode:self.world];
+    position = CGPointMake(self.world.position.x - cameraPositionInScene.x, self.world.position.y - cameraPositionInScene.y);
     
     // apply the change while ensuring the position doesnt cause the game to go out of bounds
     self.world.position = [self boundedLayerPosition:position];
 }
 
 - (void) pointCameraToSpawn:(TDSpawn *)spawn {
+    [self disableTracking];
+    
     [self pointCameraToPoint:spawn.position];
 }
 
 - (void) pointCameraToUnit:(TDUnit *)unit {
-    //TODO: make it follow the unit at the same time?
+    [self pointCameraToUnit:unit trackingEnabled:NO];
+}
+
+- (void) pointCameraToUnit:(TDUnit *)unit trackingEnabled:(BOOL)trackingEnabled {
     [self zoomOnObjectWithRect:unit.frame withDesiredSpaceOccupation:0.2]; // 20%
-    //[self pointCameraToPoint:unit.spriteNode.position];
+    [self pointCameraToPoint:unit.position];
+    
+    if (trackingEnabled) {
+        [self enableTrackingForElement:unit];
+    } else {
+        [self disableTracking];
+    }
 }
 
 - (void) pointCameraToBuilding:(id)building {
-    
+    [self disableTracking];
+}
+
+- (void) updateCameraTracking {
+    if (self.trackingEnabled) {
+        [self pointCameraToPoint:self.trackedElement.position];
+    }
+}
+
+- (void) enableTrackingForElement:(SKNode *)node {
+    self.trackedElement = node;
+}
+
+- (void) disableTracking {
+    self.trackedElement = nil;
+}
+
+- (BOOL) trackingEnabled {
+    if (self.trackedElement && self.trackedElement.parent && !self.trackedElement.hidden) {
+        return YES;
+    }
+    return NO;
 }
 
 //TODO: fix and try to keep it centered on the right location when zooming!
@@ -103,14 +144,14 @@ static TDCamera *_sharedCamera;
     
     [self setCameraZoomLevel:newScale];
     
-    CGRect r = self.world.calculateAccumulatedFrame;
-    self.world.position = CGPointMake(0, 0);
+//    CGRect r = self.world.calculateAccumulatedFrame;
+//    self.world.position = CGPointMake(0, 0);
     //    [self pointCameraToPoint:objectRect.origin];
 }
 
 - (void) setCameraToDefaultZoomLevel {
     CGFloat newScale = [self bestScaleForDevice];
-    [self.world setScale:newScale];
+    [self setCameraZoomLevel:newScale];
 }
 
 - (void) setCameraZoomLevel:(CGFloat)newDesiredScale {

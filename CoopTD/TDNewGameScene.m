@@ -11,6 +11,7 @@
 #import "TDSpawn.h"
 #import "TDTiledMap.h"
 #import "TDMapCache.h"
+#import "SKButton.h"
 
 NSString * const kGameSceneMapName = @"Demo";
 
@@ -20,10 +21,11 @@ NSString * const kGameSceneMapName = @"Demo";
     self = [super initWithSize:size];
     
     if (self) {
+        self.anchorPoint = CGPointMake(0.5, 0.5);
         
         // initialize the main layers
         _world = [[SKNode alloc] init];
-        [_world setName:@"world"];
+        _world.name = @"world";
         _layers = [NSMutableArray arrayWithCapacity:kWorldLayerCount];
         for (int i = 0; i < kWorldLayerCount; i++) {
             SKNode *layer = [[SKNode alloc] init];
@@ -43,6 +45,7 @@ NSString * const kGameSceneMapName = @"Demo";
         [[TDCamera sharedCamera] setDelegate:self];
         
         // Center the camera on the hero spawn point.
+        [[TDCamera sharedCamera] setCameraToDefaultZoomLevel];
         [[TDCamera sharedCamera] pointCameraToSpawn:self.defaultSpawnPoint];
     }
     
@@ -100,7 +103,20 @@ NSString * const kGameSceneMapName = @"Demo";
 #pragma mark - HUD and Scores
 
 - (void) buildHUD {
+    _hud = [[SKNode alloc] init];
+    _hud.name = @"hud";
+    [self addChild:_hud];
     
+    SKButton *btn = [[SKButton alloc] initWithImageNamedNormal:@"redButton" selected:@"redButtonActivated"];
+    btn.size = CGSizeMake(150, 50);
+    btn.position = CGPointMake(100, 100);
+    btn.title.text = @"Zoom";
+    [btn setTouchUpInsideTarget:self action:@selector(didTapZoom)];
+    [self.hud addChild:btn];
+}
+
+- (void) didTapZoom {
+    [[TDCamera sharedCamera] pointCameraToUnit:self.targetUnit trackingEnabled:YES];
 }
 
 #pragma mark - TDCameraDelegate
@@ -154,6 +170,7 @@ NSString * const kGameSceneMapName = @"Demo";
 }
 
 - (void)didSimulatePhysics {
+    [[TDCamera sharedCamera] updateCameraTracking];
     return;
     // Move the world relative to the target unit position.
     if (self.targetUnit) {

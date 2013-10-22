@@ -34,8 +34,15 @@
 - (void) pointCameraToPoint:(CGPoint)position;
 - (void) pointCameraToSpawn:(TDSpawn *)spawn;
 - (void) pointCameraToUnit:(TDUnit *)unit;
+- (void) pointCameraToUnit:(TDUnit *)unit trackingEnabled:(BOOL)trackingEnabled;
 - (void) pointCameraToBuilding:(id)building;
 - (void) moveCameraBy:(CGPoint)tran;
+
+#pragma mark - Tracking
+- (void) updateCameraTracking;
+- (void) enableTrackingForElement:(SKNode *)node;
+- (void) disableTracking;
+- (BOOL) trackingEnabled;
 
 #pragma mark - Zoom on something
 - (void) zoomOnObjectWithRect:(CGRect)objectRect withDesiredSpaceOccupation:(CGFloat)spaceOccupationDesired;

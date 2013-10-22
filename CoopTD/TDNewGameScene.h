@@ -33,6 +33,7 @@ typedef void (^TDAssetLoadCompletionHandler)(void);
 @property (nonatomic, strong) SKNode *world;
 @property (nonatomic, strong) NSMutableArray *layers;
 @property (nonatomic, strong) TDTiledMap *backgroundMap;
+@property (nonatomic, strong) SKNode *hud;
 
 @property (nonatomic, assign) CFTimeInterval lastUpdateTimeInterval;
 
