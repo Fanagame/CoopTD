@@ -14,6 +14,10 @@
 
 @property (nonatomic, weak) SKNode *trackedElement;
 
+#pragma mark - Helpers
+- (CGFloat) bestScaleForDevice;
+- (CGPoint) boundedLayerPosition:(CGPoint)newPos;
+
 @end
 
 @implementation TDCamera
@@ -41,21 +45,36 @@ static TDCamera *_sharedCamera;
     return MAX(bestXScale, bestYScale);
 }
 
+
+/// @description ensures that the new position won't make go out of bounds (mapSize wise)
 - (CGPoint) boundedLayerPosition:(CGPoint)newPos {
-    return newPos;
-    
     CGSize winSize = self.world.scene.size;
     CGSize mapSize = self.world.calculateAccumulatedFrame.size;
     
     CGPoint retval = newPos;
+    
+    // let's offset all positions, base on the anchorPoint
+    retval.x += winSize.width * self.world.scene.anchorPoint.x;
+    retval.y += winSize.height * self.world.scene.anchorPoint.y;
+    
+    // Now, let's check if we're out of bounds with the smaller values
     retval.x = MIN(retval.x, 0);
-    retval.x = MAX(retval.x, -mapSize.width + winSize.width);
     retval.y = MIN(retval.y, 0);
+    
+    // Let's do the same check with the bigger values
+    retval.x = MAX(retval.x, -mapSize.width + winSize.width);
     retval.y = MAX(retval.y, -mapSize.height + winSize.height);
+    
+    // Finally, restore the offset on those values (cause we're dealing with .position, not .frame.origin)
+    retval.x -= winSize.width * self.world.scene.anchorPoint.x;
+    retval.y -= winSize.height * self.world.scene.anchorPoint.y;
     
     return retval;
 }
 
+#pragma mark - Handle camera position, move it around
+
+//TODO: do we really need this exposed?
 - (CGPoint) cameraPosition {
     return self.world.position;
 }
@@ -87,8 +106,7 @@ static TDCamera *_sharedCamera;
 }
 
 - (void) pointCameraToUnit:(TDUnit *)unit trackingEnabled:(BOOL)trackingEnabled {
-    [self zoomOnObjectWithRect:unit.frame withDesiredSpaceOccupation:0.2]; // 20%
-    [self pointCameraToPoint:unit.position];
+    [self zoomOnNode:unit withSizeOnScreenAsPercentage:0.3];
     
     if (trackingEnabled) {
         [self enableTrackingForElement:unit];
@@ -100,6 +118,8 @@ static TDCamera *_sharedCamera;
 - (void) pointCameraToBuilding:(id)building {
     [self disableTracking];
 }
+
+#pragma mark - Node tracking management
 
 - (void) updateCameraTracking {
     if (self.trackingEnabled) {
@@ -122,18 +142,20 @@ static TDCamera *_sharedCamera;
     return NO;
 }
 
-//TODO: fix and try to keep it centered on the right location when zooming!
-- (void) zoomOnObjectWithRect:(CGRect)objectRect withDesiredSpaceOccupation:(CGFloat)spaceOccupationDesired {
+#pragma mark - Zoom management
+
+- (void) zoomOnNode:(SKNode *)node {
+    [self zoomOnNode:node withSizeOnScreenAsPercentage:0.5];
+}
+
+- (void) zoomOnNode:(SKNode *)node withSizeOnScreenAsPercentage:(CGFloat)sizeOnScreen {
     CGSize winSize = self.world.scene.size;
     
-    // we want the object to occupy 20% of the screen
-    // 0.2 = desiredSize / winSize
+    CGFloat desiredWidth = winSize.width * sizeOnScreen;
+    CGFloat desiredHeight = winSize.height * sizeOnScreen;
     
-    CGFloat desiredWidth = winSize.width * spaceOccupationDesired;
-    CGFloat desiredHeight = winSize.height * spaceOccupationDesired;
-    
-    CGFloat bestXScale = winSize.width / desiredWidth;
-    CGFloat bestYScale = winSize.height / desiredHeight;
+    CGFloat bestXScale = desiredWidth / node.calculateAccumulatedFrame.size.width;
+    CGFloat bestYScale = desiredHeight / node.calculateAccumulatedFrame.size.height;
     
     CGFloat newScale = MIN(bestXScale, bestYScale);
     
@@ -143,10 +165,7 @@ static TDCamera *_sharedCamera;
     //
     
     [self setCameraZoomLevel:newScale];
-    
-//    CGRect r = self.world.calculateAccumulatedFrame;
-//    self.world.position = CGPointMake(0, 0);
-    //    [self pointCameraToPoint:objectRect.origin];
+    [self pointCameraToPoint:node.position];
 }
 
 - (void) setCameraToDefaultZoomLevel {
@@ -154,7 +173,10 @@ static TDCamera *_sharedCamera;
     [self setCameraZoomLevel:newScale];
 }
 
+//TODO: let's try to stay centered on the same point
 - (void) setCameraZoomLevel:(CGFloat)newDesiredScale {
+    CGPoint currentCenterPoint = CGPointMake(0, 0);
+    NSLog(@"Current center: %f %f", currentCenterPoint.x, currentCenterPoint.y);
     [self.world setScale:MIN(kCameraZoomLevel_Max, MAX(newDesiredScale, self.bestScaleForDevice))];
 }
 

@@ -116,7 +116,7 @@ NSString * const kGameSceneMapName = @"Demo";
 }
 
 - (void) didTapZoom {
-    [[TDCamera sharedCamera] pointCameraToUnit:self.targetUnit trackingEnabled:YES];
+    [[TDCamera sharedCamera] pointCameraToUnit:self.targetUnit trackingEnabled:NO];
 }
 
 #pragma mark - TDCameraDelegate

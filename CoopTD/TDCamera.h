@@ -25,10 +25,6 @@
 
 + (instancetype) sharedCamera;
 
-#pragma mark - Helpers
-- (CGFloat) bestScaleForDevice;
-- (CGPoint) boundedLayerPosition:(CGPoint)newPos;
-
 #pragma mark - Point camera somewhere
 - (CGPoint) cameraPosition;
 - (void) pointCameraToPoint:(CGPoint)position;
@@ -45,7 +41,8 @@
 - (BOOL) trackingEnabled;
 
 #pragma mark - Zoom on something
-- (void) zoomOnObjectWithRect:(CGRect)objectRect withDesiredSpaceOccupation:(CGFloat)spaceOccupationDesired;
+- (void) zoomOnNode:(SKNode *)node;
+- (void) zoomOnNode:(SKNode *)node withSizeOnScreenAsPercentage:(CGFloat)sizeOnScreen;
 - (void) setCameraToDefaultZoomLevel;
 - (void) setCameraZoomLevel:(CGFloat)newZoomLevel;
 - (CGFloat) cameraZoomLevel;
