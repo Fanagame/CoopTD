@@ -8,7 +8,6 @@
 
 #import "TDViewController.h"
 #import "TDMainMenuScene.h"
-#import "TDGameScene.h"
 #import "TDNewGameScene.h"
 
 @implementation TDViewController

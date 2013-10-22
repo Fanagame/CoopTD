@@ -8,6 +8,7 @@
 
 #import <SpriteKit/SpriteKit.h>
 #import "PathFinder.h"
+#import "TDCamera.h"
 
 #define kMinTimeInterval (1.0f / 60.0f)
 #define kMinHeroToEdgeDistance 50
@@ -27,7 +28,7 @@ typedef void (^TDAssetLoadCompletionHandler)(void);
 
 @class TDUnit, TDSpawn, TDUltimateGoal, TDTiledMap;
 
-@interface TDNewGameScene : SKScene<SKPhysicsContactDelegate, ExplorableWorldDelegate>
+@interface TDNewGameScene : SKScene<SKPhysicsContactDelegate, ExplorableWorldDelegate, TDCameraDelegate>
 
 @property (nonatomic, strong) SKNode *world;
 @property (nonatomic, strong) NSMutableArray *layers;
@@ -50,9 +51,6 @@ typedef void (^TDAssetLoadCompletionHandler)(void);
 
 /* All sprites in the scene should be added through this method to ensure they are placed in the correct world layer. */
 - (void)addNode:(SKNode *)node atWorldLayer:(TDWorldLayer)layer;
-
-- (void)centerWorldOnSpriteNode:(SKSpriteNode *)character;
-- (void)centerWorldOnPosition:(CGPoint)position;
 
 - (CGPoint) tileCoordinatesForPosition:(CGPoint)position;
 - (CGPoint) tilePositionForCoordinate:(CGPoint)position;

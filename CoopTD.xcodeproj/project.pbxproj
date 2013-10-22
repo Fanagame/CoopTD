@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4406EF981812425700BA102D /* TDGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 4406EF971812425700BA102D /* TDGameScene.m */; };
-		4406EFA1181242BF00BA102D /* TDMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 4406EFA0181242BF00BA102D /* TDMap.m */; };
 		4406EFA4181242E100BA102D /* PathFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4406EFA3181242E100BA102D /* PathFinder.m */; };
 		4406EFA71812477100BA102D /* TDAssetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4406EFA61812477100BA102D /* TDAssetManager.m */; };
 		4406EFB51812513900BA102D /* JSTileMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 4406EFB41812513900BA102D /* JSTileMap.m */; };
@@ -23,6 +21,7 @@
 		4406EFD518135C8200BA102D /* pikachu-32.png in Resources */ = {isa = PBXBuildFile; fileRef = 4406EFD418135C8200BA102D /* pikachu-32.png */; };
 		4406EFD81813614D00BA102D /* TDSpawn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4406EFD71813614D00BA102D /* TDSpawn.m */; };
 		4406EFE31813621F00BA102D /* TDTMXObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4406EFE21813621F00BA102D /* TDTMXObject.m */; };
+		442967F21815937600BD20BA /* TDCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 442967F11815937600BD20BA /* TDCamera.m */; };
 		44A8099E1814D4F7007EB6DA /* TDBaseUnitAI.m in Sources */ = {isa = PBXBuildFile; fileRef = 44A8099D1814D4F7007EB6DA /* TDBaseUnitAI.m */; };
 		44F5470E181370AA000459AB /* TDUltimateGoal.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F5470D181370AA000459AB /* TDUltimateGoal.m */; };
 		44F547121813D047000459AB /* SKButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F547111813D047000459AB /* SKButton.m */; };
@@ -75,10 +74,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4406EF961812425700BA102D /* TDGameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDGameScene.h; sourceTree = "<group>"; };
-		4406EF971812425700BA102D /* TDGameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDGameScene.m; sourceTree = "<group>"; };
-		4406EF9F181242BF00BA102D /* TDMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDMap.h; sourceTree = "<group>"; };
-		4406EFA0181242BF00BA102D /* TDMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDMap.m; sourceTree = "<group>"; };
 		4406EFA2181242E100BA102D /* PathFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PathFinder.h; sourceTree = "<group>"; };
 		4406EFA3181242E100BA102D /* PathFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PathFinder.m; sourceTree = "<group>"; };
 		4406EFA51812477100BA102D /* TDAssetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDAssetManager.h; sourceTree = "<group>"; };
@@ -100,6 +95,8 @@
 		4406EFD71813614D00BA102D /* TDSpawn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSpawn.m; sourceTree = "<group>"; };
 		4406EFE11813621F00BA102D /* TDTMXObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDTMXObject.h; sourceTree = "<group>"; };
 		4406EFE21813621F00BA102D /* TDTMXObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDTMXObject.m; sourceTree = "<group>"; };
+		442967F01815937600BD20BA /* TDCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDCamera.h; sourceTree = "<group>"; };
+		442967F11815937600BD20BA /* TDCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDCamera.m; sourceTree = "<group>"; };
 		44A8099C1814D4F7007EB6DA /* TDBaseUnitAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBaseUnitAI.h; sourceTree = "<group>"; };
 		44A8099D1814D4F7007EB6DA /* TDBaseUnitAI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBaseUnitAI.m; sourceTree = "<group>"; };
 		44F5470C181370AA000459AB /* TDUltimateGoal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDUltimateGoal.h; sourceTree = "<group>"; };
@@ -198,8 +195,6 @@
 			children = (
 				72D99A901811038C00AB5B9D /* TDMainMenuScene.h */,
 				72D99A911811038C00AB5B9D /* TDMainMenuScene.m */,
-				4406EF961812425700BA102D /* TDGameScene.h */,
-				4406EF971812425700BA102D /* TDGameScene.m */,
 				44F5472C1814AA81000459AB /* TDNewGameScene.h */,
 				44F5472D1814AA81000459AB /* TDNewGameScene.m */,
 			);
@@ -229,13 +224,14 @@
 		4406EF9D1812429D00BA102D /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				44F5473F1814C55B000459AB /* __deprecated__ */,
 				44F5473E1814C542000459AB /* Objects from TMX files */,
 				4406EFD91813617400BA102D /* Abstract */,
 				44F547371814C466000459AB /* AI */,
 				44F547361814C44E000459AB /* Enemies */,
 				44F5472F1814B941000459AB /* TDTiledMap.h */,
 				44F547301814B941000459AB /* TDTiledMap.m */,
+				442967F01815937600BD20BA /* TDCamera.h */,
+				442967F11815937600BD20BA /* TDCamera.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -378,15 +374,6 @@
 				44F5470D181370AA000459AB /* TDUltimateGoal.m */,
 			);
 			name = "Objects from TMX files";
-			sourceTree = "<group>";
-		};
-		44F5473F1814C55B000459AB /* __deprecated__ */ = {
-			isa = PBXGroup;
-			children = (
-				4406EF9F181242BF00BA102D /* TDMap.h */,
-				4406EFA0181242BF00BA102D /* TDMap.m */,
-			);
-			name = __deprecated__;
 			sourceTree = "<group>";
 		};
 		72D99A671811038B00AB5B9D = {
@@ -585,12 +572,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4406EFA1181242BF00BA102D /* TDMap.m in Sources */,
 				4406EFD81813614D00BA102D /* TDSpawn.m in Sources */,
 				72D99A8F1811038C00AB5B9D /* TDViewController.m in Sources */,
 				44F547351814BD20000459AB /* TDMapCache.m in Sources */,
-				4406EF981812425700BA102D /* TDGameScene.m in Sources */,
 				44F5473D1814C4D8000459AB /* TDMapObject.m in Sources */,
+				442967F21815937600BD20BA /* TDCamera.m in Sources */,
 				44A8099E1814D4F7007EB6DA /* TDBaseUnitAI.m in Sources */,
 				4406EFE31813621F00BA102D /* TDTMXObject.m in Sources */,
 				44F5472E1814AA81000459AB /* TDNewGameScene.m in Sources */,

@@ -38,9 +38,12 @@ NSString * const kGameSceneMapName = @"Demo";
         [self buildWorld];
         
         
+        // Initialize the camera
+        [[TDCamera sharedCamera] setWorld:_world];
+        [[TDCamera sharedCamera] setDelegate:self];
+        
         // Center the camera on the hero spawn point.
-        CGPoint startPosition = self.defaultSpawnPoint.position;
-        [self centerWorldOnPosition:startPosition];
+        [[TDCamera sharedCamera] pointCameraToSpawn:self.defaultSpawnPoint];
     }
     
     return self;
@@ -100,67 +103,14 @@ NSString * const kGameSceneMapName = @"Demo";
     
 }
 
-#pragma mark - Mapping
-- (void)centerWorldOnPosition:(CGPoint)position {
-    position = CGPointMake(-(position.x) + CGRectGetMidX(self.frame),
-                           -(position.y) + CGRectGetMidY(self.frame));
-    
-    [self pointCameraToPoint:position];
-    
-//    self.worldMovedForUpdate = YES;
+#pragma mark - TDCameraDelegate
+
+- (CGSize) actualMapSizeForCamera:(TDCamera *)camera {
+    return CGSizeMake(self.backgroundMap.tiledMap.mapSize.width * self.backgroundMap.tiledMap.tileSize.width, self.backgroundMap.tiledMap.mapSize.height * self.backgroundMap.tiledMap.tileSize.height);
 }
 
-- (void)centerWorldOnSpriteNode:(SKSpriteNode *)character {
-    [self centerWorldOnPosition:character.position];
-}
-
-- (void) pointCameraToPoint:(CGPoint)position {
-    self.world.position = [self boundedLayerPosition:position];
-}
-
-- (void) pointCameraToSpawn:(TDSpawn *)spawn {
-    [self pointCameraToPoint:spawn.position];
-}
-
-- (void) pointCameraToUnit:(TDUnit *)unit {
-    //TODO: make it follow the unit at the same time?
-//    [self zoomOnObjectWithRect:unit.frame withDesiredSpaceOccupation:0.2]; // 20%
-    //[self pointCameraToPoint:unit.spriteNode.position];
-}
-
-- (void) pointCameraToBuilding:(id)building {
-    
-}
-
-- (void) pointCameraToDefaultElement {
-    TDSpawn *spawn = self.defaultSpawnPoint;
-    
-    if (spawn)
-        [self pointCameraToSpawn:spawn];
-}
-
-//TODO: cache the value for best performance?
-- (CGFloat) bestScaleForDevice {
-    CGSize winSize = self.size;
-    CGSize actualMapSize = CGSizeMake(self.backgroundMap.tiledMap.mapSize.width * self.backgroundMap.tiledMap.tileSize.width, self.backgroundMap.tiledMap.mapSize.height * self.backgroundMap.tiledMap.tileSize.height);
-    
-    CGFloat bestXScale = winSize.width / actualMapSize.width;
-    CGFloat bestYScale = winSize.height / actualMapSize.height;
-    
-    return MAX(bestXScale, bestYScale);
-}
-
-- (CGPoint) boundedLayerPosition:(CGPoint)newPos {
-    CGSize winSize = self.size;
-    CGSize mapSize = self.backgroundMap.tiledMap.calculateAccumulatedFrame.size;
-    
-    CGPoint retval = newPos;
-    retval.x = MIN(retval.x, 0);
-    retval.x = MAX(retval.x, -mapSize.width + winSize.width);
-    retval.y = MIN(retval.y, 0);
-    retval.y = MAX(retval.y, -mapSize.height + winSize.height);
-    
-    return retval;
+- (CGSize) mapSizeForCamera:(TDCamera *)camera {
+    return self.backgroundMap.tiledMap.calculateAccumulatedFrame.size;
 }
 
 #pragma mark - Position conversion
@@ -196,13 +146,19 @@ NSString * const kGameSceneMapName = @"Demo";
     // Game logic
     for (TDSpawn *spawnPoint in self.spawnPoints) {
         [spawnPoint updateWithTimeSinceLastUpdate:timeSinceLast];
+        
+        if (!self.targetUnit) {
+            self.targetUnit = [spawnPoint.units objectAtIndex:0];
+        }
     }
 }
 
 - (void)didSimulatePhysics {
-    
+    return;
     // Move the world relative to the target unit position.
     if (self.targetUnit) {
+        [[TDCamera sharedCamera] pointCameraToPoint:self.targetUnit.position];
+        return;
         CGPoint heroPosition = self.targetUnit.position;
         CGPoint worldPos = self.world.position;
         CGFloat yCoordinate = worldPos.y + heroPosition.y;
@@ -222,7 +178,8 @@ NSString * const kGameSceneMapName = @"Demo";
             worldPos.x = worldPos.x + (self.frame.size.width - xCoordinate) - kMinHeroToEdgeDistance;
 //            self.worldMovedForUpdate = YES;
         }
-        self.world.position = worldPos;
+        
+        [[TDCamera sharedCamera] pointCameraToPoint:worldPos];
     }
 }
 
@@ -232,25 +189,23 @@ NSString * const kGameSceneMapName = @"Demo";
     // get the translation info
     CGPoint trans = [pan translationInView:pan.view];
     
-    // calculate the new map position
-    CGPoint pos = self.world.position;
-    CGPoint newPos = CGPointMake(pos.x + trans.x, pos.y - trans.y);
-    [self pointCameraToPoint:newPos];
+    // move the camera
+    [[TDCamera sharedCamera] moveCameraBy:trans];
     
     // "reset" the translation
     [pan setTranslation:CGPointZero inView:pan.view];
 }
 
 - (void) handlePinch:(UIPinchGestureRecognizer *)pinch {
+    TDCamera *camera = [TDCamera sharedCamera];
+    
     static CGFloat startScale = 1;
     if (pinch.state == UIGestureRecognizerStateBegan)
     {
-        //        startScale = self.world.cameraZoomLevel;
-        startScale = self.world.xScale;
+        startScale = camera.cameraZoomLevel;
     }
     CGFloat newScale = startScale * pinch.scale;
-    //    self.world.cameraZoomLevel = newScale;
-    [self.world setScale:newScale];
+    [camera setCameraZoomLevel:newScale];
 }
 
 #pragma mark - Explorable world delegate
