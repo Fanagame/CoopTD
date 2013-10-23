@@ -36,7 +36,7 @@
 
 #pragma mark - Tracking
 - (void) updateCameraTracking;
-- (void) enableTrackingForElement:(SKNode *)node;
+- (void) enableTrackingForElement:(SKNode *)node withEdgeBounds:(CGFloat)edgeBounds;
 - (void) disableTracking;
 - (BOOL) trackingEnabled;
 

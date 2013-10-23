@@ -13,6 +13,7 @@
 @interface TDCamera ()
 
 @property (nonatomic, weak) SKNode *trackedElement;
+@property (nonatomic, assign) CGFloat trackingEdgeBounds;
 
 #pragma mark - Helpers
 - (CGFloat) bestScaleForDevice;
@@ -34,9 +35,18 @@ static TDCamera *_sharedCamera;
     return _sharedCamera;
 }
 
+- (CGSize)winSize {
+    CGSize winSize = self.world.scene.size;
+    
+    // invert if the orientation changed
+    
+    // then return the value
+    return winSize;
+}
+
 //TODO: cache the value for best performance?
 - (CGFloat) bestScaleForDevice {
-    CGSize winSize = self.world.scene.size;
+    CGSize winSize = self.winSize;
     CGSize actualMapSize = [self.delegate actualMapSizeForCamera:self];
     
     CGFloat bestXScale = winSize.width / actualMapSize.width;
@@ -48,7 +58,7 @@ static TDCamera *_sharedCamera;
 
 /// @description ensures that the new position won't make go out of bounds (mapSize wise)
 - (CGPoint) boundedLayerPosition:(CGPoint)newPos {
-    CGSize winSize = self.world.scene.size;
+    CGSize winSize = self.winSize;
     CGSize mapSize = self.world.calculateAccumulatedFrame.size;
     
     CGPoint retval = newPos;
@@ -106,10 +116,15 @@ static TDCamera *_sharedCamera;
 }
 
 - (void) pointCameraToUnit:(TDUnit *)unit trackingEnabled:(BOOL)trackingEnabled {
+    [self pointCameraToUnit:unit trackingEnabled:trackingEnabled keepUnitWithinEdgeBounds:-1];
+}
+
+- (void) pointCameraToUnit:(TDUnit *)unit trackingEnabled:(BOOL)trackingEnabled keepUnitWithinEdgeBounds:(CGFloat)edgeBound {
+    
     [self zoomOnNode:unit withSizeOnScreenAsPercentage:0.3];
     
     if (trackingEnabled) {
-        [self enableTrackingForElement:unit];
+        [self enableTrackingForElement:unit withEdgeBounds:edgeBound];
     } else {
         [self disableTracking];
     }
@@ -127,12 +142,14 @@ static TDCamera *_sharedCamera;
     }
 }
 
-- (void) enableTrackingForElement:(SKNode *)node {
+- (void) enableTrackingForElement:(SKNode *)node withEdgeBounds:(CGFloat)edgeBounds; {
     self.trackedElement = node;
+    self.trackingEdgeBounds = edgeBounds;
 }
 
 - (void) disableTracking {
     self.trackedElement = nil;
+    self.trackingEdgeBounds = -1;
 }
 
 - (BOOL) trackingEnabled {
@@ -149,7 +166,7 @@ static TDCamera *_sharedCamera;
 }
 
 - (void) zoomOnNode:(SKNode *)node withSizeOnScreenAsPercentage:(CGFloat)sizeOnScreen {
-    CGSize winSize = self.world.scene.size;
+    CGSize winSize = self.winSize;
     
     CGFloat desiredWidth = winSize.width * sizeOnScreen;
     CGFloat desiredHeight = winSize.height * sizeOnScreen;
@@ -169,15 +186,23 @@ static TDCamera *_sharedCamera;
 }
 
 - (void) setCameraToDefaultZoomLevel {
+    [self disableTracking];
+    
     CGFloat newScale = [self bestScaleForDevice];
     [self setCameraZoomLevel:newScale];
 }
 
-//TODO: let's try to stay centered on the same point
 - (void) setCameraZoomLevel:(CGFloat)newDesiredScale {
-    CGPoint currentCenterPoint = CGPointMake(0, 0);
-    NSLog(@"Current center: %f %f", currentCenterPoint.x, currentCenterPoint.y);
+    [self disableTracking];
+    
+    // Let's find out what map position is currently in the center of the screen
+    CGPoint centerOfScreenCoordinates = [self.world.scene convertPoint:CGPointMake(0.5, 0.5) toNode:self.world];
+    
+    // Change the zoom (scale)
     [self.world setScale:MIN(kCameraZoomLevel_Max, MAX(newDesiredScale, self.bestScaleForDevice))];
+    
+    // Then point the camera back to that same center position!
+    [self pointCameraToPoint:centerOfScreenCoordinates];
 }
 
 - (CGFloat) cameraZoomLevel {
