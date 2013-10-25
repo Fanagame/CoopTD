@@ -51,7 +51,7 @@ CGFloat const kUnitMovingSpeed = 0.3f;
         __weak TDUnit *weakSelf = self;
         [[PathFinder sharedInstance] pathInExplorableWorld:self.gameScene fromA:selfCoord toB:destCoord usingDiagonal:YES onSuccess:^(NSArray *path)
         {
-            [self.gameScene convertCoordinatesArrayToPositionsArray:path];
+            [weakSelf.gameScene convertCoordinatesArrayToPositionsArray:path];
             [weakSelf followArrayPath:path];
             weakSelf.status = TDUnitStatus_Moving;
         }];

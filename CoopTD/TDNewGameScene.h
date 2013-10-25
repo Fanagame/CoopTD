@@ -30,6 +30,9 @@ typedef void (^TDAssetLoadCompletionHandler)(void);
 
 @interface TDNewGameScene : SKScene<SKPhysicsContactDelegate, ExplorableWorldDelegate, TDCameraDelegate>
 
+@property (nonatomic, weak)   UIViewController *parentViewController;
+@property (nonatomic, strong) NSString *mapName;
+
 @property (nonatomic, strong) SKNode *world;
 @property (nonatomic, strong) NSMutableArray *layers;
 @property (nonatomic, strong) TDTiledMap *backgroundMap;
@@ -44,10 +47,11 @@ typedef void (^TDAssetLoadCompletionHandler)(void);
 @property (nonatomic, strong) NSMutableArray *spawnPoints;
 @property (nonatomic, strong) NSMutableArray *goalPoints;
 
-+ (void)loadSceneAssetsWithCompletionHandler:(TDAssetLoadCompletionHandler)callback;
-+ (void)loadSceneAssets;
-+ (void)releaseSceneAssets;
++ (void)loadSceneAssetsForMapName:(NSString *)mapName withCompletionHandler:(TDAssetLoadCompletionHandler)callback;
++ (void)loadSceneAssetsForMapName:(NSString *)mapName;
++ (void)releaseSceneAssetsForMapName:(NSString *)mapName;
 
+- (id) initWithSize:(CGSize)size andMapName:(NSString *)mapName;
 - (void)updateWithTimeSinceLastUpdate:(NSTimeInterval)timeSinceLast;
 
 /* All sprites in the scene should be added through this method to ensure they are placed in the correct world layer. */

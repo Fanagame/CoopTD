@@ -39,7 +39,7 @@ static TDMapCache *_sharedCache;
 }
 
 - (void) addMapToCache:(TDTiledMap *)map {
-    if (!_dataMap[map.mapName]) {
+    if (map && !_dataMap[map.mapName]) {
         _dataMap[map.mapName] = map;
     }
 }
@@ -56,7 +56,7 @@ static TDMapCache *_sharedCache;
 }
 
 - (void) invalidateCacheForMapNamed:(NSString *)mapName {
-    _dataMap[mapName] = nil;
+	[_dataMap removeObjectForKey:mapName];
 }
 
 @end

@@ -13,16 +13,15 @@
 #import "TDMapCache.h"
 #import "SKButton.h"
 
-NSString * const kGameSceneMapName = @"Demo";
-
 @implementation TDNewGameScene
 
-- (id) initWithSize:(CGSize)size {
+- (id) initWithSize:(CGSize)size andMapName:(NSString *)mapName {
     self = [super initWithSize:size];
     
     if (self) {
         self.anchorPoint = CGPointMake(0.5, 0.5);
-        
+        self.mapName = mapName;
+		
         // initialize the main layers
         _world = [[SKNode alloc] init];
         _world.name = @"world";
@@ -80,7 +79,7 @@ NSString * const kGameSceneMapName = @"Demo";
 }
 
 - (void)addBackgroundTiles {
-    self.backgroundMap = [[TDMapCache sharedCache] cachedMapForMapName:kGameSceneMapName];
+    self.backgroundMap = [[TDMapCache sharedCache] cachedMapForMapName:self.mapName];
     [self addNode:self.backgroundMap atWorldLayer:TDWorldLayerGround];
 }
 
@@ -116,7 +115,8 @@ NSString * const kGameSceneMapName = @"Demo";
 }
 
 - (void) didTapZoom {
-    [[TDCamera sharedCamera] pointCameraToUnit:self.targetUnit trackingEnabled:YES];
+	[self.parentViewController.navigationController popViewControllerAnimated:YES];
+//    [[TDCamera sharedCamera] pointCameraToUnit:self.targetUnit trackingEnabled:YES];
 }
 
 #pragma mark - TDCameraDelegate
@@ -152,7 +152,6 @@ NSString * const kGameSceneMapName = @"Demo";
     if (timeSinceLast > 1) { // more than a second since last update
         timeSinceLast = kMinTimeInterval;
         self.lastUpdateTimeInterval = currentTime;
-//        self.worldMovedForUpdate = YES;
     }
     
     [self updateWithTimeSinceLastUpdate:timeSinceLast];
@@ -170,34 +169,9 @@ NSString * const kGameSceneMapName = @"Demo";
 }
 
 - (void)didSimulatePhysics {
+	[super didSimulatePhysics];
+	
     [[TDCamera sharedCamera] updateCameraTracking];
-    return;
-    // Move the world relative to the target unit position.
-    if (self.targetUnit) {
-        [[TDCamera sharedCamera] pointCameraToPoint:self.targetUnit.position];
-        return;
-        CGPoint heroPosition = self.targetUnit.position;
-        CGPoint worldPos = self.world.position;
-        CGFloat yCoordinate = worldPos.y + heroPosition.y;
-        if (yCoordinate < kMinHeroToEdgeDistance) {
-            worldPos.y = worldPos.y - yCoordinate + kMinHeroToEdgeDistance;
-//            self.worldMovedForUpdate = YES;
-        } else if (yCoordinate > (self.frame.size.height - kMinHeroToEdgeDistance)) {
-            worldPos.y = worldPos.y + (self.frame.size.height - yCoordinate) - kMinHeroToEdgeDistance;
-//            self.worldMovedForUpdate = YES;
-        }
-        
-        CGFloat xCoordinate = worldPos.x + heroPosition.x;
-        if (xCoordinate < kMinHeroToEdgeDistance) {
-            worldPos.x = worldPos.x - xCoordinate + kMinHeroToEdgeDistance;
-//            self.worldMovedForUpdate = YES;
-        } else if (xCoordinate > (self.frame.size.width - kMinHeroToEdgeDistance)) {
-            worldPos.x = worldPos.x + (self.frame.size.width - xCoordinate) - kMinHeroToEdgeDistance;
-//            self.worldMovedForUpdate = YES;
-        }
-        
-        [[TDCamera sharedCamera] pointCameraToPoint:worldPos];
-    }
 }
 
 #pragma mark - Event Handling - iOS
@@ -257,10 +231,10 @@ NSString * const kGameSceneMapName = @"Demo";
 
 #pragma mark - Shared Assets
 
-+ (void)loadSceneAssetsWithCompletionHandler:(TDAssetLoadCompletionHandler)handler {
++ (void)loadSceneAssetsForMapName:(NSString *)mapName withCompletionHandler:(TDAssetLoadCompletionHandler)handler {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         // Load the shared assets in the background.
-        [self loadSceneAssets];
+        [self.class loadSceneAssetsForMapName:mapName];
         
         if (!handler) {
             return;
@@ -273,14 +247,14 @@ NSString * const kGameSceneMapName = @"Demo";
     });
 }
 
-+ (void)loadSceneAssets {
-    [[TDMapCache sharedCache] preloadMapNamed:kGameSceneMapName];
++ (void)loadSceneAssetsForMapName:(NSString *)mapName {
+    [[TDMapCache sharedCache] preloadMapNamed:mapName];
     
     //TODO: load monsters assets
 }
 
-+ (void)releaseSceneAssets {
-    
++ (void)releaseSceneAssetsForMapName:(NSString *)mapName {
+	[[TDMapCache sharedCache] invalidateCacheForMapNamed:mapName];
 }
 
 @end

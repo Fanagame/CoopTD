@@ -43,6 +43,8 @@
 		44F5473A1814C486000459AB /* TDArtificialIntelligence.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F547391814C486000459AB /* TDArtificialIntelligence.m */; };
 		44F5473D1814C4D8000459AB /* TDMapObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F5473C1814C4D8000459AB /* TDMapObject.m */; };
 		44F547421814CEE2000459AB /* TDSpawnAI.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F547411814CEE2000459AB /* TDSpawnAI.m */; };
+		72A6FEEF181A0EC200B74119 /* TDMapSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 72A6FEEE181A0EC200B74119 /* TDMapSelectorViewController.m */; };
+		72A6FEF1181A112C00B74119 /* TileMap.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 72A6FEF0181A112C00B74119 /* TileMap.tmx */; };
 		72D99A741811038C00AB5B9D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D99A731811038C00AB5B9D /* Foundation.framework */; };
 		72D99A761811038C00AB5B9D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D99A751811038C00AB5B9D /* CoreGraphics.framework */; };
 		72D99A781811038C00AB5B9D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D99A771811038C00AB5B9D /* UIKit.framework */; };
@@ -50,10 +52,8 @@
 		72D99A801811038C00AB5B9D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 72D99A7E1811038C00AB5B9D /* InfoPlist.strings */; };
 		72D99A821811038C00AB5B9D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 72D99A811811038C00AB5B9D /* main.m */; };
 		72D99A861811038C00AB5B9D /* TDAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 72D99A851811038C00AB5B9D /* TDAppDelegate.m */; };
-		72D99A891811038C00AB5B9D /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72D99A871811038C00AB5B9D /* Main_iPhone.storyboard */; };
-		72D99A8C1811038C00AB5B9D /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72D99A8A1811038C00AB5B9D /* Main_iPad.storyboard */; };
+		72D99A891811038C00AB5B9D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72D99A871811038C00AB5B9D /* Main.storyboard */; };
 		72D99A8F1811038C00AB5B9D /* TDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 72D99A8E1811038C00AB5B9D /* TDViewController.m */; };
-		72D99A921811038C00AB5B9D /* TDMainMenuScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 72D99A911811038C00AB5B9D /* TDMainMenuScene.m */; };
 		72D99A941811038C00AB5B9D /* Spaceship.png in Resources */ = {isa = PBXBuildFile; fileRef = 72D99A931811038C00AB5B9D /* Spaceship.png */; };
 		72D99A961811038C00AB5B9D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72D99A951811038C00AB5B9D /* Images.xcassets */; };
 		72D99A9D1811038C00AB5B9D /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D99A9C1811038C00AB5B9D /* XCTest.framework */; };
@@ -127,6 +127,9 @@
 		44F5473C1814C4D8000459AB /* TDMapObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDMapObject.m; sourceTree = "<group>"; };
 		44F547401814CEE2000459AB /* TDSpawnAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDSpawnAI.h; sourceTree = "<group>"; };
 		44F547411814CEE2000459AB /* TDSpawnAI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSpawnAI.m; sourceTree = "<group>"; };
+		72A6FEED181A0EC200B74119 /* TDMapSelectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDMapSelectorViewController.h; sourceTree = "<group>"; };
+		72A6FEEE181A0EC200B74119 /* TDMapSelectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDMapSelectorViewController.m; sourceTree = "<group>"; };
+		72A6FEF0181A112C00B74119 /* TileMap.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = TileMap.tmx; path = Resources/Maps/TileMap.tmx; sourceTree = "<group>"; };
 		72D99A701811038B00AB5B9D /* CoopTD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoopTD.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72D99A731811038C00AB5B9D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		72D99A751811038C00AB5B9D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -138,12 +141,9 @@
 		72D99A831811038C00AB5B9D /* CoopTD-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CoopTD-Prefix.pch"; sourceTree = "<group>"; };
 		72D99A841811038C00AB5B9D /* TDAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TDAppDelegate.h; sourceTree = "<group>"; };
 		72D99A851811038C00AB5B9D /* TDAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TDAppDelegate.m; sourceTree = "<group>"; };
-		72D99A881811038C00AB5B9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
-		72D99A8B1811038C00AB5B9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
+		72D99A881811038C00AB5B9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		72D99A8D1811038C00AB5B9D /* TDViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TDViewController.h; sourceTree = "<group>"; };
 		72D99A8E1811038C00AB5B9D /* TDViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TDViewController.m; sourceTree = "<group>"; };
-		72D99A901811038C00AB5B9D /* TDMainMenuScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TDMainMenuScene.h; sourceTree = "<group>"; };
-		72D99A911811038C00AB5B9D /* TDMainMenuScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TDMainMenuScene.m; sourceTree = "<group>"; };
 		72D99A931811038C00AB5B9D /* Spaceship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spaceship.png; sourceTree = "<group>"; };
 		72D99A951811038C00AB5B9D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		72D99A9B1811038C00AB5B9D /* CoopTDTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoopTDTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -182,10 +182,11 @@
 		4406EF991812426200BA102D /* Root */ = {
 			isa = PBXGroup;
 			children = (
-				72D99A871811038C00AB5B9D /* Main_iPhone.storyboard */,
-				72D99A8A1811038C00AB5B9D /* Main_iPad.storyboard */,
+				72D99A871811038C00AB5B9D /* Main.storyboard */,
 				72D99A8D1811038C00AB5B9D /* TDViewController.h */,
 				72D99A8E1811038C00AB5B9D /* TDViewController.m */,
+				72A6FEED181A0EC200B74119 /* TDMapSelectorViewController.h */,
+				72A6FEEE181A0EC200B74119 /* TDMapSelectorViewController.m */,
 			);
 			name = Root;
 			sourceTree = "<group>";
@@ -193,8 +194,6 @@
 		4406EF9A1812427400BA102D /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
-				72D99A901811038C00AB5B9D /* TDMainMenuScene.h */,
-				72D99A911811038C00AB5B9D /* TDMainMenuScene.m */,
 				44F5472C1814AA81000459AB /* TDNewGameScene.h */,
 				44F5472D1814AA81000459AB /* TDNewGameScene.m */,
 			);
@@ -279,6 +278,7 @@
 		4406EFBC181257F000BA102D /* Maps */ = {
 			isa = PBXGroup;
 			children = (
+				72A6FEF0181A112C00B74119 /* TileMap.tmx */,
 				4406EFC618125D6700BA102D /* sample.tmx */,
 				4406EFBD181257FE00BA102D /* Demo.tmx */,
 			);
@@ -531,14 +531,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72A6FEF1181A112C00B74119 /* TileMap.tmx in Resources */,
 				44F5472B1813D216000459AB /* yellowButtonActivated@2x.png in Resources */,
 				72D99A941811038C00AB5B9D /* Spaceship.png in Resources */,
 				72D99A961811038C00AB5B9D /* Images.xcassets in Resources */,
 				4406EFBE181257FE00BA102D /* Demo.tmx in Resources */,
 				4406EFD018125E5B00BA102D /* tmw_desert_spacing.png in Resources */,
 				44F547291813D216000459AB /* yellowButton@2x.png in Resources */,
-				72D99A8C1811038C00AB5B9D /* Main_iPad.storyboard in Resources */,
-				72D99A891811038C00AB5B9D /* Main_iPhone.storyboard in Resources */,
+				72D99A891811038C00AB5B9D /* Main.storyboard in Resources */,
 				4406EFCF18125E5B00BA102D /* meta_tiles.png in Resources */,
 				44F547241813D216000459AB /* redButton.png in Resources */,
 				44F5471A1813D20C000459AB /* greenButtonActivated.png in Resources */,
@@ -586,10 +586,10 @@
 				44F547311814B941000459AB /* TDTiledMap.m in Sources */,
 				44F5470E181370AA000459AB /* TDUltimateGoal.m in Sources */,
 				72D99A861811038C00AB5B9D /* TDAppDelegate.m in Sources */,
+				72A6FEEF181A0EC200B74119 /* TDMapSelectorViewController.m in Sources */,
 				4406EFA4181242E100BA102D /* PathFinder.m in Sources */,
 				4406EFB8181253D200BA102D /* LFCGzipUtility.m in Sources */,
 				44F547121813D047000459AB /* SKButton.m in Sources */,
-				72D99A921811038C00AB5B9D /* TDMainMenuScene.m in Sources */,
 				4406EFA71812477100BA102D /* TDAssetManager.m in Sources */,
 				44F547421814CEE2000459AB /* TDSpawnAI.m in Sources */,
 				72D99A821811038C00AB5B9D /* main.m in Sources */,
@@ -623,20 +623,12 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		72D99A871811038C00AB5B9D /* Main_iPhone.storyboard */ = {
+		72D99A871811038C00AB5B9D /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				72D99A881811038C00AB5B9D /* Base */,
 			);
-			name = Main_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		72D99A8A1811038C00AB5B9D /* Main_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				72D99A8B1811038C00AB5B9D /* Base */,
-			);
-			name = Main_iPad.storyboard;
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 		72D99AA51811038C00AB5B9D /* InfoPlist.strings */ = {

@@ -17,5 +17,6 @@
 - (void) addMapToCache:(TDTiledMap *)map;
 - (TDTiledMap *) cachedMapForMapName:(NSString *)mapName;
 - (void) preloadMapNamed:(NSString *)mapName;
+- (void) invalidateCacheForMapNamed:(NSString *)mapName;
 
 @end
