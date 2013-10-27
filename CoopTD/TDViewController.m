@@ -7,7 +7,6 @@
 //
 
 #import "TDViewController.h"
-#import "TDMainMenuScene.h"
 #import "TDNewGameScene.h"
 
 @implementation TDViewController
@@ -15,7 +14,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
     
     // Configure the view.
     SKView * skView = (SKView *)self.view;
@@ -23,15 +21,23 @@
     skView.showsNodeCount = YES;
     
     // Create and configure the scene.
-    [TDNewGameScene loadSceneAssetsWithCompletionHandler:^{
-        [self hideInterface];
+	__weak TDViewController *weakSelf = self;
+    [TDNewGameScene loadSceneAssetsForMapName:self.mapName withCompletionHandler:^{
+        [weakSelf hideInterface];
         
-        SKScene * scene = [TDNewGameScene sceneWithSize:skView.bounds.size];
+        TDNewGameScene * scene = [[TDNewGameScene alloc] initWithSize:skView.bounds.size andMapName:weakSelf.mapName];
         scene.scaleMode = SKSceneScaleModeAspectFill;
+		scene.parentViewController = weakSelf;
         
         // Present the scene.
         [skView presentScene:scene];
     }];
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	
+	self.navigationController.navigationBarHidden = YES;
 }
 
 - (void) hideInterface {
@@ -48,6 +54,10 @@
             view.hidden = NO;
         }
     }
+}
+
+- (NSString *)mapName {
+	return [self.mapFilename stringByDeletingPathExtension];
 }
 
 - (BOOL)shouldAutorotate
@@ -68,6 +78,12 @@
 {
     [super didReceiveMemoryWarning];
     // Release any cached data, images, etc that aren't in use.
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+	[super viewDidDisappear:animated];
+	
+	[TDNewGameScene releaseSceneAssetsForMapName:self.mapName];
 }
 
 @end

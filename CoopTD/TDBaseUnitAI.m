@@ -18,7 +18,7 @@
     
     if ([self.character isKindOfClass:[TDUnit class]]) {
         TDUnit *unit = (TDUnit *)self.character;
-        TDNewGameScene *gameScene = self.character.gameScene;
+        TDNewGameScene *gameScene = unit.gameScene;
 
         // Find a goal in the map
         self.target = gameScene.defaultGoalPoint;

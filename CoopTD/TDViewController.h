@@ -11,4 +11,6 @@
 
 @interface TDViewController : UIViewController
 
+@property (nonatomic, strong) NSString *mapFilename;
+
 @end

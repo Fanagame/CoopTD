@@ -198,11 +198,16 @@ static TDCamera *_sharedCamera;
     // Let's find out what map position is currently in the center of the screen
     CGPoint centerOfScreenCoordinates = [self.world.scene convertPoint:CGPointMake(0.5, 0.5) toNode:self.world];
     
-    // Change the zoom (scale)
-    [self.world setScale:MIN(kCameraZoomLevel_Max, MAX(newDesiredScale, self.bestScaleForDevice))];
-    
-    // Then point the camera back to that same center position!
-    [self pointCameraToPoint:centerOfScreenCoordinates];
+    // Calculates optimum zoom level to not go out of bounds
+	newDesiredScale = MIN(kCameraZoomLevel_Max, MAX(newDesiredScale, self.bestScaleForDevice));
+	
+	// Change the zoom (scale)
+	if (newDesiredScale != self.cameraZoomLevel) {
+		[self.world setScale:newDesiredScale];
+		
+		// Then point the camera back to that same center position!
+		[self pointCameraToPoint:centerOfScreenCoordinates];
+	}
 }
 
 - (CGFloat) cameraZoomLevel {
