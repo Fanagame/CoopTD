@@ -13,6 +13,7 @@
 #import "TDMapCache.h"
 #import "SKButton.h"
 #import "TDPathFinder.h"
+#import "TDGridNode.h"
 
 @implementation TDNewGameScene
 
@@ -28,7 +29,14 @@
         _world.name = @"world";
         _layers = [NSMutableArray arrayWithCapacity:kWorldLayerCount];
         for (int i = 0; i < kWorldLayerCount; i++) {
-            SKNode *layer = [[SKNode alloc] init];
+			SKNode *layer = nil;
+			
+			if (i == TDWorldLayerGrid) {
+				layer = [[TDGridNode alloc] init];
+				_grid = layer;
+			} else {
+				layer = [[SKNode alloc] init];
+			}
             layer.zPosition = i - kWorldLayerCount;
             [_world addChild:layer];
             [(NSMutableArray *)_layers addObject:layer];
@@ -38,6 +46,7 @@
         
         [self buildHUD];
         [self buildWorld];
+		[self buildGrid];
         
         
         // Initialize the camera
@@ -98,6 +107,12 @@
     if (self.goalPoints.count > 0) {
         self.defaultGoalPoint = self.goalPoints[0];
     }
+}
+
+#pragma mark - Create grid
+
+- (void) buildGrid {
+	[self.grid buildGrid];
 }
 
 #pragma mark - HUD and Scores

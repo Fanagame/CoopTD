@@ -9,6 +9,8 @@
 #import "TDMapSelectorViewController.h"
 #import "TDViewController.h"
 
+#define kDefaultMapName @"sample"
+
 @interface TDMapSelectorViewController ()
 
 @end
@@ -124,7 +126,7 @@
 	NSString *mapName = nil;
 	if (path.row >= self.maps.count) {
 #if DEBUG
-		mapName = @"Demo";
+		mapName = kDefaultMapName;
 #else
 		return;
 #endif

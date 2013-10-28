@@ -15,6 +15,7 @@
 
 typedef enum : uint8_t {
 	TDWorldLayerGround = 0,
+	TDWorldLayerGrid,
     TDWorldLayerBuilding,
 	TDWorldLayerBelowCharacter,
 	TDWorldLayerCharacter,
@@ -27,6 +28,7 @@ typedef enum : uint8_t {
 typedef void (^TDAssetLoadCompletionHandler)(void);
 
 @class TDUnit, TDSpawn, TDUltimateGoal, TDTiledMap;
+@class TDGridNode;
 
 @interface TDNewGameScene : SKScene<SKPhysicsContactDelegate, ExplorableWorldDelegate, TDCameraDelegate>
 
@@ -37,6 +39,7 @@ typedef void (^TDAssetLoadCompletionHandler)(void);
 @property (nonatomic, strong) NSMutableArray *layers;
 @property (nonatomic, strong) TDTiledMap *backgroundMap;
 @property (nonatomic, strong) SKNode *hud;
+@property (nonatomic, strong) TDGridNode *grid;
 
 @property (nonatomic, assign) CFTimeInterval lastUpdateTimeInterval;
 
