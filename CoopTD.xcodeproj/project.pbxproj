@@ -22,6 +22,7 @@
 		4406EFD81813614D00BA102D /* TDSpawn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4406EFD71813614D00BA102D /* TDSpawn.m */; };
 		4406EFE31813621F00BA102D /* TDTMXObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4406EFE21813621F00BA102D /* TDTMXObject.m */; };
 		442967F21815937600BD20BA /* TDCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 442967F11815937600BD20BA /* TDCamera.m */; };
+		44862B58181DD01700DE9C1E /* TDPathFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 44862B57181DD01700DE9C1E /* TDPathFinder.m */; };
 		44A8099E1814D4F7007EB6DA /* TDBaseUnitAI.m in Sources */ = {isa = PBXBuildFile; fileRef = 44A8099D1814D4F7007EB6DA /* TDBaseUnitAI.m */; };
 		44F5470E181370AA000459AB /* TDUltimateGoal.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F5470D181370AA000459AB /* TDUltimateGoal.m */; };
 		44F547121813D047000459AB /* SKButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F547111813D047000459AB /* SKButton.m */; };
@@ -97,6 +98,8 @@
 		4406EFE21813621F00BA102D /* TDTMXObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDTMXObject.m; sourceTree = "<group>"; };
 		442967F01815937600BD20BA /* TDCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDCamera.h; sourceTree = "<group>"; };
 		442967F11815937600BD20BA /* TDCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDCamera.m; sourceTree = "<group>"; };
+		44862B56181DD01700DE9C1E /* TDPathFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDPathFinder.h; sourceTree = "<group>"; };
+		44862B57181DD01700DE9C1E /* TDPathFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDPathFinder.m; sourceTree = "<group>"; };
 		44A8099C1814D4F7007EB6DA /* TDBaseUnitAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBaseUnitAI.h; sourceTree = "<group>"; };
 		44A8099D1814D4F7007EB6DA /* TDBaseUnitAI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBaseUnitAI.m; sourceTree = "<group>"; };
 		44F5470C181370AA000459AB /* TDUltimateGoal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDUltimateGoal.h; sourceTree = "<group>"; };
@@ -231,6 +234,8 @@
 				44F547301814B941000459AB /* TDTiledMap.m */,
 				442967F01815937600BD20BA /* TDCamera.h */,
 				442967F11815937600BD20BA /* TDCamera.m */,
+				44862B56181DD01700DE9C1E /* TDPathFinder.h */,
+				44862B57181DD01700DE9C1E /* TDPathFinder.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -576,6 +581,7 @@
 				72D99A8F1811038C00AB5B9D /* TDViewController.m in Sources */,
 				44F547351814BD20000459AB /* TDMapCache.m in Sources */,
 				44F5473D1814C4D8000459AB /* TDMapObject.m in Sources */,
+				44862B58181DD01700DE9C1E /* TDPathFinder.m in Sources */,
 				442967F21815937600BD20BA /* TDCamera.m in Sources */,
 				44A8099E1814D4F7007EB6DA /* TDBaseUnitAI.m in Sources */,
 				4406EFE31813621F00BA102D /* TDTMXObject.m in Sources */,

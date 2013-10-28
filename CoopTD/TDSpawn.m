@@ -21,11 +21,18 @@
 }
 
 - (void) spawnNextUnit {
+    self.lastSpawnDate = [NSDate date];
+    
     TDUnit *unit = [[TDUnit alloc] init];
+    unit.unitID = self.lastSpawnedUnit.unitID + 1;
     unit.position = self.position;
     
     [self.gameScene addNode:unit atWorldLayer:TDWorldLayerCharacter];
     [self.units addObject:unit];
+}
+
+- (TDUnit *) lastSpawnedUnit {
+    return [self.units lastObject];
 }
 
 #pragma mark - Loop Update
