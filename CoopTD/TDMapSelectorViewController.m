@@ -52,7 +52,11 @@
 	self.title = @"Map list";
 	[[UIApplication sharedApplication] setStatusBarHidden:YES];
 	
+#if DEBUG
+	[self performSegueWithIdentifier:@"loadMap" sender:nil];
+#else
 	[self loadMaps];
+#endif
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -117,11 +121,18 @@
 {
 	NSIndexPath *path = [self.tableView indexPathForSelectedRow];
 	
+	NSString *mapName = nil;
 	if (path.row >= self.maps.count) {
+#if DEBUG
+		mapName = @"Demo";
+#else
 		return;
+#endif
 	}
 	
-	NSString *mapName = self.maps[path.row];
+	if (mapName.length == 0)
+		mapName = self.maps[path.row];
+	
 	if ([segue.destinationViewController isKindOfClass:[TDViewController class]]) {
 		TDViewController *vc = segue.destinationViewController;
 		vc.mapFilename = mapName;

@@ -89,7 +89,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="LVB-YS-i5n" kind="push" id="rcN-zT-ALt"/>
+                                    <segue destination="LVB-YS-i5n" kind="push" identifier="loadMap" id="rcN-zT-ALt"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
