@@ -14,6 +14,9 @@
 
 @property (nonatomic, strong) NSMutableArray *units;
 
+@property (nonatomic, strong) NSDate *lastSpawnDate;
+@property (nonatomic, weak) TDUnit *lastSpawnedUnit;
+
 - (void) spawnNextUnit;
 
 @end

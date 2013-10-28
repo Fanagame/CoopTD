@@ -37,7 +37,7 @@
  </layer>
  <objectgroup name="MetaObjects" width="50" height="50">
   <object name="StartPoint" type="SpawnPoint" x="641" y="1571" width="157" height="27"/>
-  <object name="DestinationPoint" type="DestinationPoint" x="1057" y="889" width="91" height="30"/>
+  <object name="DestinationPoint" type="DestinationPoint" x="674" y="2" width="91" height="30"/>
  </objectgroup>
  <layer name="MetaLayer" width="50" height="50" visible="0">
   <data encoding="base64" compression="zlib">

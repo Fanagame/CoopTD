@@ -12,6 +12,7 @@
 #import "TDTiledMap.h"
 #import "TDMapCache.h"
 #import "SKButton.h"
+#import "TDPathFinder.h"
 
 @implementation TDNewGameScene
 
@@ -162,7 +163,7 @@
     for (TDSpawn *spawnPoint in self.spawnPoints) {
         [spawnPoint updateWithTimeSinceLastUpdate:timeSinceLast];
         
-        if (!self.targetUnit) {
+        if (!self.targetUnit && spawnPoint.units.count > 0) {
             self.targetUnit = [spawnPoint.units objectAtIndex:0];
         }
     }
@@ -216,7 +217,6 @@
             }
         }
     }
-    
     return YES;
 }
 
@@ -248,7 +248,10 @@
 }
 
 + (void)loadSceneAssetsForMapName:(NSString *)mapName {
+    // Preload the map
     [[TDMapCache sharedCache] preloadMapNamed:mapName];
+    
+    //TODO: Pre-calculate the pathfinding from spawn point
     
     //TODO: load monsters assets
 }

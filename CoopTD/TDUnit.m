@@ -7,8 +7,9 @@
 //
 
 #import "TDUnit.h"
-#import "PathFinder.h"
+#import "TDPathFinder.h"
 #import "TDBaseUnitAI.h"
+#import "TDPathFinder.h"
 
 CGFloat const kUnitMovingSpeed = 0.3f;
 
@@ -49,10 +50,8 @@ CGFloat const kUnitMovingSpeed = 0.3f;
         CGPoint destCoord = [self.gameScene tileCoordinatesForPosition:mapPosition];
         
         __weak TDUnit *weakSelf = self;
-        [[PathFinder sharedInstance] pathInExplorableWorld:self.gameScene fromA:selfCoord toB:destCoord usingDiagonal:YES onSuccess:^(NSArray *path)
-        {
-            [weakSelf.gameScene convertCoordinatesArrayToPositionsArray:path];
-            [weakSelf followArrayPath:path];
+        [[TDPathFinder sharedPathCache] pathInExplorableWorld:self.gameScene fromA:selfCoord toB:destCoord usingDiagonal:NO onSuccess:^(TDPath *path) {
+            [weakSelf followArrayPath:path.positionsPathArray];
             weakSelf.status = TDUnitStatus_Moving;
         }];
     }
