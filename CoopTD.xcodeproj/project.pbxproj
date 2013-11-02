@@ -46,6 +46,12 @@
 		44F547421814CEE2000459AB /* TDSpawnAI.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F547411814CEE2000459AB /* TDSpawnAI.m */; };
 		72A6FEEF181A0EC200B74119 /* TDMapSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 72A6FEEE181A0EC200B74119 /* TDMapSelectorViewController.m */; };
 		72A6FEF1181A112C00B74119 /* TileMap.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 72A6FEF0181A112C00B74119 /* TileMap.tmx */; };
+		72B8AC561824B72F0071D0AE /* Circle_Blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 72B8AC521824B72F0071D0AE /* Circle_Blue.png */; };
+		72B8AC571824B72F0071D0AE /* Circle_Green.png in Resources */ = {isa = PBXBuildFile; fileRef = 72B8AC531824B72F0071D0AE /* Circle_Green.png */; };
+		72B8AC581824B72F0071D0AE /* Circle_Orange.png in Resources */ = {isa = PBXBuildFile; fileRef = 72B8AC541824B72F0071D0AE /* Circle_Orange.png */; };
+		72B8AC591824B72F0071D0AE /* Circle_Red.png in Resources */ = {isa = PBXBuildFile; fileRef = 72B8AC551824B72F0071D0AE /* Circle_Red.png */; };
+		72B8AC5D1824BE410071D0AE /* TDBuilding.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B8AC5C1824BE410071D0AE /* TDBuilding.m */; };
+		72B8AC5F1824BFB50071D0AE /* Tower-Single-Sprite.png in Resources */ = {isa = PBXBuildFile; fileRef = 72B8AC5E1824BFB50071D0AE /* Tower-Single-Sprite.png */; };
 		72D99A741811038C00AB5B9D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D99A731811038C00AB5B9D /* Foundation.framework */; };
 		72D99A761811038C00AB5B9D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D99A751811038C00AB5B9D /* CoreGraphics.framework */; };
 		72D99A781811038C00AB5B9D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D99A771811038C00AB5B9D /* UIKit.framework */; };
@@ -134,6 +140,13 @@
 		72A6FEED181A0EC200B74119 /* TDMapSelectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDMapSelectorViewController.h; sourceTree = "<group>"; };
 		72A6FEEE181A0EC200B74119 /* TDMapSelectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDMapSelectorViewController.m; sourceTree = "<group>"; };
 		72A6FEF0181A112C00B74119 /* TileMap.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = TileMap.tmx; path = Resources/Maps/TileMap.tmx; sourceTree = "<group>"; };
+		72B8AC521824B72F0071D0AE /* Circle_Blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Circle_Blue.png; path = Resources/HUD/Circle_Blue.png; sourceTree = "<group>"; };
+		72B8AC531824B72F0071D0AE /* Circle_Green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Circle_Green.png; path = Resources/HUD/Circle_Green.png; sourceTree = "<group>"; };
+		72B8AC541824B72F0071D0AE /* Circle_Orange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Circle_Orange.png; path = Resources/HUD/Circle_Orange.png; sourceTree = "<group>"; };
+		72B8AC551824B72F0071D0AE /* Circle_Red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Circle_Red.png; path = Resources/HUD/Circle_Red.png; sourceTree = "<group>"; };
+		72B8AC5B1824BE410071D0AE /* TDBuilding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBuilding.h; sourceTree = "<group>"; };
+		72B8AC5C1824BE410071D0AE /* TDBuilding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBuilding.m; sourceTree = "<group>"; };
+		72B8AC5E1824BFB50071D0AE /* Tower-Single-Sprite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Tower-Single-Sprite.png"; path = "Resources/images/Tower-Single-Sprite.png"; sourceTree = "<group>"; };
 		72D99A701811038B00AB5B9D /* CoopTD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoopTD.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72D99A731811038C00AB5B9D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		72D99A751811038C00AB5B9D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -220,6 +233,7 @@
 		4406EF9C1812428D00BA102D /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				72B8AC5E1824BFB50071D0AE /* Tower-Single-Sprite.png */,
 				44F547131813D201000459AB /* HUD */,
 				4406EFD418135C8200BA102D /* pikachu-32.png */,
 				72D99A931811038C00AB5B9D /* Spaceship.png */,
@@ -233,6 +247,7 @@
 				44F5473E1814C542000459AB /* Objects from TMX files */,
 				4406EFD91813617400BA102D /* Abstract */,
 				44F547371814C466000459AB /* AI */,
+				72B8AC5A1824BE260071D0AE /* Buildings */,
 				44F547361814C44E000459AB /* Enemies */,
 				44F5472F1814B941000459AB /* TDTiledMap.h */,
 				44F547301814B941000459AB /* TDTiledMap.m */,
@@ -329,18 +344,8 @@
 		44F547131813D201000459AB /* HUD */ = {
 			isa = PBXGroup;
 			children = (
-				44F5471C1813D216000459AB /* redButton.png */,
-				44F5471D1813D216000459AB /* redButton@2x.png */,
-				44F5471E1813D216000459AB /* redButtonActivated.png */,
-				44F5471F1813D216000459AB /* redButtonActivated@2x.png */,
-				44F547201813D216000459AB /* yellowButton.png */,
-				44F547211813D216000459AB /* yellowButton@2x.png */,
-				44F547221813D216000459AB /* yellowButtonActivated.png */,
-				44F547231813D216000459AB /* yellowButtonActivated@2x.png */,
-				44F547141813D20C000459AB /* greenButton.png */,
-				44F547151813D20C000459AB /* greenButton@2x.png */,
-				44F547161813D20C000459AB /* greenButtonActivated.png */,
-				44F547171813D20C000459AB /* greenButtonActivated@2x.png */,
+				72B8AC511824B71D0071D0AE /* circle buttons */,
+				72B8AC501824B70C0071D0AE /* old squared buttons */,
 			);
 			name = HUD;
 			sourceTree = "<group>";
@@ -383,6 +388,45 @@
 				44F5470D181370AA000459AB /* TDUltimateGoal.m */,
 			);
 			name = "Objects from TMX files";
+			sourceTree = "<group>";
+		};
+		72B8AC501824B70C0071D0AE /* old squared buttons */ = {
+			isa = PBXGroup;
+			children = (
+				44F5471C1813D216000459AB /* redButton.png */,
+				44F5471D1813D216000459AB /* redButton@2x.png */,
+				44F5471E1813D216000459AB /* redButtonActivated.png */,
+				44F5471F1813D216000459AB /* redButtonActivated@2x.png */,
+				44F547201813D216000459AB /* yellowButton.png */,
+				44F547211813D216000459AB /* yellowButton@2x.png */,
+				44F547221813D216000459AB /* yellowButtonActivated.png */,
+				44F547231813D216000459AB /* yellowButtonActivated@2x.png */,
+				44F547141813D20C000459AB /* greenButton.png */,
+				44F547151813D20C000459AB /* greenButton@2x.png */,
+				44F547161813D20C000459AB /* greenButtonActivated.png */,
+				44F547171813D20C000459AB /* greenButtonActivated@2x.png */,
+			);
+			name = "old squared buttons";
+			sourceTree = "<group>";
+		};
+		72B8AC511824B71D0071D0AE /* circle buttons */ = {
+			isa = PBXGroup;
+			children = (
+				72B8AC521824B72F0071D0AE /* Circle_Blue.png */,
+				72B8AC531824B72F0071D0AE /* Circle_Green.png */,
+				72B8AC541824B72F0071D0AE /* Circle_Orange.png */,
+				72B8AC551824B72F0071D0AE /* Circle_Red.png */,
+			);
+			name = "circle buttons";
+			sourceTree = "<group>";
+		};
+		72B8AC5A1824BE260071D0AE /* Buildings */ = {
+			isa = PBXGroup;
+			children = (
+				72B8AC5B1824BE410071D0AE /* TDBuilding.h */,
+				72B8AC5C1824BE410071D0AE /* TDBuilding.m */,
+			);
+			name = Buildings;
 			sourceTree = "<group>";
 		};
 		72D99A671811038B00AB5B9D = {
@@ -552,21 +596,26 @@
 				72A6FEF1181A112C00B74119 /* TileMap.tmx in Resources */,
 				44F5472B1813D216000459AB /* yellowButtonActivated@2x.png in Resources */,
 				72D99A941811038C00AB5B9D /* Spaceship.png in Resources */,
+				72B8AC571824B72F0071D0AE /* Circle_Green.png in Resources */,
 				72D99A961811038C00AB5B9D /* Images.xcassets in Resources */,
 				4406EFBE181257FE00BA102D /* Demo.tmx in Resources */,
+				72B8AC591824B72F0071D0AE /* Circle_Red.png in Resources */,
 				4406EFD018125E5B00BA102D /* tmw_desert_spacing.png in Resources */,
 				44F547291813D216000459AB /* yellowButton@2x.png in Resources */,
 				72D99A891811038C00AB5B9D /* Main.storyboard in Resources */,
 				4406EFCF18125E5B00BA102D /* meta_tiles.png in Resources */,
 				44F547241813D216000459AB /* redButton.png in Resources */,
 				44F5471A1813D20C000459AB /* greenButtonActivated.png in Resources */,
+				72B8AC561824B72F0071D0AE /* Circle_Blue.png in Resources */,
 				44F547261813D216000459AB /* redButtonActivated.png in Resources */,
 				44F547191813D20C000459AB /* greenButton@2x.png in Resources */,
 				44F547281813D216000459AB /* yellowButton.png in Resources */,
 				72D99A801811038C00AB5B9D /* InfoPlist.strings in Resources */,
 				4406EFD518135C8200BA102D /* pikachu-32.png in Resources */,
 				44F5472A1813D216000459AB /* yellowButtonActivated.png in Resources */,
+				72B8AC581824B72F0071D0AE /* Circle_Orange.png in Resources */,
 				44F5471B1813D20C000459AB /* greenButtonActivated@2x.png in Resources */,
+				72B8AC5F1824BFB50071D0AE /* Tower-Single-Sprite.png in Resources */,
 				4406EFCE18125E5B00BA102D /* cobbleset-64_0.png in Resources */,
 				44F547251813D216000459AB /* redButton@2x.png in Resources */,
 				4406EFC718125D6700BA102D /* sample.tmx in Resources */,
@@ -595,6 +644,7 @@
 				44F547351814BD20000459AB /* TDMapCache.m in Sources */,
 				44F5473D1814C4D8000459AB /* TDMapObject.m in Sources */,
 				44862B58181DD01700DE9C1E /* TDPathFinder.m in Sources */,
+				72B8AC5D1824BE410071D0AE /* TDBuilding.m in Sources */,
 				442967F21815937600BD20BA /* TDCamera.m in Sources */,
 				44A8099E1814D4F7007EB6DA /* TDBaseUnitAI.m in Sources */,
 				4406EFE31813621F00BA102D /* TDTMXObject.m in Sources */,

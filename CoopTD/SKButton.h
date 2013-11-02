@@ -24,6 +24,7 @@
 /** Sets the target-action pair, that is called when the Button is tapped.
  "target" won't be retained.
  */
+- (void) addTarget:(id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents;
 - (void)setTouchUpInsideTarget:(id)target action:(SEL)action;
 - (void)setTouchDownTarget:(id)target action:(SEL)action;
 - (void)setTouchUpTarget:(id)target action:(SEL)action;

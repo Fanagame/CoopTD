@@ -35,6 +35,8 @@
         
         [self addChild:_title];
         [self setUserInteractionEnabled:YES];
+		
+		self.anchorPoint = CGPointMake(0, 0);
     }
     return self;
 }
@@ -69,6 +71,16 @@
 
 #pragma -
 #pragma mark Setting Target-Action pairs
+
+- (void) addTarget:(id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents {
+	if (controlEvents == UIControlEventTouchUpInside) {
+		[self setTouchUpInsideTarget:target action:action];
+	} else if (controlEvents == UIControlEventTouchUpOutside) {
+		[self setTouchUpTarget:target action:action];
+	} else if (controlEvents == UIControlEventTouchDown) {
+		[self setTouchDownTarget:target action:action];
+	}
+}
 
 - (void)setTouchUpInsideTarget:(id)target action:(SEL)action {
     _targetTouchUpInside = target;

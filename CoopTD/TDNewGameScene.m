@@ -14,6 +14,9 @@
 #import "SKButton.h"
 #import "TDPathFinder.h"
 #import "TDGridNode.h"
+#import "TDBuilding.h"
+
+#define BUTTON_SIZE 32
 
 @implementation TDNewGameScene
 
@@ -121,19 +124,34 @@
     _hud = [[SKNode alloc] init];
     _hud.name = @"hud";
     [self addChild:_hud];
-    
-    SKButton *btn = [[SKButton alloc] initWithImageNamedNormal:@"redButton" selected:@"redButtonActivated"];
-    btn.size = CGSizeMake(150, 50);
-    btn.position = CGPointMake(100, 100);
-    btn.title.text = @"Zoom";
-    [btn setTouchUpInsideTarget:self action:@selector(didTapZoom)];
-    [self.hud addChild:btn];
+	
+	CGPoint origin = CGPointMake(- self.size.width / 2, - self.size.height / 2);
+	
+	SKButton *exitButton = [[SKButton alloc] initWithImageNamedNormal:@"Circle_Red" selected:@"Circle_Red"];
+	exitButton.size = CGSizeMake(BUTTON_SIZE, BUTTON_SIZE);
+	exitButton.anchorPoint = CGPointMake(1, 1);
+	exitButton.position = CGPointMake(origin.x + self.size.width, origin.y + self.size.height);
+	[exitButton addTarget:self action:@selector(didTapExit) forControlEvents:UIControlEventTouchUpInside];
+	[self.hud addChild:exitButton];
+	
+	SKButton *zoomButton = [[SKButton alloc] initWithImageNamedNormal:@"Circle_Green" selected:@"Circle_Green"];
+	zoomButton.size = CGSizeMake(BUTTON_SIZE, BUTTON_SIZE);
+	zoomButton.position = CGPointMake(origin.x, origin.y + 100);
+	[zoomButton addTarget:self action:@selector(didTapZoom) forControlEvents:UIControlEventTouchUpInside];
+	[self.hud addChild:zoomButton];
+}
+
+- (void) didTapExit {
+	[self.parentViewController.navigationController popViewControllerAnimated:YES];
 }
 
 - (void) didTapZoom {
-	[self.parentViewController.navigationController popViewControllerAnimated:YES];
+	TDBuilding *b = [[TDBuilding alloc] init];
+	b.position = CGPointMake(200, 200);
+	[self addNode:b atWorldLayer:TDWorldLayerBuilding];
 //    [[TDCamera sharedCamera] pointCameraToUnit:self.targetUnit trackingEnabled:YES];
 }
+
 
 #pragma mark - TDCameraDelegate
 
