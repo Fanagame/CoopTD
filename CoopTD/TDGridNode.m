@@ -36,8 +36,8 @@
 	for (NSInteger x = 0; x < maxX; x++) {
 		// init shape node
 		SKShapeNode *n = [[SKShapeNode alloc] init];
-		n.lineWidth = 1.0;
-		n.fillColor = [SKColor blackColor];
+		n.lineWidth = 0.1;
+		n.fillColor = [SKColor clearColor];
 		n.strokeColor = [SKColor blackColor];
 		n.glowWidth = 0.0;
 		
@@ -55,8 +55,8 @@
 	for (NSInteger y = 0; y < maxY; y++) {
 		// init shape node
 		SKShapeNode *n = [[SKShapeNode alloc] init];
-		n.lineWidth = 1.0;
-		n.fillColor = [SKColor blackColor];
+		n.lineWidth = 0.1;
+		n.fillColor = [SKColor clearColor];
 		n.strokeColor = [SKColor blackColor];
 		n.glowWidth = 0.0;
 		

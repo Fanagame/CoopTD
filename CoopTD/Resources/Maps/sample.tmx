@@ -8,6 +8,143 @@
     <property name="Walkable" value="NO"/>
    </properties>
   </tile>
+  <tile id="15">
+   <properties>
+    <property name="Constructable" value="NO"/>
+    <property name="Walkable" value="YES"/>
+   </properties>
+  </tile>
+  <tile id="19">
+   <properties>
+    <property name="Constructable" value="NO"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="Constructable" value="NO"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="Constructable" value="NO"/>
+    <property name="Walkable" value="YES"/>
+   </properties>
+  </tile>
+  <tile id="22">
+   <properties>
+    <property name="Constructable" value="NO"/>
+    <property name="Walkable" value="YES"/>
+   </properties>
+  </tile>
+  <tile id="23">
+   <properties>
+    <property name="Constructable" value="NO"/>
+    <property name="Walkable" value="YES"/>
+   </properties>
+  </tile>
+  <tile id="27">
+   <properties>
+    <property name="Constructable" value="NO"/>
+   </properties>
+  </tile>
+  <tile id="28">
+   <properties>
+    <property name="Constructable" value="NO"/>
+   </properties>
+  </tile>
+  <tile id="29">
+   <properties>
+    <property name="Constructable" value="NO"/>
+    <property name="Walkable" value="YES"/>
+   </properties>
+  </tile>
+  <tile id="30">
+   <properties>
+    <property name="Constructable" value="NO"/>
+    <property name="Walkable" value="YES"/>
+   </properties>
+  </tile>
+  <tile id="35">
+   <properties>
+    <property name="Constructable" value="NO"/>
+   </properties>
+  </tile>
+  <tile id="36">
+   <properties>
+    <property name="Constructable" value="NO"/>
+   </properties>
+  </tile>
+  <tile id="43">
+   <properties>
+    <property name="Constructable" value="NO"/>
+   </properties>
+  </tile>
+  <tile id="44">
+   <properties>
+    <property name="Constructable" value="NO"/>
+   </properties>
+  </tile>
+  <tile id="46">
+   <properties>
+    <property name="Constructable" value="NO"/>
+   </properties>
+  </tile>
+  <tile id="47">
+   <properties>
+    <property name="Constructable" value="NO"/>
+   </properties>
+  </tile>
+  <tile id="51">
+   <properties>
+    <property name="Constructable" value="NO"/>
+   </properties>
+  </tile>
+  <tile id="52">
+   <properties>
+    <property name="Constructable" value="NO"/>
+    <property name="Walkable" value="YES"/>
+   </properties>
+  </tile>
+  <tile id="53">
+   <properties>
+    <property name="Constructable" value="NO"/>
+   </properties>
+  </tile>
+  <tile id="54">
+   <properties>
+    <property name="Constructable" value="NO"/>
+   </properties>
+  </tile>
+  <tile id="55">
+   <properties>
+    <property name="Constructable" value="NO"/>
+   </properties>
+  </tile>
+  <tile id="59">
+   <properties>
+    <property name="Constructable" value="NO"/>
+   </properties>
+  </tile>
+  <tile id="60">
+   <properties>
+    <property name="Constructable" value="NO"/>
+   </properties>
+  </tile>
+  <tile id="61">
+   <properties>
+    <property name="Constructable" value="NO"/>
+   </properties>
+  </tile>
+  <tile id="62">
+   <properties>
+    <property name="Constructable" value="NO"/>
+   </properties>
+  </tile>
+  <tile id="63">
+   <properties>
+    <property name="Constructable" value="NO"/>
+   </properties>
+  </tile>
  </tileset>
  <layer name="Map" width="16" height="16">
   <data encoding="base64" compression="zlib">
@@ -16,6 +153,6 @@
  </layer>
  <objectgroup name="MetaObjects" width="16" height="16">
   <object name="StartPoint" type="SpawnPoint" x="12" y="963" width="46" height="48"/>
-  <object name="DestinationPoint" type="DestinationPoint" x="650" y="136" width="48" height="49"/>
+  <object name="DestinationPoint" type="DestinationPoint" x="431" y="967" width="48" height="49"/>
  </objectgroup>
 </map>

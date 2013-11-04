@@ -54,6 +54,17 @@ NSString * const kTiledMapTilePropertyName_Constructable = @"Constructable";
             }
 
             [self addChild:self.tiledMap];
+            
+#if DEBUG
+      
+            NSLog(@"======== DEBUG =========");
+            NSLog(@"Map loaded: %@", self.fileName);
+            NSLog(@"Map size (pixels): %f x %f", self.calculateAccumulatedFrame.size.width, self.calculateAccumulatedFrame.size.height);
+            NSLog(@"Tile size: %f x %f", self.tiledMap.tileSize.width, self.tiledMap.tileSize.height);
+            NSLog(@"Spawn points: %d", self.spawnPoints.count);
+            NSLog(@"Goal points: %d", self.goalPoints.count);
+            NSLog(@"========================");
+#endif
         }
     }
     

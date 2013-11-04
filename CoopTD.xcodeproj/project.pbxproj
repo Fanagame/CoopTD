@@ -22,7 +22,11 @@
 		4406EFD81813614D00BA102D /* TDSpawn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4406EFD71813614D00BA102D /* TDSpawn.m */; };
 		4406EFE31813621F00BA102D /* TDTMXObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4406EFE21813621F00BA102D /* TDTMXObject.m */; };
 		442967F21815937600BD20BA /* TDCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 442967F11815937600BD20BA /* TDCamera.m */; };
+		4483FF0918276E1100FF4126 /* TDBaseBullet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4483FF0818276E1100FF4126 /* TDBaseBullet.m */; };
+		4483FF0D18276E3300FF4126 /* TDArrowBullet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4483FF0C18276E3300FF4126 /* TDArrowBullet.m */; };
 		44862B58181DD01700DE9C1E /* TDPathFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 44862B57181DD01700DE9C1E /* TDPathFinder.m */; };
+		44A434CF1825F0A20094A374 /* TDPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 44A434CE1825F0A20094A374 /* TDPlayer.m */; };
+		44A434D2182609300094A374 /* TDHudNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 44A434D1182609300094A374 /* TDHudNode.m */; };
 		44A8099E1814D4F7007EB6DA /* TDBaseUnitAI.m in Sources */ = {isa = PBXBuildFile; fileRef = 44A8099D1814D4F7007EB6DA /* TDBaseUnitAI.m */; };
 		44F5470E181370AA000459AB /* TDUltimateGoal.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F5470D181370AA000459AB /* TDUltimateGoal.m */; };
 		44F547121813D047000459AB /* SKButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F547111813D047000459AB /* SKButton.m */; };
@@ -105,8 +109,17 @@
 		4406EFE21813621F00BA102D /* TDTMXObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDTMXObject.m; sourceTree = "<group>"; };
 		442967F01815937600BD20BA /* TDCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDCamera.h; sourceTree = "<group>"; };
 		442967F11815937600BD20BA /* TDCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDCamera.m; sourceTree = "<group>"; };
+		4483FF0718276E1100FF4126 /* TDBaseBullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBaseBullet.h; sourceTree = "<group>"; };
+		4483FF0818276E1100FF4126 /* TDBaseBullet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBaseBullet.m; sourceTree = "<group>"; };
+		4483FF0B18276E3300FF4126 /* TDArrowBullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDArrowBullet.h; sourceTree = "<group>"; };
+		4483FF0C18276E3300FF4126 /* TDArrowBullet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDArrowBullet.m; sourceTree = "<group>"; };
 		44862B56181DD01700DE9C1E /* TDPathFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDPathFinder.h; sourceTree = "<group>"; };
 		44862B57181DD01700DE9C1E /* TDPathFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDPathFinder.m; sourceTree = "<group>"; };
+		44A434CD1825F0A20094A374 /* TDPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDPlayer.h; sourceTree = "<group>"; };
+		44A434CE1825F0A20094A374 /* TDPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDPlayer.m; sourceTree = "<group>"; };
+		44A434D0182609300094A374 /* TDHudNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDHudNode.h; sourceTree = "<group>"; };
+		44A434D1182609300094A374 /* TDHudNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDHudNode.m; sourceTree = "<group>"; };
+		44A434D31826A9310094A374 /* TDConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDConstants.h; sourceTree = "<group>"; };
 		44A8099C1814D4F7007EB6DA /* TDBaseUnitAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBaseUnitAI.h; sourceTree = "<group>"; };
 		44A8099D1814D4F7007EB6DA /* TDBaseUnitAI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBaseUnitAI.m; sourceTree = "<group>"; };
 		44F5470C181370AA000459AB /* TDUltimateGoal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDUltimateGoal.h; sourceTree = "<group>"; };
@@ -244,6 +257,9 @@
 		4406EF9D1812429D00BA102D /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4483FF0A18276E1500FF4126 /* Bullets */,
+				44A434D31826A9310094A374 /* TDConstants.h */,
+				44A434CC1825F0950094A374 /* Player */,
 				44F5473E1814C542000459AB /* Objects from TMX files */,
 				4406EFD91813617400BA102D /* Abstract */,
 				44F547371814C466000459AB /* AI */,
@@ -322,6 +338,8 @@
 		4406EFD91813617400BA102D /* Abstract */ = {
 			isa = PBXGroup;
 			children = (
+				4483FF0718276E1100FF4126 /* TDBaseBullet.h */,
+				4483FF0818276E1100FF4126 /* TDBaseBullet.m */,
 				4406EFE11813621F00BA102D /* TDTMXObject.h */,
 				4406EFE21813621F00BA102D /* TDTMXObject.m */,
 				44F5473B1814C4D8000459AB /* TDMapObject.h */,
@@ -330,6 +348,24 @@
 				44F547391814C486000459AB /* TDArtificialIntelligence.m */,
 			);
 			name = Abstract;
+			sourceTree = "<group>";
+		};
+		4483FF0A18276E1500FF4126 /* Bullets */ = {
+			isa = PBXGroup;
+			children = (
+				4483FF0B18276E3300FF4126 /* TDArrowBullet.h */,
+				4483FF0C18276E3300FF4126 /* TDArrowBullet.m */,
+			);
+			name = Bullets;
+			sourceTree = "<group>";
+		};
+		44A434CC1825F0950094A374 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				44A434CD1825F0A20094A374 /* TDPlayer.h */,
+				44A434CE1825F0A20094A374 /* TDPlayer.m */,
+			);
+			name = Player;
 			sourceTree = "<group>";
 		};
 		44F5470F1813D035000459AB /* SKButton */ = {
@@ -512,6 +548,8 @@
 			children = (
 				72EAB2CB181E48A2000C8BF4 /* TDGridNode.h */,
 				72EAB2CC181E48A2000C8BF4 /* TDGridNode.m */,
+				44A434D0182609300094A374 /* TDHudNode.h */,
+				44A434D1182609300094A374 /* TDHudNode.m */,
 			);
 			name = "Major nodes";
 			sourceTree = "<group>";
@@ -650,14 +688,18 @@
 				4406EFE31813621F00BA102D /* TDTMXObject.m in Sources */,
 				72EAB2CD181E48A2000C8BF4 /* TDGridNode.m in Sources */,
 				44F5472E1814AA81000459AB /* TDNewGameScene.m in Sources */,
+				44A434D2182609300094A374 /* TDHudNode.m in Sources */,
 				44F5473A1814C486000459AB /* TDArtificialIntelligence.m in Sources */,
 				4406EFB51812513900BA102D /* JSTileMap.m in Sources */,
 				4406EFD3181271F900BA102D /* TDUnit.m in Sources */,
+				4483FF0918276E1100FF4126 /* TDBaseBullet.m in Sources */,
 				44F547311814B941000459AB /* TDTiledMap.m in Sources */,
 				44F5470E181370AA000459AB /* TDUltimateGoal.m in Sources */,
 				72D99A861811038C00AB5B9D /* TDAppDelegate.m in Sources */,
 				72A6FEEF181A0EC200B74119 /* TDMapSelectorViewController.m in Sources */,
 				4406EFA4181242E100BA102D /* PathFinder.m in Sources */,
+				4483FF0D18276E3300FF4126 /* TDArrowBullet.m in Sources */,
+				44A434CF1825F0A20094A374 /* TDPlayer.m in Sources */,
 				4406EFB8181253D200BA102D /* LFCGzipUtility.m in Sources */,
 				44F547121813D047000459AB /* SKButton.m in Sources */,
 				4406EFA71812477100BA102D /* TDAssetManager.m in Sources */,

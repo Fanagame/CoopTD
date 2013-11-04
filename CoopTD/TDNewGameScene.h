@@ -24,11 +24,17 @@ typedef enum : uint8_t {
 	kWorldLayerCount
 } TDWorldLayer;
 
+typedef enum : uint8_t {
+    TDWorldModeDefault = 0,
+    TDWorldModePlaceBuilding,
+    TDWorldModeGameOver
+} TDWorldMode;
+
 /* Completion handler for callback after loading assets asynchronously. */
 typedef void (^TDAssetLoadCompletionHandler)(void);
 
 @class TDUnit, TDSpawn, TDUltimateGoal, TDTiledMap;
-@class TDGridNode;
+@class TDGridNode, TDHudNode;
 
 @interface TDNewGameScene : SKScene<SKPhysicsContactDelegate, ExplorableWorldDelegate, TDCameraDelegate>
 
@@ -38,17 +44,19 @@ typedef void (^TDAssetLoadCompletionHandler)(void);
 @property (nonatomic, strong) SKNode *world;
 @property (nonatomic, strong) NSMutableArray *layers;
 @property (nonatomic, strong) TDTiledMap *backgroundMap;
-@property (nonatomic, strong) SKNode *hud;
+@property (nonatomic, strong) TDHudNode *hud;
 @property (nonatomic, strong) TDGridNode *grid;
 
 @property (nonatomic, assign) CFTimeInterval lastUpdateTimeInterval;
+@property (nonatomic, assign) TDWorldMode currentMode;
 
 @property (nonatomic, strong) TDUltimateGoal *defaultGoalPoint;
 @property (nonatomic, strong) TDSpawn *defaultSpawnPoint;
-@property (nonatomic, strong) TDUnit *targetUnit;
+@property (nonatomic, weak) TDUnit *targetUnit;
 
 @property (nonatomic, strong) NSMutableArray *spawnPoints;
 @property (nonatomic, strong) NSMutableArray *goalPoints;
+@property (nonatomic, strong) NSMutableArray *buildings;
 
 + (void)loadSceneAssetsForMapName:(NSString *)mapName withCompletionHandler:(TDAssetLoadCompletionHandler)callback;
 + (void)loadSceneAssetsForMapName:(NSString *)mapName;
@@ -60,9 +68,9 @@ typedef void (^TDAssetLoadCompletionHandler)(void);
 /* All sprites in the scene should be added through this method to ensure they are placed in the correct world layer. */
 - (void)addNode:(SKNode *)node atWorldLayer:(TDWorldLayer)layer;
 
-- (CGPoint) tileCoordinatesForPosition:(CGPoint)position;
-- (CGPoint) tilePositionForCoordinate:(CGPoint)position;
-- (void) convertCoordinatesArrayToPositionsArray:(NSArray *)coords;
+- (CGPoint) tileCoordinatesForPositionInMap:(CGPoint)position;
+- (CGPoint) tilePositionInMapForCoordinate:(CGPoint)position;
+- (void) convertCoordinatesArrayToPositionsInMapArray:(NSArray *)coords;
 
 
 @end

@@ -10,6 +10,8 @@
 #import <SpriteKit/SpriteKit.h>
 #import "TDMapObject.h"
 
+@class TDSpawn;
+
 typedef enum TDUnitStatus : NSUInteger {
     TDUnitStatus_Standy,
     TDUnitStatus_CalculatingPath,
@@ -24,8 +26,15 @@ typedef enum TDUnitStatus : NSUInteger {
 @property (nonatomic, assign) NSInteger health;
 @property (nonatomic, assign) NSInteger maxHealth;
 
+@property (nonatomic, assign) NSInteger softCurrencyEarningValue;
+@property (nonatomic, assign) NSInteger softCurrencyBuyingValue;
+
 @property (nonatomic, assign) TDUnitStatus status;
 @property (nonatomic, strong, readonly) NSArray *path;
+
+@property (nonatomic, weak) TDSpawn *spawn;
+
+- (void) die;
 
 - (void) moveTowards:(CGPoint)mapPosition withTimeInterval:(CFTimeInterval)interval;
 - (void) followArrayPath:(NSArray *)path withCompletionHandler:(void (^)())onComplete;

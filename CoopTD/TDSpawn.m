@@ -26,6 +26,7 @@
     TDUnit *unit = [[TDUnit alloc] init];
     unit.unitID = self.lastSpawnedUnit.unitID + 1;
     unit.position = self.position;
+    unit.spawn = self;
     
     [self.gameScene addNode:unit atWorldLayer:TDWorldLayerCharacter];
     [self.units addObject:unit];
@@ -33,6 +34,12 @@
 
 - (TDUnit *) lastSpawnedUnit {
     return [self.units lastObject];
+}
+
+- (void) unitWasKilled:(TDUnit *)unit {
+    [self.units removeObject:unit];
+    
+    // do we need to do anything else?
 }
 
 #pragma mark - Loop Update

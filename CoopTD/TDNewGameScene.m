@@ -9,14 +9,16 @@
 #import "TDNewGameScene.h"
 #import "TDUnit.h"
 #import "TDSpawn.h"
+#import "TDUltimateGoal.h"
 #import "TDTiledMap.h"
 #import "TDMapCache.h"
 #import "SKButton.h"
 #import "TDPathFinder.h"
 #import "TDGridNode.h"
 #import "TDBuilding.h"
-
-#define BUTTON_SIZE 32
+#import "TDHudNode.h"
+#import "TDPlayer.h"
+#import "TDConstants.h"
 
 @implementation TDNewGameScene
 
@@ -35,8 +37,8 @@
 			SKNode *layer = nil;
 			
 			if (i == TDWorldLayerGrid) {
-				layer = [[TDGridNode alloc] init];
-				_grid = layer;
+				_grid = [[TDGridNode alloc] init];
+				layer = _grid;
 			} else {
 				layer = [[SKNode alloc] init];
 			}
@@ -47,10 +49,16 @@
         
         [self addChild:_world];
         
-        [self buildHUD];
+        // Initialize player
+        [[TDPlayer localPlayer] setSoftCurrency:2000];
+        [[TDPlayer localPlayer] setDisplayName:@"Remy"];
+        [[TDPlayer localPlayer] setRemainingLives:2];
+        
+        
+        // Initialize the world + hud
         [self buildWorld];
 		[self buildGrid];
-        
+        [self buildHUD];
         
         // Initialize the camera
         [[TDCamera sharedCamera] setWorld:_world];
@@ -59,6 +67,9 @@
         // Center the camera on the hero spawn point.
         [[TDCamera sharedCamera] setCameraToDefaultZoomLevel];
         [[TDCamera sharedCamera] pointCameraToSpawn:self.defaultSpawnPoint];
+        
+        // Register to important notifications
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerLivesReachedZero:) name:kLocalPlayerLivesReachedZeroNotificationName object:nil];
     }
     
     return self;
@@ -77,6 +88,9 @@
     
     UIPinchGestureRecognizer *pinchRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinch:)];
     [self.view addGestureRecognizer:pinchRecognizer];
+    
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    [self.view addGestureRecognizer:tapRecognizer];
 }
 
 #pragma mark - World building
@@ -89,6 +103,7 @@
     [self addBackgroundTiles];
     [self addSpawnPoints];
     [self addGoalPoints];
+    [self addBuildings];
 }
 
 - (void)addBackgroundTiles {
@@ -112,6 +127,27 @@
     }
 }
 
+- (void) addBuildings {
+    self.buildings = [[NSMutableArray alloc] init];
+}
+
+#pragma mark - Building helpers
+
+//TODO: maybe we should handle that somewhere else
+- (void) addBuildingAtTileCoordinates:(CGPoint)tileCoordinates {
+    if ([self isConstructable:tileCoordinates]) {
+        CGPoint position = [self tilePositionInMapForCoordinate:tileCoordinates];
+        
+        TDBuilding *b = [[TDBuilding alloc] init];
+        //    b.anchorPoint = CGPointMake(0, 0);
+        b.position = position;
+        [self addNode:b atWorldLayer:TDWorldLayerBuilding];
+        [self.buildings addObject:b];
+        
+        [[TDPlayer localPlayer] subtractSoftCurrency:b.softCurrencyPrice];
+    }
+}
+
 #pragma mark - Create grid
 
 - (void) buildGrid {
@@ -121,37 +157,10 @@
 #pragma mark - HUD and Scores
 
 - (void) buildHUD {
-    _hud = [[SKNode alloc] init];
-    _hud.name = @"hud";
+    _hud = [[TDHudNode alloc] init];
     [self addChild:_hud];
-	
-	CGPoint origin = CGPointMake(- self.size.width / 2, - self.size.height / 2);
-	
-	SKButton *exitButton = [[SKButton alloc] initWithImageNamedNormal:@"Circle_Red" selected:@"Circle_Red"];
-	exitButton.size = CGSizeMake(BUTTON_SIZE, BUTTON_SIZE);
-	exitButton.anchorPoint = CGPointMake(1, 1);
-	exitButton.position = CGPointMake(origin.x + self.size.width, origin.y + self.size.height);
-	[exitButton addTarget:self action:@selector(didTapExit) forControlEvents:UIControlEventTouchUpInside];
-	[self.hud addChild:exitButton];
-	
-	SKButton *zoomButton = [[SKButton alloc] initWithImageNamedNormal:@"Circle_Green" selected:@"Circle_Green"];
-	zoomButton.size = CGSizeMake(BUTTON_SIZE, BUTTON_SIZE);
-	zoomButton.position = CGPointMake(origin.x, origin.y + 100);
-	[zoomButton addTarget:self action:@selector(didTapZoom) forControlEvents:UIControlEventTouchUpInside];
-	[self.hud addChild:zoomButton];
+    [_hud didMoveToScene];
 }
-
-- (void) didTapExit {
-	[self.parentViewController.navigationController popViewControllerAnimated:YES];
-}
-
-- (void) didTapZoom {
-	TDBuilding *b = [[TDBuilding alloc] init];
-	b.position = CGPointMake(200, 200);
-	[self addNode:b atWorldLayer:TDWorldLayerBuilding];
-//    [[TDCamera sharedCamera] pointCameraToUnit:self.targetUnit trackingEnabled:YES];
-}
-
 
 #pragma mark - TDCameraDelegate
 
@@ -165,15 +174,21 @@
 
 #pragma mark - Position conversion
 
-- (CGPoint) tileCoordinatesForPosition:(CGPoint)position {
+- (CGPoint) tileCoordinatesForPositionInMap:(CGPoint)position {
     return [self.backgroundMap tileCoordinatesForPosition:position];
 }
 
-- (CGPoint) tilePositionForCoordinate:(CGPoint)position {
+- (CGPoint) tilePositionInMapForCoordinate:(CGPoint)position {
     return [self.backgroundMap tilePositionForCoordinate:position];
 }
 
-- (void) convertCoordinatesArrayToPositionsArray:(NSArray *)coords {
+- (CGPoint) convertPointFromViewToMapPosition:(CGPoint)point {
+    point = [self convertPointFromView:point];
+    point = [self convertPoint:point toNode:self.world];
+    return point;
+}
+
+- (void) convertCoordinatesArrayToPositionsInMapArray:(NSArray *)coords {
     [self.backgroundMap convertCoordinatesArrayToPositionsArray:coords];
 }
 
@@ -196,9 +211,15 @@
     for (TDSpawn *spawnPoint in self.spawnPoints) {
         [spawnPoint updateWithTimeSinceLastUpdate:timeSinceLast];
         
-        if (!self.targetUnit && spawnPoint.units.count > 0) {
-            self.targetUnit = [spawnPoint.units objectAtIndex:0];
-        }
+//#if DEBUG
+//        if (!self.targetUnit && spawnPoint.units.count > 0) {
+//            self.targetUnit = [spawnPoint.units objectAtIndex:0];
+//        }
+//#endif
+    }
+    
+    for (TDUltimateGoal *goal in self.goalPoints) {
+        [goal updateWithTimeSinceLastUpdate:timeSinceLast];
     }
 }
 
@@ -233,7 +254,59 @@
     [camera setCameraZoomLevel:newScale];
 }
 
+- (void) handleTap:(UITapGestureRecognizer *)tap {
+    if (tap.state == UIGestureRecognizerStateEnded) {
+        CGPoint position = [tap locationInView:tap.view];
+        position = [self convertPointFromViewToMapPosition:position];
+
+        CGPoint coord = [self tileCoordinatesForPositionInMap:position];
+        [self addBuildingAtTileCoordinates:coord];
+    }
+}
+
+#pragma mark - Notifications handling
+
+- (void) playerLivesReachedZero:(NSNotification *)notification {
+    if (notification.object == [TDPlayer localPlayer]) {
+        self.currentMode = TDWorldModeGameOver;
+    }
+}
+
 #pragma mark - Explorable world delegate
+
+- (BOOL)isConstructable:(CGPoint)coordinates {
+    BOOL ok = YES;
+    
+    // Is the terrain constructable?
+    if (self.backgroundMap.mainLayer.layerInfo) {
+        TMXLayerInfo *layerInfo = self.backgroundMap.mainLayer.layerInfo;
+        
+        NSInteger gid = [layerInfo tileGidAtCoord:coordinates];
+        NSDictionary *props = [self.backgroundMap.tiledMap propertiesForGid:gid];
+        
+        if (props) {
+            if ([props[@"Constructable"] isEqualToString:@"YES"]) {
+                ok = YES;
+            } else if (props[@"Constructable"]) {
+                ok = NO;
+            }
+        }
+    }
+    
+    // if it is, then do we already have a construction here?
+    if (ok) {
+        for (TDBuilding *b in self.buildings) {
+            CGPoint coord = [self tileCoordinatesForPositionInMap:b.position];
+            
+            if (CGPointEqualToPoint(coord, coordinates)) {
+                ok = NO;
+                break;
+            }
+        }
+    }
+    
+    return ok;
+}
 
 - (BOOL)isWalkable:(CGPoint)coordinates {
     if (self.backgroundMap.mainLayer.layerInfo) {
@@ -245,7 +318,7 @@
         if (props) {
             if ([props[@"Walkable"] isEqualToString:@"YES"]) {
                 return YES;
-            } else {
+            } else if (props[@"Walkable"]) {
                 return NO;
             }
         }
@@ -259,7 +332,27 @@
 
 #pragma mark - Physics Delegate
 - (void)didBeginContact:(SKPhysicsContact *)contact {
-    //TODO: handle collisions here
+    if ([contact.bodyA.node isKindOfClass:[TDMapObject class]]) {
+        TDMapObject *objA = (TDMapObject *)contact.bodyA.node;
+        [objA collidedWith:contact.bodyB contact:contact];
+    }
+    
+    if ([contact.bodyB.node isKindOfClass:[TDMapObject class]]) {
+        TDMapObject *objB = (TDMapObject *)contact.bodyB.node;
+        [objB collidedWith:contact.bodyA contact:contact];
+    }
+}
+
+- (void)didEndContact:(SKPhysicsContact *)contact {
+    if ([contact.bodyA.node isKindOfClass:[TDMapObject class]]) {
+        TDMapObject *objA = (TDMapObject *)contact.bodyA.node;
+        [objA stoppedCollidingWith:contact.bodyB contact:contact];
+    }
+    
+    if ([contact.bodyB.node isKindOfClass:[TDMapObject class]]) {
+        TDMapObject *objB = (TDMapObject *)contact.bodyB.node;
+        [objB stoppedCollidingWith:contact.bodyA contact:contact];
+    }
 }
 
 #pragma mark - Shared Assets

@@ -26,4 +26,14 @@
     [self.intelligence updateWithTimeSinceLastUpdate:interval];
 }
 
+#pragma mark - Collision handling
+
+- (void)collidedWith:(SKPhysicsBody *)body contact:(SKPhysicsContact *)contact {
+    // do nothing here
+}
+
+- (void)stoppedCollidingWith:(SKPhysicsBody *)body contact:(SKPhysicsContact *)contact {
+    // do nothing either
+}
+
 @end

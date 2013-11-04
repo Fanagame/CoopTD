@@ -15,8 +15,8 @@
     self = [super initWithColor:[UIColor clearColor] size:CGSizeZero];
     
     if (self) {
-        [self setup];
         [self setValuesForKeysWithDictionary:dictionary];
+        [self setup];
     }
     
     return self;

@@ -8,6 +8,15 @@
 
 #import "TDMapObject.h"
 
+@class TDUnit;
+
 @interface TDBuilding : TDMapObject
+
+@property (nonatomic, assign) CGFloat range;
+@property (nonatomic, assign) NSInteger softCurrencyPrice;
+
+- (BOOL) rangeIsVisibe;
+- (void) setRangeVisible:(BOOL)hidden;
+- (void) attackTarget:(TDUnit *)unit;
 
 @end

@@ -18,5 +18,6 @@
 @property (nonatomic, weak) TDUnit *lastSpawnedUnit;
 
 - (void) spawnNextUnit;
+- (void) unitWasKilled:(TDUnit *)unit;
 
 @end

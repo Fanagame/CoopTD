@@ -151,7 +151,7 @@ static TDPathFinder *_sharedPathCache;
 #if kTDPath_KeepPathCoordinates
             newPath.coordinatesPathArray = [pathAsArray copy];
 #endif
-            [world convertCoordinatesArrayToPositionsArray:pathAsArray];
+            [world convertCoordinatesArrayToPositionsInMapArray:pathAsArray];
             newPath.positionsPathArray = pathAsArray;
             
             // Notify our pending callers that the work here is done!
