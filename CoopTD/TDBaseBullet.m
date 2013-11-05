@@ -11,8 +11,7 @@
 @implementation TDBaseBullet
 
 - (CGFloat) attack {
-    return 100.0;
-//    return self.baseAttack + self.bonusAttack;
+    return self.baseAttack + self.bonusAttack;
 }
 
 @end

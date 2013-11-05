@@ -11,7 +11,7 @@
 #import "TDSpawn.h"
 
 CFTimeInterval const kMinTimeIntervalBetweenSpawn = 2.0f;
-NSInteger const kMaxUnitsOnMap = 1;
+NSInteger const kMaxUnitsOnMap = 30;
 
 @implementation TDSpawnAI
 

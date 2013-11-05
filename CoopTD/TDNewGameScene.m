@@ -266,6 +266,7 @@
 
 #pragma mark - Notifications handling
 
+//TODO: handle player lives = 0 correctly
 - (void) playerLivesReachedZero:(NSNotification *)notification {
     if (notification.object == [TDPlayer localPlayer]) {
         self.currentMode = TDWorldModeGameOver;

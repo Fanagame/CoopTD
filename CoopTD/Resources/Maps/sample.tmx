@@ -153,6 +153,6 @@
  </layer>
  <objectgroup name="MetaObjects" width="16" height="16">
   <object name="StartPoint" type="SpawnPoint" x="12" y="963" width="46" height="48"/>
-  <object name="DestinationPoint" type="DestinationPoint" x="431" y="967" width="48" height="49"/>
+  <object name="DestinationPoint" type="DestinationPoint" x="648" y="137" width="48" height="49"/>
  </objectgroup>
 </map>

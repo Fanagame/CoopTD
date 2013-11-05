@@ -30,6 +30,8 @@
         [self initRangeNode];
         
         [self setRangeVisible:YES];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unitWasKilled:) name:kTDUnitDiedNotificationName object:nil];
 	}
 	
 	return self;
@@ -115,6 +117,14 @@
 //        
 //        // attack with a bullet?
 //    }
+}
+
+#pragma mark - Handle other events
+
+- (void) unitWasKilled:(NSNotification *)notification {
+    if ([notification.object isKindOfClass:[TDUnit class]]) {
+        [self stoppedCollidingWith:[notification.object physicsBody] contact:nil];
+    }
 }
 
 #pragma mark - Handle collisions

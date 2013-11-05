@@ -10,6 +10,8 @@
 #import <SpriteKit/SpriteKit.h>
 #import "TDMapObject.h"
 
+extern NSString * const kTDUnitDiedNotificationName;
+
 @class TDSpawn;
 
 typedef enum TDUnitStatus : NSUInteger {
@@ -23,16 +25,16 @@ typedef enum TDUnitStatus : NSUInteger {
 @property (nonatomic, assign) NSInteger unitID;
 @property (nonatomic, strong) NSString *displayName;
 
-@property (nonatomic, assign) NSInteger health;
-@property (nonatomic, assign) NSInteger maxHealth;
+@property (nonatomic, assign) CFTimeInterval timeIntervalBetweenHits;
+@property (nonatomic, strong) NSDate* lastHitDate;
+@property (nonatomic, assign) NSUInteger health;
+@property (nonatomic, assign) NSUInteger maxHealth;
 
 @property (nonatomic, assign) NSInteger softCurrencyEarningValue;
 @property (nonatomic, assign) NSInteger softCurrencyBuyingValue;
 
 @property (nonatomic, assign) TDUnitStatus status;
 @property (nonatomic, strong, readonly) NSArray *path;
-
-@property (nonatomic, weak) TDSpawn *spawn;
 
 - (void) die;
 

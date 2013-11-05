@@ -24,6 +24,7 @@
 		442967F21815937600BD20BA /* TDCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 442967F11815937600BD20BA /* TDCamera.m */; };
 		4483FF0918276E1100FF4126 /* TDBaseBullet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4483FF0818276E1100FF4126 /* TDBaseBullet.m */; };
 		4483FF0D18276E3300FF4126 /* TDArrowBullet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4483FF0C18276E3300FF4126 /* TDArrowBullet.m */; };
+		4483FF1118280DE000FF4126 /* TDHealthBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4483FF1018280DE000FF4126 /* TDHealthBar.m */; };
 		44862B58181DD01700DE9C1E /* TDPathFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 44862B57181DD01700DE9C1E /* TDPathFinder.m */; };
 		44A434CF1825F0A20094A374 /* TDPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 44A434CE1825F0A20094A374 /* TDPlayer.m */; };
 		44A434D2182609300094A374 /* TDHudNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 44A434D1182609300094A374 /* TDHudNode.m */; };
@@ -113,6 +114,8 @@
 		4483FF0818276E1100FF4126 /* TDBaseBullet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBaseBullet.m; sourceTree = "<group>"; };
 		4483FF0B18276E3300FF4126 /* TDArrowBullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDArrowBullet.h; sourceTree = "<group>"; };
 		4483FF0C18276E3300FF4126 /* TDArrowBullet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDArrowBullet.m; sourceTree = "<group>"; };
+		4483FF0F18280DE000FF4126 /* TDHealthBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDHealthBar.h; sourceTree = "<group>"; };
+		4483FF1018280DE000FF4126 /* TDHealthBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDHealthBar.m; sourceTree = "<group>"; };
 		44862B56181DD01700DE9C1E /* TDPathFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDPathFinder.h; sourceTree = "<group>"; };
 		44862B57181DD01700DE9C1E /* TDPathFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDPathFinder.m; sourceTree = "<group>"; };
 		44A434CD1825F0A20094A374 /* TDPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDPlayer.h; sourceTree = "<group>"; };
@@ -257,14 +260,15 @@
 		4406EF9D1812429D00BA102D /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				4483FF0A18276E1500FF4126 /* Bullets */,
 				44A434D31826A9310094A374 /* TDConstants.h */,
-				44A434CC1825F0950094A374 /* Player */,
-				44F5473E1814C542000459AB /* Objects from TMX files */,
 				4406EFD91813617400BA102D /* Abstract */,
 				44F547371814C466000459AB /* AI */,
 				72B8AC5A1824BE260071D0AE /* Buildings */,
+				4483FF0A18276E1500FF4126 /* Bullets */,
+				4483FF0E18280DC700FF4126 /* Components */,
 				44F547361814C44E000459AB /* Enemies */,
+				44F5473E1814C542000459AB /* Objects from TMX files */,
+				44A434CC1825F0950094A374 /* Player */,
 				44F5472F1814B941000459AB /* TDTiledMap.h */,
 				44F547301814B941000459AB /* TDTiledMap.m */,
 				442967F01815937600BD20BA /* TDCamera.h */,
@@ -357,6 +361,15 @@
 				4483FF0C18276E3300FF4126 /* TDArrowBullet.m */,
 			);
 			name = Bullets;
+			sourceTree = "<group>";
+		};
+		4483FF0E18280DC700FF4126 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				4483FF0F18280DE000FF4126 /* TDHealthBar.h */,
+				4483FF1018280DE000FF4126 /* TDHealthBar.m */,
+			);
+			name = Components;
 			sourceTree = "<group>";
 		};
 		44A434CC1825F0950094A374 /* Player */ = {
@@ -688,6 +701,7 @@
 				4406EFE31813621F00BA102D /* TDTMXObject.m in Sources */,
 				72EAB2CD181E48A2000C8BF4 /* TDGridNode.m in Sources */,
 				44F5472E1814AA81000459AB /* TDNewGameScene.m in Sources */,
+				4483FF1118280DE000FF4126 /* TDHealthBar.m in Sources */,
 				44A434D2182609300094A374 /* TDHudNode.m in Sources */,
 				44F5473A1814C486000459AB /* TDArtificialIntelligence.m in Sources */,
 				4406EFB51812513900BA102D /* JSTileMap.m in Sources */,

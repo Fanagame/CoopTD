@@ -15,12 +15,16 @@
 #import "TDPlayer.h"
 #import "TDUltimateGoal.h"
 #import "TDBaseBullet.h"
+#import "TDBuilding.h"
+#import "TDHealthBar.h"
 
 static const CGFloat kUnitMovingSpeed = 0.3f;
+NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
 
 @interface TDUnit ()
 
 @property (nonatomic, strong) NSArray *path;
+@property (nonatomic, strong) TDHealthBar *healthBar;
 
 @end
 
@@ -30,10 +34,20 @@ static const CGFloat kUnitMovingSpeed = 0.3f;
     self = [super initWithImageNamed:@"pikachu-32"];
     
     if (self) {
+        // this should be made dynamic
         self.displayName = @"Pikachu";
+        self.maxHealth = 200;
+        self.health = self.maxHealth;
         self.softCurrencyEarningValue = 50;
         self.softCurrencyBuyingValue = 200;
+        self.timeIntervalBetweenHits = 0;
+        
+        // setup intelligence
         self.intelligence = [[TDBaseUnitAI alloc] initWithCharacter:self andTarget:nil];
+        
+        // add health bar
+        self.healthBar = [[TDHealthBar alloc] initWithTotalHP:self.maxHealth aboveSprite:self];
+        [self addChild:self.healthBar];
         
         // setup physics
         self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:self.size];
@@ -55,13 +69,19 @@ static const CGFloat kUnitMovingSpeed = 0.3f;
     _status = status;
 }
 
-- (void) setHealth:(NSInteger)health {
-    if (health < 0) { health = 0; }
-    
+- (void) setHealth:(NSUInteger)health {
     _health = health;
+    
+    self.healthBar.currentHP = health;
     
     if (_health == 0)
         [self die];
+}
+
+- (void) setMaxHealth:(NSUInteger)maxHealth {
+    _maxHealth = maxHealth;
+    
+    self.healthBar.totalHP = maxHealth;
 }
 
 #pragma mark - Handle collisions 
@@ -74,6 +94,13 @@ static const CGFloat kUnitMovingSpeed = 0.3f;
     } else if ([body.node isKindOfClass:[TDBaseBullet class]]) {
         [self hitByBullet:(TDBaseBullet *)body.node];
     }
+    
+    // next is temp fake code
+    else if ([body.node isKindOfClass:[TDBuilding class]]) {
+        TDBaseBullet *b = [[TDBaseBullet alloc] init];
+        b.baseAttack = 10;
+        [self hitByBullet:b];
+    }
 }
 
 - (void) stoppedCollidingWith:(SKPhysicsBody *)body contact:(SKPhysicsContact *)contact {
@@ -83,21 +110,26 @@ static const CGFloat kUnitMovingSpeed = 0.3f;
 #pragma mark - Unit actions
 
 - (void) reachedUltimateGoal {
-    [self.spawn unitWasKilled:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kTDUnitDiedNotificationName object:self];
     [self removeFromParent];
     
     [TDPlayer localPlayer].remainingLives--;
 }
 
 - (void) die {
-    [self.spawn unitWasKilled:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kTDUnitDiedNotificationName object:self];
     [self removeFromParent];
     
     [[TDPlayer localPlayer] addSoftCurrency:self.softCurrencyEarningValue];
 }
 
 - (void) hitByBullet:(TDBaseBullet *)bullet {
-    self.health -= bullet.attack;
+//    if (!self.lastHitDate || [self.lastHitDate timeIntervalSinceNow] > self.timeIntervalBetweenHits) {
+//        self.lastHitDate = [NSDate date];
+//        NSLog(@"before hitByBullet: %d", self.healthBar.currentHP);
+        self.health -= bullet.attack;
+//        NSLog(@"after hitByBullet: %d", self.healthBar.currentHP);
+//    }
 }
 
 #pragma mark - Moving unit along a path

@@ -18,6 +18,8 @@
     
     self.units = [[NSMutableArray alloc] init];
     self.intelligence = [[TDSpawnAI alloc] initWithCharacter:self andTarget:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unitWasKilled:) name:kTDUnitDiedNotificationName object:nil];
 }
 
 - (void) spawnNextUnit {
@@ -26,7 +28,6 @@
     TDUnit *unit = [[TDUnit alloc] init];
     unit.unitID = self.lastSpawnedUnit.unitID + 1;
     unit.position = self.position;
-    unit.spawn = self;
     
     [self.gameScene addNode:unit atWorldLayer:TDWorldLayerCharacter];
     [self.units addObject:unit];
@@ -36,8 +37,9 @@
     return [self.units lastObject];
 }
 
-- (void) unitWasKilled:(TDUnit *)unit {
-    [self.units removeObject:unit];
+- (void) unitWasKilled:(NSNotification *)notification {
+    if ([notification.object isKindOfClass:[TDUnit class]])
+        [self.units removeObject:notification.object];
     
     // do we need to do anything else?
 }
