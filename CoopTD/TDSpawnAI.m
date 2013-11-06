@@ -10,9 +10,6 @@
 #import "TDMapObject.h"
 #import "TDSpawn.h"
 
-CFTimeInterval const kMinTimeIntervalBetweenSpawn = 2.0f;
-NSInteger const kMaxUnitsOnMap = 30;
-
 @implementation TDSpawnAI
 
 #pragma mark - Loop Update
@@ -22,7 +19,7 @@ NSInteger const kMaxUnitsOnMap = 30;
     if ([self.character isKindOfClass:[TDSpawn class]]) {
         TDSpawn *spawn = (TDSpawn *)self.character;
         
-        if ((!spawn.lastSpawnDate && spawn.units.count < kMaxUnitsOnMap) || (spawn.units.count < kMaxUnitsOnMap && [[NSDate date] timeIntervalSinceDate:spawn.lastSpawnDate] >= kMinTimeIntervalBetweenSpawn)) {
+        if ((!spawn.lastSpawnDate && spawn.units.count < spawn.maxUnitsOnMap) || (spawn.units.count < spawn.maxUnitsOnMap && [[NSDate date] timeIntervalSinceDate:spawn.lastSpawnDate] >= spawn.timeIntervalBetweenSpawns)) {
             [spawn spawnNextUnit];
         }
     }

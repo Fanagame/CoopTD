@@ -8,10 +8,30 @@
 
 #import "TDBaseBullet.h"
 
+NSString * const kTDBulletDestroyedNotificationName = @"kTDBulletDestroyedNotificationName";
+
 @implementation TDBaseBullet
 
 - (CGFloat) attack {
     return self.baseAttack + self.bonusAttack;
+}
+
+#pragma mark - Handle collisions
+
+- (void) collidedWith:(SKPhysicsBody *)body contact:(SKPhysicsContact *)contact {
+    [super collidedWith:body contact:contact];
+    
+    // run some kind of animation maybe?
+    
+    // then disappear
+    [self removeFromParent];
+    
+    // tell the world about it!
+    [[NSNotificationCenter defaultCenter] postNotificationName:kTDBulletDestroyedNotificationName object:self];
+}
+
+- (void) stoppedCollidingWith:(SKPhysicsBody *)body contact:(SKPhysicsContact *)contact {
+    [super stoppedCollidingWith:body contact:contact];
 }
 
 @end

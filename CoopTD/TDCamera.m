@@ -10,7 +10,9 @@
 #import "TDUnit.h"
 #import "TDSpawn.h"
 
-@interface TDCamera ()
+@interface TDCamera () {
+    CGSize _cachedWorldSize;
+}
 
 @property (nonatomic, weak) SKNode *trackedElement;
 @property (nonatomic, assign) CGFloat trackingEdgeBounds;
@@ -44,6 +46,13 @@ static TDCamera *_sharedCamera;
     return winSize;
 }
 
+- (CGSize)worldSize {
+//    if (CGSizeEqualToSize(_cachedWorldSize, CGSizeZero)) {
+        _cachedWorldSize = self.world.calculateAccumulatedFrame.size;
+//    }
+    return _cachedWorldSize;
+}
+
 //TODO: cache the value for best performance?
 - (CGFloat) bestScaleForDevice {
     CGSize winSize = self.winSize;
@@ -59,7 +68,7 @@ static TDCamera *_sharedCamera;
 /// @description ensures that the new position won't make go out of bounds (mapSize wise)
 - (CGPoint) boundedLayerPosition:(CGPoint)newPos {
     CGSize winSize = self.winSize;
-    CGSize mapSize = self.world.calculateAccumulatedFrame.size;
+    CGSize mapSize = self.worldSize;
     
     CGPoint retval = newPos;
     

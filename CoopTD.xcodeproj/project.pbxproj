@@ -22,6 +22,7 @@
 		4406EFD81813614D00BA102D /* TDSpawn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4406EFD71813614D00BA102D /* TDSpawn.m */; };
 		4406EFE31813621F00BA102D /* TDTMXObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4406EFE21813621F00BA102D /* TDTMXObject.m */; };
 		442967F21815937600BD20BA /* TDCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 442967F11815937600BD20BA /* TDCamera.m */; };
+		44562FB218296F71004F1098 /* TDBaseBuildingAI.m in Sources */ = {isa = PBXBuildFile; fileRef = 44562FB118296F71004F1098 /* TDBaseBuildingAI.m */; };
 		4483FF0918276E1100FF4126 /* TDBaseBullet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4483FF0818276E1100FF4126 /* TDBaseBullet.m */; };
 		4483FF0D18276E3300FF4126 /* TDArrowBullet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4483FF0C18276E3300FF4126 /* TDArrowBullet.m */; };
 		4483FF1118280DE000FF4126 /* TDHealthBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4483FF1018280DE000FF4126 /* TDHealthBar.m */; };
@@ -55,7 +56,7 @@
 		72B8AC571824B72F0071D0AE /* Circle_Green.png in Resources */ = {isa = PBXBuildFile; fileRef = 72B8AC531824B72F0071D0AE /* Circle_Green.png */; };
 		72B8AC581824B72F0071D0AE /* Circle_Orange.png in Resources */ = {isa = PBXBuildFile; fileRef = 72B8AC541824B72F0071D0AE /* Circle_Orange.png */; };
 		72B8AC591824B72F0071D0AE /* Circle_Red.png in Resources */ = {isa = PBXBuildFile; fileRef = 72B8AC551824B72F0071D0AE /* Circle_Red.png */; };
-		72B8AC5D1824BE410071D0AE /* TDBuilding.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B8AC5C1824BE410071D0AE /* TDBuilding.m */; };
+		72B8AC5D1824BE410071D0AE /* TDBaseBuilding.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B8AC5C1824BE410071D0AE /* TDBaseBuilding.m */; };
 		72B8AC5F1824BFB50071D0AE /* Tower-Single-Sprite.png in Resources */ = {isa = PBXBuildFile; fileRef = 72B8AC5E1824BFB50071D0AE /* Tower-Single-Sprite.png */; };
 		72D99A741811038C00AB5B9D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D99A731811038C00AB5B9D /* Foundation.framework */; };
 		72D99A761811038C00AB5B9D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D99A751811038C00AB5B9D /* CoreGraphics.framework */; };
@@ -110,6 +111,8 @@
 		4406EFE21813621F00BA102D /* TDTMXObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDTMXObject.m; sourceTree = "<group>"; };
 		442967F01815937600BD20BA /* TDCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDCamera.h; sourceTree = "<group>"; };
 		442967F11815937600BD20BA /* TDCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDCamera.m; sourceTree = "<group>"; };
+		44562FB018296F71004F1098 /* TDBaseBuildingAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBaseBuildingAI.h; sourceTree = "<group>"; };
+		44562FB118296F71004F1098 /* TDBaseBuildingAI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBaseBuildingAI.m; sourceTree = "<group>"; };
 		4483FF0718276E1100FF4126 /* TDBaseBullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBaseBullet.h; sourceTree = "<group>"; };
 		4483FF0818276E1100FF4126 /* TDBaseBullet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBaseBullet.m; sourceTree = "<group>"; };
 		4483FF0B18276E3300FF4126 /* TDArrowBullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDArrowBullet.h; sourceTree = "<group>"; };
@@ -160,8 +163,8 @@
 		72B8AC531824B72F0071D0AE /* Circle_Green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Circle_Green.png; path = Resources/HUD/Circle_Green.png; sourceTree = "<group>"; };
 		72B8AC541824B72F0071D0AE /* Circle_Orange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Circle_Orange.png; path = Resources/HUD/Circle_Orange.png; sourceTree = "<group>"; };
 		72B8AC551824B72F0071D0AE /* Circle_Red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Circle_Red.png; path = Resources/HUD/Circle_Red.png; sourceTree = "<group>"; };
-		72B8AC5B1824BE410071D0AE /* TDBuilding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBuilding.h; sourceTree = "<group>"; };
-		72B8AC5C1824BE410071D0AE /* TDBuilding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBuilding.m; sourceTree = "<group>"; };
+		72B8AC5B1824BE410071D0AE /* TDBaseBuilding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBaseBuilding.h; sourceTree = "<group>"; };
+		72B8AC5C1824BE410071D0AE /* TDBaseBuilding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBaseBuilding.m; sourceTree = "<group>"; };
 		72B8AC5E1824BFB50071D0AE /* Tower-Single-Sprite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Tower-Single-Sprite.png"; path = "Resources/images/Tower-Single-Sprite.png"; sourceTree = "<group>"; };
 		72D99A701811038B00AB5B9D /* CoopTD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoopTD.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72D99A731811038C00AB5B9D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -424,6 +427,8 @@
 				44F547411814CEE2000459AB /* TDSpawnAI.m */,
 				44A8099C1814D4F7007EB6DA /* TDBaseUnitAI.h */,
 				44A8099D1814D4F7007EB6DA /* TDBaseUnitAI.m */,
+				44562FB018296F71004F1098 /* TDBaseBuildingAI.h */,
+				44562FB118296F71004F1098 /* TDBaseBuildingAI.m */,
 			);
 			name = AI;
 			sourceTree = "<group>";
@@ -472,8 +477,8 @@
 		72B8AC5A1824BE260071D0AE /* Buildings */ = {
 			isa = PBXGroup;
 			children = (
-				72B8AC5B1824BE410071D0AE /* TDBuilding.h */,
-				72B8AC5C1824BE410071D0AE /* TDBuilding.m */,
+				72B8AC5B1824BE410071D0AE /* TDBaseBuilding.h */,
+				72B8AC5C1824BE410071D0AE /* TDBaseBuilding.m */,
 			);
 			name = Buildings;
 			sourceTree = "<group>";
@@ -695,9 +700,10 @@
 				44F547351814BD20000459AB /* TDMapCache.m in Sources */,
 				44F5473D1814C4D8000459AB /* TDMapObject.m in Sources */,
 				44862B58181DD01700DE9C1E /* TDPathFinder.m in Sources */,
-				72B8AC5D1824BE410071D0AE /* TDBuilding.m in Sources */,
+				72B8AC5D1824BE410071D0AE /* TDBaseBuilding.m in Sources */,
 				442967F21815937600BD20BA /* TDCamera.m in Sources */,
 				44A8099E1814D4F7007EB6DA /* TDBaseUnitAI.m in Sources */,
+				44562FB218296F71004F1098 /* TDBaseBuildingAI.m in Sources */,
 				4406EFE31813621F00BA102D /* TDTMXObject.m in Sources */,
 				72EAB2CD181E48A2000C8BF4 /* TDGridNode.m in Sources */,
 				44F5472E1814AA81000459AB /* TDNewGameScene.m in Sources */,

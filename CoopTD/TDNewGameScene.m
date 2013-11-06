@@ -15,10 +15,17 @@
 #import "SKButton.h"
 #import "TDPathFinder.h"
 #import "TDGridNode.h"
-#import "TDBuilding.h"
+#import "TDBaseBuilding.h"
 #import "TDHudNode.h"
 #import "TDPlayer.h"
 #import "TDConstants.h"
+
+@interface TDNewGameScene () {
+    CGSize _cachedMapSizeForCamera;
+    CGSize _cachedActualMapSize;
+}
+
+@end
 
 @implementation TDNewGameScene
 
@@ -104,6 +111,11 @@
     [self addSpawnPoints];
     [self addGoalPoints];
     [self addBuildings];
+
+    self.world.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.world.calculateAccumulatedFrame];
+    self.world.physicsBody.categoryBitMask = kPhysicsCategory_World;
+    self.world.physicsBody.collisionBitMask = 0; // collide with nothing
+    self.world.physicsBody.contactTestBitMask = kPhysicsCategory_Bullet | kPhysicsCategory_Unit;
 }
 
 - (void)addBackgroundTiles {
@@ -138,7 +150,7 @@
     if ([self isConstructable:tileCoordinates]) {
         CGPoint position = [self tilePositionInMapForCoordinate:tileCoordinates];
         
-        TDBuilding *b = [[TDBuilding alloc] init];
+        TDBaseBuilding *b = [[TDBaseBuilding alloc] init];
         //    b.anchorPoint = CGPointMake(0, 0);
         b.position = position;
         [self addNode:b atWorldLayer:TDWorldLayerBuilding];
@@ -165,11 +177,18 @@
 #pragma mark - TDCameraDelegate
 
 - (CGSize) actualMapSizeForCamera:(TDCamera *)camera {
-    return CGSizeMake(self.backgroundMap.tiledMap.mapSize.width * self.backgroundMap.tiledMap.tileSize.width, self.backgroundMap.tiledMap.mapSize.height * self.backgroundMap.tiledMap.tileSize.height);
+    if (CGSizeEqualToSize(_cachedActualMapSize, CGSizeZero)) {
+        _cachedActualMapSize = CGSizeMake(self.backgroundMap.tiledMap.mapSize.width * self.backgroundMap.tiledMap.tileSize.width, self.backgroundMap.tiledMap.mapSize.height * self.backgroundMap.tiledMap.tileSize.height);
+    }
+    
+    return _cachedActualMapSize;
 }
 
 - (CGSize) mapSizeForCamera:(TDCamera *)camera {
-    return self.backgroundMap.tiledMap.calculateAccumulatedFrame.size;
+    if (CGSizeEqualToSize(_cachedMapSizeForCamera, CGSizeZero)) {
+        _cachedMapSizeForCamera = self.backgroundMap.tiledMap.calculateAccumulatedFrame.size;
+    }
+    return _cachedMapSizeForCamera;
 }
 
 #pragma mark - Position conversion
@@ -210,16 +229,14 @@
     // Game logic
     for (TDSpawn *spawnPoint in self.spawnPoints) {
         [spawnPoint updateWithTimeSinceLastUpdate:timeSinceLast];
-        
-//#if DEBUG
-//        if (!self.targetUnit && spawnPoint.units.count > 0) {
-//            self.targetUnit = [spawnPoint.units objectAtIndex:0];
-//        }
-//#endif
     }
     
     for (TDUltimateGoal *goal in self.goalPoints) {
         [goal updateWithTimeSinceLastUpdate:timeSinceLast];
+    }
+    
+    for (TDBaseBuilding *building in self.buildings) {
+        [building updateWithTimeSinceLastUpdate:timeSinceLast];
     }
 }
 
@@ -296,7 +313,7 @@
     
     // if it is, then do we already have a construction here?
     if (ok) {
-        for (TDBuilding *b in self.buildings) {
+        for (TDBaseBuilding *b in self.buildings) {
             CGPoint coord = [self tileCoordinatesForPositionInMap:b.position];
             
             if (CGPointEqualToPoint(coord, coordinates)) {
@@ -309,7 +326,22 @@
     return ok;
 }
 
+- (BOOL) hasBuildingAtCoordinates:(CGPoint)coordinates {
+    BOOL hasBuilding = NO;
+    
+    for (TDBaseBuilding *building in self.buildings) {
+        if (CGPointEqualToPoint(coordinates, [self tileCoordinatesForPositionInMap:building.position])) {
+            hasBuilding = YES;
+            break;
+        }
+    }
+    
+    return hasBuilding;
+}
+
 - (BOOL)isWalkable:(CGPoint)coordinates {
+    BOOL walkable = YES;
+    
     if (self.backgroundMap.mainLayer.layerInfo) {
         TMXLayerInfo *layerInfo = self.backgroundMap.mainLayer.layerInfo;
         
@@ -318,13 +350,18 @@
         
         if (props) {
             if ([props[@"Walkable"] isEqualToString:@"YES"]) {
-                return YES;
+                walkable = YES;
             } else if (props[@"Walkable"]) {
-                return NO;
+                walkable = NO;
             }
         }
     }
-    return YES;
+    
+    if (walkable) {
+        walkable = ![self hasBuildingAtCoordinates:coordinates];
+    }
+    
+    return walkable;
 }
 
 - (NSUInteger)weightForTileAtPosition:(CGPoint)position {

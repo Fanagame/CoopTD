@@ -6,38 +6,45 @@
 //  Copyright (c) 2013 Remy Bardou Corp. All rights reserved.
 //
 
-#import "TDBuilding.h"
+#import "TDBaseBuilding.h"
 #import "TDUnit.h"
 #import "TDConstants.h"
+#import "TDArrowBullet.h"
+#import "TDBaseBuildingAI.h"
 
-@interface TDBuilding ()
+@interface TDBaseBuilding ()
 
 @property (nonatomic, strong) SKShapeNode *rangeNode;
-@property (nonatomic, strong) NSMutableArray *activeTargets;
 
 @end
 
-@implementation TDBuilding
+@implementation TDBaseBuilding
 
 - (id) init {
 	self = [super initWithImageNamed:@"Tower-Single-Sprite"];
     
 	if (self) {
-        self.activeTargets = [[NSMutableArray alloc] init];
+        self.unitsInRange = [[NSMutableArray alloc] init];
+        self.bullets = [[NSMutableArray alloc] init];
+        self.intelligence = [[TDBaseBuildingAI alloc] initWithCharacter:self andTarget:nil];
+        
+        //TODO: init this from database or something else
         self.range = 100.0f;
         self.softCurrencyPrice = 200;
+        self.timeIntervalBetweenShots = 0.2;
+        self.maxBulletsOnScreen = 3;
         
-        [self initRangeNode];
-        
+        [self setupRange];
         [self setRangeVisible:YES];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unitWasKilled:) name:kTDUnitDiedNotificationName object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bulletWasDestroyed:) name:kTDBulletDestroyedNotificationName object:nil];
 	}
 	
 	return self;
 }
 
-- (void) initRangeNode {
+- (void) setupRange {
     // setup range node
     self.rangeNode = [[SKShapeNode alloc] init];
     self.rangeNode.position = CGPointMake(0, 0);
@@ -79,44 +86,39 @@
     self.rangeNode.hidden = !visible;
 }
 
-#pragma mark - Attacking targets
-
-- (void) addTarget:(TDUnit *)target {
-    __weak TDUnit *weakTarget = target;
-    [self.activeTargets addObject:weakTarget];
-    
-    [self updateRangeStatus];
-}
-
-- (void) removeTarget:(TDUnit *)target {
-    [self.activeTargets removeObject:target];
-    
-    [self updateRangeStatus];
-}
-
-- (void) updateRangeStatus {
-    if (self.activeTargets.count > 0)
+- (void) updateRangeStatus { // might not keep this until the end
+    if (self.unitsInRange.count > 0)
         self.rangeNode.fillColor = [UIColor redColor];
     else
         self.rangeNode.fillColor = [UIColor greenColor];
 }
 
-- (TDUnit *) activeTarget {
-    if (self.activeTargets.count > 0) {
-        return [self.activeTargets lastObject];
-    }
-    
-    return nil;
+#pragma mark - Attacking targets
+
+- (void) addPossibleTarget:(TDUnit *)target {
+    [self.unitsInRange addObject:target];
+    [self updateRangeStatus];
 }
 
-// should be called by AI
-- (void) attackTargets {
-//    if (self.activeTargets > 0) {
-//        // attack the latest target only
-//        TDUnit *target = [self activeTarget];
-//        
-//        // attack with a bullet?
-//    }
+- (void) removePossibleTarget:(TDUnit *)target {
+    [self.unitsInRange removeObject:target];
+    [self updateRangeStatus];
+}
+
+// called by the AI
+- (void) attackTarget:(TDUnit *)target {
+    if (target && (!self.lastShotDate || [self.lastShotDate timeIntervalSinceNow] < -self.timeIntervalBetweenShots) && self.bullets.count <= self.maxBulletsOnScreen) {
+        self.lastShotDate = [NSDate date];
+        
+        // shoot
+        TDArrowBullet *arrow = [[TDArrowBullet alloc] init];
+        arrow.position = self.position;
+        [self.gameScene addNode:arrow atWorldLayer:TDWorldLayerAboveCharacter];
+        [self.bullets addObject:arrow];
+        
+        // we need to move the bullet now! use physics
+        [arrow.physicsBody applyImpulse:CGVectorMake(0, 200)];
+    }
 }
 
 #pragma mark - Handle other events
@@ -127,13 +129,19 @@
     }
 }
 
+- (void) bulletWasDestroyed:(NSNotification *)notification {
+    if ([notification.object isKindOfClass:[TDBaseBullet class]]) {
+        [self.bullets removeObject:notification.object];
+    }
+}
+
 #pragma mark - Handle collisions
 
 - (void) collidedWith:(SKPhysicsBody *)body contact:(SKPhysicsContact *)contact {
     [super collidedWith:body contact:contact];
     
     if ([body.node isKindOfClass:[TDUnit class]]) {
-        [self addTarget:(TDUnit *)body.node];
+        [self addPossibleTarget:(TDUnit *)body.node];
     }
 }
 
@@ -141,7 +149,7 @@
     [super stoppedCollidingWith:body contact:contact];
     
     if ([body.node isKindOfClass:[TDUnit class]]) {
-        [self removeTarget:(TDUnit *)body.node];
+        [self removePossibleTarget:(TDUnit *)body.node];
     }
 }
 

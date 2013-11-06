@@ -12,3 +12,4 @@ static const uint32_t kPhysicsCategory_Unit             = 0x1 << 0;
 static const uint32_t kPhysicsCategory_UltimateGoal     = 0x1 << 1;
 static const uint32_t kPhysicsCategory_BuildingRange    = 0x1 << 2;
 static const uint32_t kPhysicsCategory_Bullet           = 0x1 << 3;
+static const uint32_t kPhysicsCategory_World            = 0x1 << 4;

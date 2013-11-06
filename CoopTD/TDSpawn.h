@@ -12,8 +12,10 @@
 
 @interface TDSpawn : TDTMXObject
 
-@property (nonatomic, strong) NSMutableArray *units;
+@property (nonatomic, assign) CFTimeInterval timeIntervalBetweenSpawns;
+@property (nonatomic, assign) NSInteger maxUnitsOnMap;
 
+@property (nonatomic, strong) NSMutableArray *units;
 @property (nonatomic, strong) NSDate *lastSpawnDate;
 @property (nonatomic, weak) TDUnit *lastSpawnedUnit;
 

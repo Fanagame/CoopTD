@@ -15,7 +15,7 @@
 #import "TDPlayer.h"
 #import "TDUltimateGoal.h"
 #import "TDBaseBullet.h"
-#import "TDBuilding.h"
+#import "TDBaseBuilding.h"
 #import "TDHealthBar.h"
 
 static const CGFloat kUnitMovingSpeed = 0.3f;
@@ -93,13 +93,6 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
         [self reachedUltimateGoal];
     } else if ([body.node isKindOfClass:[TDBaseBullet class]]) {
         [self hitByBullet:(TDBaseBullet *)body.node];
-    }
-    
-    // next is temp fake code
-    else if ([body.node isKindOfClass:[TDBuilding class]]) {
-        TDBaseBullet *b = [[TDBaseBullet alloc] init];
-        b.baseAttack = 10;
-        [self hitByBullet:b];
     }
 }
 
