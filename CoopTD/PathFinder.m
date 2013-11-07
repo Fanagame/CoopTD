@@ -35,6 +35,28 @@
 	return _overallScore;
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+    PathNode *n = [self.class allocWithZone:zone];
+    
+    if (n) {
+        n.position = self.position;
+        n.gScore = self.gScore;
+        n.hScore = self.hScore;
+        n.parent = self.parent;
+    }
+    
+    return n;
+}
+
+- (BOOL) isEqual:(id)object {
+    if ([object isKindOfClass:self.class]) {
+        if (CGPointEqualToPoint(self.position, [object position])) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 @end
 
 @implementation PathFinder

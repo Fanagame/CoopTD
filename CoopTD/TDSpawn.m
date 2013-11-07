@@ -16,7 +16,7 @@
 - (void) setup {
     self.color = [UIColor redColor];
     
-    self.maxUnitsOnMap = 1;
+    self.maxUnitsOnMap = 10;
     self.timeIntervalBetweenSpawns = 3;
     
     self.units = [[NSMutableArray alloc] init];

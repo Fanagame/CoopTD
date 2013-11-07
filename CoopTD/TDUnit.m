@@ -54,9 +54,16 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
         self.physicsBody.categoryBitMask = kPhysicsCategory_Unit;
         self.physicsBody.usesPreciseCollisionDetection = YES;
         self.physicsBody.collisionBitMask = 0;
+        
+        // await for notifications
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pathDidUpdate:) name:kTDPathFindingInvalidatePathNotificationName object:nil];
     }
     
     return self;
+}
+
+- (void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 /// @description Change the unit status. Going to standby cancels any of its ongoing actions.
@@ -127,6 +134,20 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
 
 #pragma mark - Moving unit along a path
 
+- (void) pathDidUpdate:(NSNotification *)notification {
+    if ([notification.object isKindOfClass:[TDPath class]]) {
+        if (self.pathToVictory == notification.object) {
+            CGPoint oldDestination = [[self.path lastObject] position];
+            
+            self.path = nil;
+            self.pathToVictory = nil;
+            [self removeAllActions];
+            
+            [self moveTowards:oldDestination withTimeInterval:0];
+        }
+    }
+}
+
 - (void) moveTowards:(CGPoint)mapPosition withTimeInterval:(CFTimeInterval)interval {
     if (self.status != TDUnitStatus_CalculatingPath) {
         self.status = TDUnitStatus_CalculatingPath;
@@ -136,6 +157,7 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
         
         __weak TDUnit *weakSelf = self;
         [[TDPathFinder sharedPathCache] pathInExplorableWorld:self.gameScene fromA:selfCoord toB:destCoord usingDiagonal:NO onSuccess:^(TDPath *path) {
+            weakSelf.pathToVictory = path;
             [weakSelf followArrayPath:path.positionsPathArray];
             weakSelf.status = TDUnitStatus_Moving;
         }];

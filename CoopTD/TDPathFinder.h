@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "PathFinder.h"
 
+extern NSString * const kTDPathFindingInvalidatePathsNotificationName;
+extern NSString * const kTDPathFindingInvalidatePathNotificationName;
+
 @class TDPath, TDNewGameScene;
 
 typedef void (^TDPathCallback)(TDPath *path);
@@ -24,11 +27,15 @@ typedef void (^TDPathCallback)(TDPath *path);
 @property (nonatomic, assign) CGPoint endPosition;
 
 @property (atomic, assign) BOOL isBeingCalculated;
+@property (atomic, assign) BOOL wasInvalidated;
+
 // do we really need to keep this one?
 @property (nonatomic, strong) NSArray *coordinatesPathArray;
 @property (nonatomic, strong) NSArray *positionsPathArray;
 
 - (id) initWithStartCoordinates:(CGPoint)coordA andEndCoordinates:(CGPoint)coordB;
+- (BOOL) containsCoordinates:(CGPoint)coords;
+- (void) invalidate;
 
 @end
 
@@ -39,6 +46,7 @@ typedef void (^TDPathCallback)(TDPath *path);
 - (TDPath *) pathFromSpawnPoint:(CGPoint)spawnPosition toGoalPoint:(CGPoint)goalPosition;
 - (void) setPath:(TDPath *)path fromSpawnPoint:(CGPoint)spawnPosition toGoalPoint:(CGPoint)goalPosition;
 - (void) clearCache;
+- (NSArray *) cachedPaths;
 
 - (void)pathInExplorableWorld:(TDNewGameScene *)world fromA:(CGPoint)pointA toB:(CGPoint)pointB usingDiagonal:(BOOL)useDiagonal onSuccess:(TDPathCallback)onSuccess;
 

@@ -15,7 +15,7 @@
 
 @end
 
-@interface PathNode : NSObject
+@interface PathNode : NSObject<NSCopying>
 
 @property (nonatomic, assign) CGPoint position;
 @property (nonatomic, strong) PathNode *parent;

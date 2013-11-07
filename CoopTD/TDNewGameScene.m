@@ -157,6 +157,13 @@
         [self.buildings addObject:b];
         
         [[TDPlayer localPlayer] subtractSoftCurrency:b.softCurrencyPrice];
+        
+        // is the building part of any cached path?
+        for (TDPath *path in [[TDPathFinder sharedPathCache] cachedPaths]) {
+            if ([path containsCoordinates:tileCoordinates]) {
+                [path invalidate]; // then invalidate it!
+            }
+        }
     }
 }
 

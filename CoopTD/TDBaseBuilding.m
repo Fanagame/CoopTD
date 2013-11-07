@@ -35,7 +35,7 @@
         self.maxBulletsOnScreen = 3;
         
         [self setupRange];
-        [self setRangeVisible:YES];
+//        [self setRangeVisible:YES];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unitWasKilled:) name:kTDUnitDiedNotificationName object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bulletWasDestroyed:) name:kTDBulletDestroyedNotificationName object:nil];
@@ -52,8 +52,6 @@
     self.rangeNode.strokeColor = [UIColor clearColor];
     self.rangeNode.zPosition = -1;
     self.rangeNode.alpha = 0.2;
-    self.rangeNode.hidden = YES;
-    [self addChild:self.rangeNode];
     
     // precalculate the range
     CGRect baseRect = CGRectMake(- self.size.width * 0.5, - self.size.height * 0.5, self.size.width, self.size.height);
@@ -79,11 +77,14 @@
 #pragma mark - Range detection
 
 - (BOOL) rangeIsVisibe {
-    return self.rangeNode.hidden;
+    return (self.rangeNode.parent != nil);
 }
 
 - (void) setRangeVisible:(BOOL)visible {
-    self.rangeNode.hidden = !visible;
+    if (visible && ![self rangeIsVisibe])
+        [self addChild:self.rangeNode];
+    else if (!visible)
+        [self.rangeNode removeFromParent];
 }
 
 - (void) updateRangeStatus { // might not keep this until the end
