@@ -9,6 +9,7 @@
 #import "TDBaseBuildingAI.h"
 #import "TDBaseBuilding.h"
 #import "TDUnit.h"
+#import "TDConstants.h"
 
 @implementation TDBaseBuildingAI
 
@@ -19,7 +20,9 @@
         TDBaseBuilding *building = (TDBaseBuilding *)self.character;
         
         // Find a target
+#ifndef kTDBuildingAI_ALWAYS_SHOOT_THE_NEW_GUY
         if (![building.unitsInRange containsObject:self.target])
+#endif
             self.target = [building.unitsInRange lastObject];
         
         if (self.target && [self.target isKindOfClass:[TDUnit class]]) {
