@@ -10,9 +10,9 @@
 #import "PathFinder.h"
 
 extern NSString * const kTDPathFindingInvalidatePathsNotificationName;
-extern NSString * const kTDPathFindingInvalidatePathNotificationName;
+extern NSString * const kTDPathFindingPathWasInvalidatedNotificationName;
 
-@class TDPath, TDNewGameScene;
+@class TDPath, TDNewGameScene, TDUnit;
 
 typedef void (^TDPathCallback)(TDPath *path);
 
@@ -29,13 +29,18 @@ typedef void (^TDPathCallback)(TDPath *path);
 @property (atomic, assign) BOOL isBeingCalculated;
 @property (atomic, assign) BOOL wasInvalidated;
 
-// do we really need to keep this one?
 @property (nonatomic, strong) NSArray *coordinatesPathArray;
 @property (nonatomic, strong) NSArray *positionsPathArray;
+
+@property (nonatomic, strong) NSMutableArray *owners;
 
 - (id) initWithStartCoordinates:(CGPoint)coordA andEndCoordinates:(CGPoint)coordB;
 - (BOOL) containsCoordinates:(CGPoint)coords;
 - (void) invalidate;
+
+- (void) addOwner:(TDUnit *)owner;
+- (void) removeOwner:(TDUnit *)owner;
+- (BOOL) hasOwners;
 
 @end
 
@@ -46,8 +51,12 @@ typedef void (^TDPathCallback)(TDPath *path);
 - (TDPath *) pathFromSpawnPoint:(CGPoint)spawnPosition toGoalPoint:(CGPoint)goalPosition;
 - (void) setPath:(TDPath *)path fromSpawnPoint:(CGPoint)spawnPosition toGoalPoint:(CGPoint)goalPosition;
 - (void) clearCache;
+- (void) removePathFromCache:(TDPath *)path;
 - (NSArray *) cachedPaths;
 
 - (void)pathInExplorableWorld:(TDNewGameScene *)world fromA:(CGPoint)pointA toB:(CGPoint)pointB usingDiagonal:(BOOL)useDiagonal onSuccess:(TDPathCallback)onSuccess;
+
+
+- (void) printCache;
 
 @end

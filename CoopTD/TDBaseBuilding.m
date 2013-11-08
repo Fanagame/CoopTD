@@ -15,6 +15,7 @@
 @interface TDBaseBuilding ()
 
 @property (nonatomic, strong) SKShapeNode *rangeNode;
+@property (nonatomic, strong) SKShapeNode *bodyNode;
 
 @end
 
@@ -34,9 +35,24 @@
         self.timeIntervalBetweenShots = 0.2;
         self.maxBulletsOnScreen = 3;
         
-        [self setupRange];
-//        [self setRangeVisible:YES];
+        self.bodyNode = [[SKShapeNode alloc] init];
+        self.bodyNode.path = CGPathCreateWithRect(self.frame, NULL);
+#ifdef kTDBuilding_SHOW_PHYSICS_BODY
+        self.bodyNode.fillColor = [UIColor redColor];
+#else
+        self.bodyNode.strokeColor = [UIColor clearColor];
+#endif
+        self.bodyNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:self.size];
+        self.bodyNode.physicsBody.categoryBitMask = kPhysicsCategory_Building;
+        self.bodyNode.physicsBody.collisionBitMask = kPhysicsCategory_Unit;
+        self.bodyNode.physicsBody.friction = 0;
+        self.bodyNode.physicsBody.dynamic = NO;
+        [self addChild:self.bodyNode];
         
+        [self setupRange];
+#ifdef kTDBuilding_SHOW_RANGE_BY_DEFAULT
+        [self setRangeVisible:YES];
+#endif
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unitWasKilled:) name:kTDUnitDiedNotificationName object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bulletWasDestroyed:) name:kTDBulletDestroyedNotificationName object:nil];
 	}
@@ -106,8 +122,8 @@
     [self updateRangeStatus];
 }
 
-// called by the AI
 - (void) attackTarget:(TDUnit *)target {
+#ifndef kTDBuilding_DISABLE_SHOOTING
     if (target && (!self.lastShotDate || [self.lastShotDate timeIntervalSinceNow] < -self.timeIntervalBetweenShots) && self.bullets.count <= self.maxBulletsOnScreen) {
         self.lastShotDate = [NSDate date];
         
@@ -120,6 +136,7 @@
         // we need to move the bullet now! use physics
         [arrow.physicsBody applyImpulse:CGVectorMake(0, 200)];
     }
+#endif
 }
 
 #pragma mark - Handle other events

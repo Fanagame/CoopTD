@@ -53,10 +53,13 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
         self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:self.size];
         self.physicsBody.categoryBitMask = kPhysicsCategory_Unit;
         self.physicsBody.usesPreciseCollisionDetection = YES;
-        self.physicsBody.collisionBitMask = 0;
+        self.physicsBody.collisionBitMask = kPhysicsCategory_Building;
+        self.physicsBody.allowsRotation = NO;
+        self.physicsBody.mass = 1000;
+        self.physicsBody.restitution = 1;
         
         // await for notifications
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pathDidUpdate:) name:kTDPathFindingInvalidatePathNotificationName object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pathDidUpdate:) name:kTDPathFindingPathWasInvalidatedNotificationName object:nil];
     }
     
     return self;
@@ -112,6 +115,7 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
 - (void) reachedUltimateGoal {
     [[NSNotificationCenter defaultCenter] postNotificationName:kTDUnitDiedNotificationName object:self];
     [self removeFromParent];
+    [self.pathToVictory removeOwner:self]; // releases cache
     
     [TDPlayer localPlayer].remainingLives--;
 }
@@ -119,17 +123,13 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
 - (void) die {
     [[NSNotificationCenter defaultCenter] postNotificationName:kTDUnitDiedNotificationName object:self];
     [self removeFromParent];
+    [self.pathToVictory removeOwner:self]; // releases cache
     
     [[TDPlayer localPlayer] addSoftCurrency:self.softCurrencyEarningValue];
 }
 
 - (void) hitByBullet:(TDBaseBullet *)bullet {
-//    if (!self.lastHitDate || [self.lastHitDate timeIntervalSinceNow] > self.timeIntervalBetweenHits) {
-//        self.lastHitDate = [NSDate date];
-//        NSLog(@"before hitByBullet: %d", self.healthBar.currentHP);
-        self.health -= bullet.attack;
-//        NSLog(@"after hitByBullet: %d", self.healthBar.currentHP);
-//    }
+    self.health -= bullet.attack;
 }
 
 #pragma mark - Moving unit along a path
@@ -139,6 +139,7 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
         if (self.pathToVictory == notification.object) {
             CGPoint oldDestination = [[self.path lastObject] position];
             
+            [self.pathToVictory removeOwner:self];
             self.path = nil;
             self.pathToVictory = nil;
             [self removeAllActions];
@@ -160,6 +161,7 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
             weakSelf.pathToVictory = path;
             [weakSelf followArrayPath:path.positionsPathArray];
             weakSelf.status = TDUnitStatus_Moving;
+            [weakSelf.pathToVictory addOwner:self];
         }];
     }
 }

@@ -158,7 +158,7 @@
         
         [[TDPlayer localPlayer] subtractSoftCurrency:b.softCurrencyPrice];
         
-        // is the building part of any cached path?
+//        // is the building part of any cached path?
         for (TDPath *path in [[TDPathFinder sharedPathCache] cachedPaths]) {
             if ([path containsCoordinates:tileCoordinates]) {
                 [path invalidate]; // then invalidate it!
@@ -302,6 +302,7 @@
 - (BOOL)isConstructable:(CGPoint)coordinates {
     BOOL ok = YES;
     
+#ifndef kTDGameScene_DISABLE_CONSTRUCTABLE_CHECK
     // Is the terrain constructable?
     if (self.backgroundMap.mainLayer.layerInfo) {
         TMXLayerInfo *layerInfo = self.backgroundMap.mainLayer.layerInfo;
@@ -330,6 +331,23 @@
         }
     }
     
+    // or do we have an enemy there?
+    if (ok) {
+        for (TDSpawn *spawn in self.spawnPoints) {
+            for (TDUnit *unit in spawn.units) {
+                CGPoint coord = [self tileCoordinatesForPositionInMap:unit.position];
+                
+                if (CGPointEqualToPoint(coord, coordinates)) {
+                    ok = NO;
+                    break;
+                }
+            }
+        }
+    }
+    
+    //TODO: or would it block pathfinding? although, we could fix it by doing it some other way, like making the ennemies attack!
+#endif
+    
     return ok;
 }
 
@@ -349,6 +367,10 @@
 - (BOOL)isWalkable:(CGPoint)coordinates {
     BOOL walkable = YES;
     
+    if (coordinates.x < 0 || coordinates.x > self.backgroundMap.tiledMap.mapSize.width - 1 || coordinates.y < 0 || coordinates.y > self.backgroundMap.tiledMap.mapSize.height - 1) {
+        return NO;
+    }
+#ifndef kTDGameScene_DISABLE_WALKABLE_CHECK
     if (self.backgroundMap.mainLayer.layerInfo) {
         TMXLayerInfo *layerInfo = self.backgroundMap.mainLayer.layerInfo;
         
@@ -363,6 +385,7 @@
             }
         }
     }
+#endif
     
     if (walkable) {
         walkable = ![self hasBuildingAtCoordinates:coordinates];

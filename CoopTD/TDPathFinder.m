@@ -9,9 +9,10 @@
 #import "TDPathFinder.h"
 #import "TDSpawn.h"
 #import "PathFinder.h"
+#import "TDUnit.h"
 
 NSString * const kTDPathFindingInvalidatePathsNotificationName = @"kTDPathFindingInvalidatePathsNotificationName";
-NSString * const kTDPathFindingInvalidatePathNotificationName = @"kTDPathFindingInvalidatePathNotificationName";
+NSString * const kTDPathFindingPathWasInvalidatedNotificationName = @"kTDPathFindingInvalidatePathNotificationName";
 
 #define kTDPath_KeepPathCoordinates 1
 
@@ -34,6 +35,7 @@ NSString * const kTDPathFindingInvalidatePathNotificationName = @"kTDPathFinding
     
     if (self) {
         self.pendingCallbacks = [[NSMutableArray alloc] init];
+        self.owners = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -44,6 +46,7 @@ NSString * const kTDPathFindingInvalidatePathNotificationName = @"kTDPathFinding
     
     if (self) {
         self.pendingCallbacks = [[NSMutableArray alloc] init];
+        self.owners = [[NSMutableArray alloc] init];
         
         self.startCoordinates = coordA;
         self.endCoordinates = coordB;
@@ -52,15 +55,7 @@ NSString * const kTDPathFindingInvalidatePathNotificationName = @"kTDPathFinding
     return self;
 }
 
-//TODO: do we really need that one?
-- (TDPath *) pathForSpawn:(TDSpawn *)spawn {
-//    if (spawn) {
-//        TDPath *p = [[TDPath alloc] init];
-//    }
-    
-    return nil;
-}
-
+// is this coordinate included in the path?
 - (BOOL) containsCoordinates:(CGPoint)coords {
     return ([self.coordinatesPathArray containsObject:[[PathNode alloc] initWithPosition:coords]]);
 }
@@ -69,7 +64,38 @@ NSString * const kTDPathFindingInvalidatePathNotificationName = @"kTDPathFinding
     self.wasInvalidated = YES;
     
     // contact units using this path and tell them to update their trajectories
-    [[NSNotificationCenter defaultCenter] postNotificationName:kTDPathFindingInvalidatePathNotificationName object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kTDPathFindingPathWasInvalidatedNotificationName object:self];
+}
+
+- (void) addOwner:(TDUnit *)owner {
+    if (![self.owners containsObject:owner]) {
+        [self.owners addObject:owner];
+    }
+    [[TDPathFinder sharedPathCache] printCache];
+}
+
+- (void) removeOwner:(TDUnit *)owner {
+    [self.owners removeObject:owner];
+    
+    if (!self.hasOwners) {
+        [[TDPathFinder sharedPathCache] removePathFromCache:self];
+    }
+    
+    [[TDPathFinder sharedPathCache] printCache];
+}
+
+- (BOOL) hasOwners {
+    return (self.owners.count > 0);
+}
+
+- (NSString *) description {
+    NSMutableString *str = [[NSMutableString alloc] init];
+    
+    for (PathNode *p in self.coordinatesPathArray) {
+        [str appendFormat:@"(%f,%f)\n", p.position.x, p.position.y];
+    }
+    
+    return str;
 }
 
 #pragma mark - Protected methods
@@ -143,8 +169,24 @@ static TDPathFinder *_sharedPathCache;
     }
 }
 
+- (void) removePathFromCache:(TDPath *)path {
+    [self.mainLock lock];
+    [self.cache removeObjectForKey:[self keyForPointA:path.startCoordinates pointB:path.endCoordinates]];
+    [self.mainLock unlock];
+}
+
 - (void) clearCache {
-    [self.cache removeAllObjects];
+    [self.mainLock lock];
+    NSArray *paths = [self cachedPaths];
+    
+    for (int i = paths.count - 1; i >= 0; i--) {
+        TDPath *path = paths[i];
+        
+        if (!path.hasOwners) {
+            [self.cache removeObjectForKey:[self keyForPointA:path.startCoordinates pointB:path.endCoordinates]];
+        }
+    }
+    [self.mainLock unlock];
 }
 
 - (void) pathInExplorableWorld:(TDNewGameScene *)world fromA:(CGPoint)pointA toB:(CGPoint)pointB usingDiagonal:(BOOL)useDiagonal onSuccess:(void (^)(TDPath *))onSuccess {
@@ -173,8 +215,9 @@ static TDPathFinder *_sharedPathCache;
             
             NSArray *pathAsArray = [[PathFinder sharedInstance] pathInExplorableWorld:world fromA:pointA toB:pointB usingDiagonal:useDiagonal];
             
+#ifdef kTDPath_PRINT_CACHE_CONTENT
             NSLog(@"*** PATHFINDING *** Found path in %f seconds!", -[startDate timeIntervalSinceNow]);
-            
+#endif
             newPath.isBeingCalculated = NO;
             
             if (newPath.wasInvalidated) {
@@ -213,6 +256,24 @@ static TDPathFinder *_sharedPathCache;
 
 - (NSArray *) cachedPaths {
     return self.cache.allValues;
+}
+
+#pragma mark - DEBUG
+
+- (void) printCache {
+#if DEBUG
+#ifdef kTDPath_PRINT_CACHE_CONTENT
+    NSLog(@"=========================================");
+    NSLog(@"====    PathFinder cache content   ======");
+    NSLog(@"=========================================");
+    
+    NSLog(@"Amount of cached paths: %d", self.cachedPaths.count);
+    for (TDPath *p in self.cachedPaths) {
+        NSLog(@"Path with key %@ is owned by %d units.", [self keyForPointA:p.startCoordinates pointB:p.endCoordinates], p.owners.count);
+        NSLog(@"%@", p.description);
+    }
+#endif
+#endif
 }
 
 #pragma mark - Private methods
