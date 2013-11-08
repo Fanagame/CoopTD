@@ -16,11 +16,13 @@
     
     if (self) {
         self.baseAttack = 20;
-        self.baseSpeed = 20;
+        self.baseSpeed = 2;
         self.baseSplash = 0;
         
         self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:self.size];
         self.physicsBody.mass = 1.0;
+        self.physicsBody.friction = 0;
+        self.physicsBody.linearDamping = 0;
         self.physicsBody.categoryBitMask = kPhysicsCategory_Bullet;
         self.physicsBody.collisionBitMask = 0;
         self.physicsBody.contactTestBitMask = kPhysicsCategory_Unit;

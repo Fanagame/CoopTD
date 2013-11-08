@@ -17,7 +17,7 @@
     self.color = [UIColor redColor];
     
     self.maxUnitsOnMap = 10;
-    self.timeIntervalBetweenSpawns = 3;
+    self.timeIntervalBetweenSpawns = 0.2;
     
     self.units = [[NSMutableArray alloc] init];
     self.intelligence = [[TDSpawnAI alloc] initWithCharacter:self andTarget:nil];

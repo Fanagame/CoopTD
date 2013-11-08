@@ -91,7 +91,7 @@
     self.exitButton = [[SKButton alloc] initWithImageNamedNormal:@"Circle_Red" selected:@"Circle_Red"];
     self.exitButton.size = CGSizeMake(BUTTON_SIZE, BUTTON_SIZE);
     self.exitButton.anchorPoint = CGPointMake(1, 1);
-    self.exitButton.position = CGPointMake(origin.x + scene.size.width, origin.y + scene.size.height);
+    self.exitButton.position = CGPointMake(origin.x + scene.size.width - 50, origin.y + scene.size.height - 50);
     [self.exitButton addTarget:self action:@selector(didTapExit) forControlEvents:UIControlEventTouchUpInside];
     [self addChild:self.exitButton];
     

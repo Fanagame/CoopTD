@@ -12,7 +12,7 @@
 
 extern NSString * const kTDUnitDiedNotificationName;
 
-@class TDSpawn, TDPath;
+@class TDSpawn, TDPath, TDPlayer;
 
 typedef enum TDUnitStatus : NSUInteger {
     TDUnitStatus_Standy,
@@ -36,6 +36,7 @@ typedef enum TDUnitStatus : NSUInteger {
 @property (nonatomic, assign) TDUnitStatus status;
 @property (nonatomic, strong, readonly) NSArray *path;
 @property (nonatomic, strong) TDPath *pathToVictory;
+@property (nonatomic, weak)   TDPlayer *player;
 
 - (void) die;
 

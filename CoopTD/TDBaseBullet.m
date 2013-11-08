@@ -16,6 +16,14 @@ NSString * const kTDBulletDestroyedNotificationName = @"kTDBulletDestroyedNotifi
     return self.baseAttack + self.bonusAttack;
 }
 
+- (CGFloat) speed {
+    return self.baseSpeed + self.bonusSpeed;
+}
+
+- (CGFloat) splash {
+    return self.baseSplash + self.bonusSplash;
+}
+
 #pragma mark - Handle collisions
 
 - (void) collidedWith:(SKPhysicsBody *)body contact:(SKPhysicsContact *)contact {

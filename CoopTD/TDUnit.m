@@ -117,6 +117,9 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
     [self removeFromParent];
     [self.pathToVictory removeOwner:self]; // releases cache
     
+    if (self.player != [TDPlayer localPlayer])
+        self.player.remainingLives++;
+    
     [TDPlayer localPlayer].remainingLives--;
 }
 

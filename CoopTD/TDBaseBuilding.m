@@ -134,7 +134,7 @@
         [self.bullets addObject:arrow];
         
         // we need to move the bullet now! use physics
-        [arrow.physicsBody applyImpulse:CGVectorMake(0, 200)];
+        [arrow.physicsBody applyImpulse:CGVectorMake((target.position.x - self.position.x) * arrow.speed, (target.position.y - self.position.y) * arrow.speed)];
     }
 #endif
 }
