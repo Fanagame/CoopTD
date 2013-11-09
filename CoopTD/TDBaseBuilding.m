@@ -9,7 +9,8 @@
 #import "TDBaseBuilding.h"
 #import "TDUnit.h"
 #import "TDConstants.h"
-#import "TDArrowBullet.h"
+#import "TDProjectileBullet.h"
+#import "TDBeamBullet.h"
 #import "TDBaseBuildingAI.h"
 
 @interface TDBaseBuilding ()
@@ -30,13 +31,14 @@
         self.intelligence = [[TDBaseBuildingAI alloc] initWithCharacter:self andTarget:nil];
         
         //TODO: init this from database or something else
-        self.range = 100.0f;
         self.softCurrencyPrice = 200;
         self.timeIntervalBetweenShots = 0.2;
-        self.maxBulletsOnScreen = 3;
+        self.bulletType = TDBulletType_Beam;
+        self.maxBulletsOnScreen = (self.bulletType != TDBulletType_Beam ? 3 : 1);
+        self.range = (self.bulletType != TDBulletType_Beam ? 100.0f : 300.0f);
         
         self.bodyNode = [[SKShapeNode alloc] init];
-        self.bodyNode.path = CGPathCreateWithRect(self.frame, NULL);
+        self.bodyNode.path = CGPathCreateWithRect(self.frame, NULL); // leak?
 #ifdef kTDBuilding_SHOW_PHYSICS_BODY
         self.bodyNode.fillColor = [UIColor redColor];
 #else
@@ -90,6 +92,15 @@
     self.physicsBody.contactTestBitMask = kPhysicsCategory_Unit;
 }
 
+- (void) updateWithTimeSinceLastUpdate:(CFTimeInterval)interval {
+    [super updateWithTimeSinceLastUpdate:interval];
+    
+    if (self.unitsInRange.count == 0 && self.bulletType == TDBulletType_Beam && self.bullets.count > 0) {
+        // destroy this laser bullet!
+        [[self.bullets lastObject] destroy];
+    }
+}
+
 #pragma mark - Range detection
 
 - (BOOL) rangeIsVisibe {
@@ -112,6 +123,23 @@
 
 #pragma mark - Attacking targets
 
+//TODO: make this better
+- (TDBaseBullet *) nextBullet {
+    TDBaseBullet *b = nil;
+    
+    switch (self.bulletType) {
+        case TDBulletType_Beam:
+            b = [[TDBeamBullet alloc] init];
+            break;
+            
+        default:
+            b = [[TDProjectileBullet alloc] init];
+            break;
+    }
+    
+    return b;
+}
+
 - (void) addPossibleTarget:(TDUnit *)target {
     [self.unitsInRange addObject:target];
     [self updateRangeStatus];
@@ -124,17 +152,39 @@
 
 - (void) attackTarget:(TDUnit *)target {
 #ifndef kTDBuilding_DISABLE_SHOOTING
-    if (target && (!self.lastShotDate || [self.lastShotDate timeIntervalSinceNow] < -self.timeIntervalBetweenShots) && self.bullets.count <= self.maxBulletsOnScreen) {
-        self.lastShotDate = [NSDate date];
-        
-        // shoot
-        TDArrowBullet *arrow = [[TDArrowBullet alloc] init];
-        arrow.position = self.position;
-        [self.gameScene addNode:arrow atWorldLayer:TDWorldLayerAboveCharacter];
-        [self.bullets addObject:arrow];
-        
-        // we need to move the bullet now! use physics
-        [arrow.physicsBody applyImpulse:CGVectorMake((target.position.x - self.position.x) * arrow.speed, (target.position.y - self.position.y) * arrow.speed)];
+    if (target) {
+        if (self.bulletType == TDBulletType_Beam) {
+            
+            TDBeamBullet *bullet = nil;
+            if (self.bullets.count == 0) {
+                bullet = (TDBeamBullet *)self.nextBullet;
+                bullet.position = self.position;
+                bullet.anchorPoint = CGPointMake(0, 0.5);
+                [self.gameScene addNode:bullet atWorldLayer:TDWorldLayerAboveCharacter];
+                [self.bullets addObject:bullet];
+            } else {
+                bullet = [self.bullets lastObject];
+            }
+            
+            // update the height of the bullet, then the angle
+            CGFloat deltaX = target.position.x - self.position.x;
+            CGFloat deltaY = target.position.y - self.position.y;
+            CGFloat width = sqrtf(deltaX * deltaX + deltaY * deltaY);
+            [bullet updateWidth:width];
+            bullet.zRotation = atan2f(deltaY, deltaX);
+            
+        } else if ((!self.lastShotDate || [self.lastShotDate timeIntervalSinceNow] < -self.timeIntervalBetweenShots) && self.bullets.count <= self.maxBulletsOnScreen) {
+            self.lastShotDate = [NSDate date];
+            
+            // shoot
+            TDBaseBullet *bullet = self.nextBullet;
+            bullet.position = self.position;
+            [self.gameScene addNode:bullet atWorldLayer:TDWorldLayerAboveCharacter];
+            [self.bullets addObject:bullet];
+            
+            // we need to move the bullet now! use physics
+            [bullet.physicsBody applyImpulse:CGVectorMake((target.position.x - self.position.x) * bullet.speed, (target.position.y - self.position.y) * bullet.speed)];
+        }
     }
 #endif
 }

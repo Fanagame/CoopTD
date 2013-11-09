@@ -18,6 +18,7 @@ static const uint32_t kPhysicsCategory_UltimateGoal     = 0x1 << 5;
 //#define kTDPath_PRINT_CACHE_CONTENT
 //#define kTDGameScene_DISABLE_WALKABLE_CHECK
 //#define kTDGameScene_DISABLE_CONSTRUCTABLE_CHECK
+//#define kTDGameScene_SHOW_GRID
 //#define kTDBuilding_SHOW_RANGE_BY_DEFAULT
 //#define kTDBuilding_SHOW_PHYSICS_BODY
 //#define kTDBuilding_DISABLE_SHOOTING

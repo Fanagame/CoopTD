@@ -170,7 +170,9 @@
 #pragma mark - Create grid
 
 - (void) buildGrid {
+#ifdef kTDGameScene_SHOW_GRID
 	[self.grid buildGrid];
+#endif
 }
 
 #pragma mark - HUD and Scores

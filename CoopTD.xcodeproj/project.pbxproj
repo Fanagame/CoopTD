@@ -24,7 +24,7 @@
 		442967F21815937600BD20BA /* TDCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 442967F11815937600BD20BA /* TDCamera.m */; };
 		44562FB218296F71004F1098 /* TDBaseBuildingAI.m in Sources */ = {isa = PBXBuildFile; fileRef = 44562FB118296F71004F1098 /* TDBaseBuildingAI.m */; };
 		4483FF0918276E1100FF4126 /* TDBaseBullet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4483FF0818276E1100FF4126 /* TDBaseBullet.m */; };
-		4483FF0D18276E3300FF4126 /* TDArrowBullet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4483FF0C18276E3300FF4126 /* TDArrowBullet.m */; };
+		4483FF0D18276E3300FF4126 /* TDProjectileBullet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4483FF0C18276E3300FF4126 /* TDProjectileBullet.m */; };
 		4483FF1118280DE000FF4126 /* TDHealthBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4483FF1018280DE000FF4126 /* TDHealthBar.m */; };
 		44862B58181DD01700DE9C1E /* TDPathFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 44862B57181DD01700DE9C1E /* TDPathFinder.m */; };
 		44A434CF1825F0A20094A374 /* TDPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 44A434CE1825F0A20094A374 /* TDPlayer.m */; };
@@ -50,6 +50,7 @@
 		44F5473A1814C486000459AB /* TDArtificialIntelligence.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F547391814C486000459AB /* TDArtificialIntelligence.m */; };
 		44F5473D1814C4D8000459AB /* TDMapObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F5473C1814C4D8000459AB /* TDMapObject.m */; };
 		44F547421814CEE2000459AB /* TDSpawnAI.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F547411814CEE2000459AB /* TDSpawnAI.m */; };
+		44FA5C36182DD33200AB979E /* TDBeamBullet.m in Sources */ = {isa = PBXBuildFile; fileRef = 44FA5C35182DD33200AB979E /* TDBeamBullet.m */; };
 		72A6FEEF181A0EC200B74119 /* TDMapSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 72A6FEEE181A0EC200B74119 /* TDMapSelectorViewController.m */; };
 		72A6FEF1181A112C00B74119 /* TileMap.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 72A6FEF0181A112C00B74119 /* TileMap.tmx */; };
 		72B8AC561824B72F0071D0AE /* Circle_Blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 72B8AC521824B72F0071D0AE /* Circle_Blue.png */; };
@@ -115,8 +116,8 @@
 		44562FB118296F71004F1098 /* TDBaseBuildingAI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBaseBuildingAI.m; sourceTree = "<group>"; };
 		4483FF0718276E1100FF4126 /* TDBaseBullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBaseBullet.h; sourceTree = "<group>"; };
 		4483FF0818276E1100FF4126 /* TDBaseBullet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBaseBullet.m; sourceTree = "<group>"; };
-		4483FF0B18276E3300FF4126 /* TDArrowBullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDArrowBullet.h; sourceTree = "<group>"; };
-		4483FF0C18276E3300FF4126 /* TDArrowBullet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDArrowBullet.m; sourceTree = "<group>"; };
+		4483FF0B18276E3300FF4126 /* TDProjectileBullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDProjectileBullet.h; sourceTree = "<group>"; };
+		4483FF0C18276E3300FF4126 /* TDProjectileBullet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDProjectileBullet.m; sourceTree = "<group>"; };
 		4483FF0F18280DE000FF4126 /* TDHealthBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDHealthBar.h; sourceTree = "<group>"; };
 		4483FF1018280DE000FF4126 /* TDHealthBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDHealthBar.m; sourceTree = "<group>"; };
 		44862B56181DD01700DE9C1E /* TDPathFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDPathFinder.h; sourceTree = "<group>"; };
@@ -156,6 +157,8 @@
 		44F5473C1814C4D8000459AB /* TDMapObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDMapObject.m; sourceTree = "<group>"; };
 		44F547401814CEE2000459AB /* TDSpawnAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDSpawnAI.h; sourceTree = "<group>"; };
 		44F547411814CEE2000459AB /* TDSpawnAI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSpawnAI.m; sourceTree = "<group>"; };
+		44FA5C34182DD33200AB979E /* TDBeamBullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBeamBullet.h; sourceTree = "<group>"; };
+		44FA5C35182DD33200AB979E /* TDBeamBullet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBeamBullet.m; sourceTree = "<group>"; };
 		72A6FEED181A0EC200B74119 /* TDMapSelectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDMapSelectorViewController.h; sourceTree = "<group>"; };
 		72A6FEEE181A0EC200B74119 /* TDMapSelectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDMapSelectorViewController.m; sourceTree = "<group>"; };
 		72A6FEF0181A112C00B74119 /* TileMap.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = TileMap.tmx; path = Resources/Maps/TileMap.tmx; sourceTree = "<group>"; };
@@ -360,8 +363,10 @@
 		4483FF0A18276E1500FF4126 /* Bullets */ = {
 			isa = PBXGroup;
 			children = (
-				4483FF0B18276E3300FF4126 /* TDArrowBullet.h */,
-				4483FF0C18276E3300FF4126 /* TDArrowBullet.m */,
+				4483FF0B18276E3300FF4126 /* TDProjectileBullet.h */,
+				4483FF0C18276E3300FF4126 /* TDProjectileBullet.m */,
+				44FA5C34182DD33200AB979E /* TDBeamBullet.h */,
+				44FA5C35182DD33200AB979E /* TDBeamBullet.m */,
 			);
 			name = Bullets;
 			sourceTree = "<group>";
@@ -708,6 +713,7 @@
 				72EAB2CD181E48A2000C8BF4 /* TDGridNode.m in Sources */,
 				44F5472E1814AA81000459AB /* TDNewGameScene.m in Sources */,
 				4483FF1118280DE000FF4126 /* TDHealthBar.m in Sources */,
+				44FA5C36182DD33200AB979E /* TDBeamBullet.m in Sources */,
 				44A434D2182609300094A374 /* TDHudNode.m in Sources */,
 				44F5473A1814C486000459AB /* TDArtificialIntelligence.m in Sources */,
 				4406EFB51812513900BA102D /* JSTileMap.m in Sources */,
@@ -718,7 +724,7 @@
 				72D99A861811038C00AB5B9D /* TDAppDelegate.m in Sources */,
 				72A6FEEF181A0EC200B74119 /* TDMapSelectorViewController.m in Sources */,
 				4406EFA4181242E100BA102D /* PathFinder.m in Sources */,
-				4483FF0D18276E3300FF4126 /* TDArrowBullet.m in Sources */,
+				4483FF0D18276E3300FF4126 /* TDProjectileBullet.m in Sources */,
 				44A434CF1825F0A20094A374 /* TDPlayer.m in Sources */,
 				4406EFB8181253D200BA102D /* LFCGzipUtility.m in Sources */,
 				44F547121813D047000459AB /* SKButton.m in Sources */,

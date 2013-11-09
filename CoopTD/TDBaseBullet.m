@@ -24,11 +24,7 @@ NSString * const kTDBulletDestroyedNotificationName = @"kTDBulletDestroyedNotifi
     return self.baseSplash + self.bonusSplash;
 }
 
-#pragma mark - Handle collisions
-
-- (void) collidedWith:(SKPhysicsBody *)body contact:(SKPhysicsContact *)contact {
-    [super collidedWith:body contact:contact];
-    
+- (void) destroy {
     // run some kind of animation maybe?
     
     // then disappear
@@ -36,6 +32,14 @@ NSString * const kTDBulletDestroyedNotificationName = @"kTDBulletDestroyedNotifi
     
     // tell the world about it!
     [[NSNotificationCenter defaultCenter] postNotificationName:kTDBulletDestroyedNotificationName object:self];
+}
+
+#pragma mark - Handle collisions
+
+- (void) collidedWith:(SKPhysicsBody *)body contact:(SKPhysicsContact *)contact {
+    [super collidedWith:body contact:contact];
+    
+    [self destroy];
 }
 
 - (void) stoppedCollidingWith:(SKPhysicsBody *)body contact:(SKPhysicsContact *)contact {

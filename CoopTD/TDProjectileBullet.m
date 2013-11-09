@@ -6,10 +6,10 @@
 //  Copyright (c) 2013 Remy Bardou Corp. All rights reserved.
 //
 
-#import "TDArrowBullet.h"
+#import "TDProjectileBullet.h"
 #import "TDConstants.h"
 
-@implementation TDArrowBullet
+@implementation TDProjectileBullet
 
 - (id) init {
     self = [super initWithColor:[UIColor purpleColor] size:CGSizeMake(16, 16)];

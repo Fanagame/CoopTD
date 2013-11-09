@@ -8,6 +8,8 @@
 
 #import "TDMapObject.h"
 
+#import "TDBaseBullet.h"
+
 @class TDUnit;
 
 @interface TDBaseBuilding : TDMapObject
@@ -17,11 +19,13 @@
 @property (nonatomic, assign) NSInteger softCurrencyPrice;
 @property (nonatomic, assign) CFTimeInterval timeIntervalBetweenShots;
 @property (nonatomic, assign) NSUInteger maxBulletsOnScreen;
+@property (nonatomic, assign) TDBulletType bulletType;
 
 // properties used to make the game do its job
 @property (nonatomic, strong) NSMutableArray *unitsInRange;
 @property (nonatomic, strong) NSMutableArray *bullets;
 @property (nonatomic, strong) NSDate *lastShotDate;
+@property (nonatomic, readonly) TDBaseBullet *nextBullet;
 
 - (BOOL) rangeIsVisibe;
 - (void) setRangeVisible:(BOOL)hidden;

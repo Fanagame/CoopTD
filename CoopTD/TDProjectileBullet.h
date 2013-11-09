@@ -8,6 +8,6 @@
 
 #import "TDBaseBullet.h"
 
-@interface TDArrowBullet : TDBaseBullet
+@interface TDProjectileBullet : TDBaseBullet
 
 @end

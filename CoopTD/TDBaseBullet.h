@@ -10,6 +10,11 @@
 
 extern NSString * const kTDBulletDestroyedNotificationName;
 
+typedef enum : uint8_t {
+    TDBulletType_Projectile,
+    TDBulletType_Beam
+} TDBulletType;
+
 @interface TDBaseBullet : TDMapObject
 
 @property (nonatomic, assign) CGFloat baseAttack;
@@ -24,5 +29,7 @@ extern NSString * const kTDBulletDestroyedNotificationName;
 @property (nonatomic, readonly) CGFloat attack;
 @property (nonatomic, readonly) CGFloat speed;
 @property (nonatomic, readonly) CGFloat splash;
+
+- (void) destroy;
 
 @end
