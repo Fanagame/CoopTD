@@ -115,7 +115,7 @@
     self.world.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.world.calculateAccumulatedFrame];
     self.world.physicsBody.categoryBitMask = kPhysicsCategory_World;
     self.world.physicsBody.collisionBitMask = 0; // collide with nothing
-    self.world.physicsBody.contactTestBitMask = kPhysicsCategory_Bullet | kPhysicsCategory_Unit;
+    self.world.physicsBody.contactTestBitMask = kPhysicsCategory_Bullet; // maybe we should add the units, but it adds to the cpu load
 }
 
 - (void)addBackgroundTiles {

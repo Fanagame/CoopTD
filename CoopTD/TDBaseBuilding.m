@@ -35,10 +35,12 @@
         self.timeIntervalBetweenShots = 0.2;
         self.bulletType = TDBulletType_Beam;
         self.maxBulletsOnScreen = (self.bulletType != TDBulletType_Beam ? 3 : 1);
-        self.range = (self.bulletType != TDBulletType_Beam ? 100.0f : 300.0f);
+        self.range = (self.bulletType != TDBulletType_Beam ? 100.0f : 200.0f);
         
         self.bodyNode = [[SKShapeNode alloc] init];
-        self.bodyNode.path = CGPathCreateWithRect(self.frame, NULL); // leak?
+        CGPathRef path = CGPathCreateWithRect(self.frame, NULL);
+        self.bodyNode.path = path;
+        CGPathRelease(path);
 #ifdef kTDBuilding_SHOW_PHYSICS_BODY
         self.bodyNode.fillColor = [UIColor redColor];
 #else
@@ -46,7 +48,7 @@
 #endif
         self.bodyNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:self.size];
         self.bodyNode.physicsBody.categoryBitMask = kPhysicsCategory_Building;
-        self.bodyNode.physicsBody.collisionBitMask = kPhysicsCategory_Unit;
+        self.bodyNode.physicsBody.collisionBitMask = 0; // kPhysicsCategory_Unit
         self.bodyNode.physicsBody.friction = 0;
         self.bodyNode.physicsBody.dynamic = NO;
         [self addChild:self.bodyNode];
@@ -208,7 +210,7 @@
 - (void) collidedWith:(SKPhysicsBody *)body contact:(SKPhysicsContact *)contact {
     [super collidedWith:body contact:contact];
     
-    if ([body.node isKindOfClass:[TDUnit class]]) {
+    if (body.categoryBitMask == kPhysicsCategory_Unit && [body.node isKindOfClass:[TDUnit class]]) {
         [self addPossibleTarget:(TDUnit *)body.node];
     }
 }

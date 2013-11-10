@@ -63,7 +63,9 @@
     self.topOverlayNode = [[SKShapeNode alloc] init];
     self.topOverlayNode.fillColor = [UIColor blackColor];
     self.topOverlayNode.strokeColor = [UIColor clearColor];
-    self.topOverlayNode.path = CGPathCreateWithRect(CGRectMake(origin.x, origin.y + scene.size.height - self.topOverlayHeight, scene.size.width, self.topOverlayHeight), NULL); // leak?
+    CGPathRef path = CGPathCreateWithRect(CGRectMake(origin.x, origin.y + scene.size.height - self.topOverlayHeight, scene.size.width, self.topOverlayHeight), NULL);
+    self.topOverlayNode.path = path;
+    CGPathRelease(path);
     [self addChild:self.topOverlayNode];
     
     // local player name in top left

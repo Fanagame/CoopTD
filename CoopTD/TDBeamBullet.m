@@ -9,13 +9,21 @@
 #import "TDBeamBullet.h"
 #import "TDConstants.h"
 
+#define kTDBeamBullet_DeltaUpdateInPx 0 // refresh the beam every 10px moved
+
+@interface TDBeamBullet ()
+
+@property (nonatomic, strong) SKShapeNode *laserTipNode;
+
+@end
+
 @implementation TDBeamBullet
 
 - (id) init {
     self = [super initWithColor:[UIColor redColor] size:CGSizeMake(0, 4)];
     
     if (self) {
-        self.baseAttack = 5; // dmg/sec
+        self.baseAttack = 1; // dmg/sec
         self.baseSpeed = 0; // infinite speed?
         self.baseSplash = 0;
         
@@ -26,22 +34,32 @@
 }
 
 - (void) setupPhysics {
-    CGSize size = self.size;
+    self.laserTipNode = [[SKShapeNode alloc] init];
+    CGPathRef path = CGPathCreateWithRect(CGRectMake(0, 0, self.size.height, self.size.height), NULL);
+    self.laserTipNode.path = path;
+    CGPathRelease(path);
+#ifdef kTDBeamBullet_SHOW_PHYSICS_BODY
+    self.laserTipNode.fillColor = [UIColor greenColor];
+#else
+    self.laserTipNode.strokeColor = [UIColor clearColor];
+#endif
+    [self addChild:self.laserTipNode];
+    
+    CGSize size = self.laserTipNode.frame.size;
     if (size.height > 0 && size.width > 0) {
-        self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:self.size];
-        self.physicsBody.mass = 1.0;
-        self.physicsBody.friction = 0;
-        self.physicsBody.linearDamping = 0;
-        self.physicsBody.categoryBitMask = kPhysicsCategory_Bullet;
-        self.physicsBody.collisionBitMask = 0;
-        self.physicsBody.contactTestBitMask = kPhysicsCategory_Unit;
+         //need to change physicsBody's position to the end of the beam (we only wanna do damages to the targetted unit)
+        self.laserTipNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(size.height, size.height)];
+        self.laserTipNode.physicsBody.categoryBitMask = kPhysicsCategory_Bullet;
+        self.laserTipNode.physicsBody.collisionBitMask = 0;
+        self.laserTipNode.physicsBody.contactTestBitMask = kPhysicsCategory_Unit;
     }
 }
 
 - (void) updateWidth:(CGFloat)width {
-    self.size = CGSizeMake(width, self.size.height);
-    
-    [self setupPhysics];
+    if (abs(width - self.size.width) > kTDBeamBullet_DeltaUpdateInPx) {
+        self.size = CGSizeMake(width, self.size.height);
+        self.laserTipNode.position = CGPointMake(self.size.width - self.laserTipNode.frame.size.width, -self.laserTipNode.frame.size.height * 0.5);
+    }
 }
 
 - (void) collidedWith:(SKPhysicsBody *)body contact:(SKPhysicsContact *)contact {

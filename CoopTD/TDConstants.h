@@ -23,3 +23,4 @@ static const uint32_t kPhysicsCategory_UltimateGoal     = 0x1 << 5;
 //#define kTDBuilding_SHOW_PHYSICS_BODY
 //#define kTDBuilding_DISABLE_SHOOTING
 //#define kTDBuildingAI_ALWAYS_SHOOT_THE_NEW_GUY
+//#define kTDBeamBullet_SHOW_PHYSICS_BODY

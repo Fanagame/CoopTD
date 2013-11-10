@@ -51,7 +51,8 @@
 - (void)updateWithTimeSinceLastUpdate:(CFTimeInterval)interval {
     [super updateWithTimeSinceLastUpdate:interval];
     
-    for (TDUnit *unit in self.units) {
+    for (int i = self.units.count - 1; i >= 0; i--) {
+        TDUnit *unit = self.units[i];
         [unit updateWithTimeSinceLastUpdate:interval];
     }
 }

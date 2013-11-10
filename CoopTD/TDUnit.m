@@ -26,6 +26,8 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
 @property (nonatomic, strong) NSArray *path;
 @property (nonatomic, strong) TDHealthBar *healthBar;
 
+@property (nonatomic, strong) NSPredicate *bulletFilter;
+
 @end
 
 @implementation TDUnit
@@ -49,10 +51,19 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
         self.healthBar = [[TDHealthBar alloc] initWithTotalHP:self.maxHealth aboveSprite:self];
         [self addChild:self.healthBar];
         
+        // misc
+        self.bulletFilter = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+            SKPhysicsBody *body = (SKPhysicsBody *)evaluatedObject;
+            if ([body.node.parent isKindOfClass:[TDBaseBullet class]]) {
+                return YES;
+            }
+            return NO;
+        }];
+        
         // setup physics
         self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:self.size];
         self.physicsBody.categoryBitMask = kPhysicsCategory_Unit;
-        self.physicsBody.usesPreciseCollisionDetection = YES;
+//        self.physicsBody.usesPreciseCollisionDetection = YES; // VERY SLOW!!!
         self.physicsBody.collisionBitMask = kPhysicsCategory_Building;
         self.physicsBody.allowsRotation = NO;
         self.physicsBody.mass = 1000;
@@ -94,15 +105,33 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
     self.healthBar.totalHP = maxHealth;
 }
 
+- (void) updateWithTimeSinceLastUpdate:(CFTimeInterval)interval {
+    [super updateWithTimeSinceLastUpdate:interval];
+    
+    NSArray *beamBullets = [self.physicsBody.allContactedBodies filteredArrayUsingPredicate:self.bulletFilter];
+
+    for (SKPhysicsBody *body in beamBullets) {
+        [self hitByBullet:(TDBaseBullet *)body.node.parent];
+    }
+}
+
 #pragma mark - Handle collisions 
 
 - (void) collidedWith:(SKPhysicsBody *)body contact:(SKPhysicsContact *)contact {
     [super collidedWith:body contact:contact];
     
-    if ([body.node isKindOfClass:[TDUltimateGoal class]]) {
+    if (body.categoryBitMask == kPhysicsCategory_UltimateGoal && [body.node isKindOfClass:[TDUltimateGoal class]]) {
         [self reachedUltimateGoal];
-    } else if ([body.node isKindOfClass:[TDBaseBullet class]]) {
-        [self hitByBullet:(TDBaseBullet *)body.node];
+    } else if (body.categoryBitMask == kPhysicsCategory_Bullet) {
+        TDBaseBullet *bullet = nil;
+        
+        if ([body.node isKindOfClass:[TDBaseBullet class]])
+            bullet = (TDBaseBullet *)body.node;
+//        else if ([body.node.parent isKindOfClass:[TDBaseBullet class]])
+//            bullet = (TDBaseBullet *)body.node.parent;
+        
+        if (bullet)
+            [self hitByBullet:bullet];
     }
 }
 

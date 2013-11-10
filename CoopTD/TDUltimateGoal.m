@@ -31,7 +31,7 @@
 - (void) collidedWith:(SKPhysicsBody *)body contact:(SKPhysicsContact *)contact {
     [super collidedWith:body contact:contact];
     
-    if ([body.node isKindOfClass:[TDUnit class]]) {
+    if (body.categoryBitMask == kPhysicsCategory_Unit && [body.node isKindOfClass:[TDUnit class]]) {
         // play animation!!
     }
 }
