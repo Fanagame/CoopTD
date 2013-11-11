@@ -7,6 +7,7 @@
 //
 
 #import "TDMapObject.h"
+#import "TDUnit.h"
 
 extern NSString * const kTDBulletDestroyedNotificationName;
 
@@ -30,6 +31,9 @@ typedef enum : uint8_t {
 @property (nonatomic, readonly) CGFloat speed;
 @property (nonatomic, readonly) CGFloat splash;
 
+@property (nonatomic, assign) TDUnitType attackableUnitsType;
+
+- (void) startAnimation;
 - (void) destroy;
 
 @end

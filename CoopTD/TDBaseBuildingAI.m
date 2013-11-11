@@ -19,6 +19,9 @@
     if ([self.character isKindOfClass:[TDBaseBuilding class]]) {
         TDBaseBuilding *building = (TDBaseBuilding *)self.character;
         
+        if (!building.isConstructed)
+            return;
+        
         // Find a target
 #ifndef kTDBuildingAI_ALWAYS_SHOOT_THE_NEW_GUY
         if (![building.unitsInRange containsObject:self.target])

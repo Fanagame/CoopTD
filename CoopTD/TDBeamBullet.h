@@ -10,6 +10,8 @@
 
 @interface TDBeamBullet : TDBaseBullet
 
+@property (nonatomic, strong) SKAction *soundAction;
+
 - (void) updateWidth:(CGFloat)width;
 
 @end

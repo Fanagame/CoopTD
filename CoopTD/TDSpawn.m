@@ -17,7 +17,7 @@
     self.color = [UIColor redColor];
     
     self.maxUnitsOnMap = 10;
-    self.timeIntervalBetweenSpawns = 0.2;
+    self.timeIntervalBetweenSpawns = 0.5;
     
     self.units = [[NSMutableArray alloc] init];
     self.intelligence = [[TDSpawnAI alloc] initWithCharacter:self andTarget:nil];
@@ -25,11 +25,15 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unitWasKilled:) name:kTDUnitDiedNotificationName object:nil];
 }
 
+- (void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void) spawnNextUnit {
     self.lastSpawnDate = [NSDate date];
     
-    TDUnit *unit = [[TDUnit alloc] init];
-    unit.unitID = self.lastSpawnedUnit.unitID + 1;
+    TDUnit *unit = [TDUnit unitWithType:(arc4random() % 2)];
+    unit.uniqueID = self.lastSpawnedUnit.uniqueID + 1;
     unit.position = self.position;
     
     [self.gameScene addNode:unit atWorldLayer:TDWorldLayerCharacter];

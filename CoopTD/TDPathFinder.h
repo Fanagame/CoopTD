@@ -26,6 +26,8 @@ typedef void (^TDPathCallback)(TDPath *path);
 @property (nonatomic, assign) CGPoint startPosition;
 @property (nonatomic, assign) CGPoint endPosition;
 
+@property (nonatomic, strong) NSString *type;
+
 @property (atomic, assign) BOOL isBeingCalculated;
 @property (atomic, assign) BOOL wasInvalidated;
 
@@ -34,7 +36,7 @@ typedef void (^TDPathCallback)(TDPath *path);
 
 @property (nonatomic, strong) NSMutableArray *owners;
 
-- (id) initWithStartCoordinates:(CGPoint)coordA andEndCoordinates:(CGPoint)coordB;
+- (id) initWithStartCoordinates:(CGPoint)coordA andEndCoordinates:(CGPoint)coordB andType:(NSString *)type;
 - (BOOL) containsCoordinates:(CGPoint)coords;
 - (void) invalidate;
 
@@ -48,12 +50,13 @@ typedef void (^TDPathCallback)(TDPath *path);
 
 + (instancetype) sharedPathCache;
 
-- (TDPath *) pathFromSpawnPoint:(CGPoint)spawnPosition toGoalPoint:(CGPoint)goalPosition;
-- (void) setPath:(TDPath *)path fromSpawnPoint:(CGPoint)spawnPosition toGoalPoint:(CGPoint)goalPosition;
+- (TDPath *) pathFromSpawnPoint:(CGPoint)spawnPosition toGoalPoint:(CGPoint)goalPosition withObject:(id<ExploringObjectDelegate>)object;
+- (void) cachePath:(TDPath *)path;
 - (void) clearCache;
 - (void) removePathFromCache:(TDPath *)path;
 - (NSArray *) cachedPaths;
 
+- (void)  pathInExplorableWorld:(TDNewGameScene *)world fromA:(CGPoint)pointA toB:(CGPoint)pointB usingDiagonal:(BOOL)useDiagonal withObject:(id<ExploringObjectDelegate>)exploringObject onSuccess:(void (^)(TDPath *))onSuccess;
 - (void)pathInExplorableWorld:(TDNewGameScene *)world fromA:(CGPoint)pointA toB:(CGPoint)pointB usingDiagonal:(BOOL)useDiagonal onSuccess:(TDPathCallback)onSuccess;
 
 

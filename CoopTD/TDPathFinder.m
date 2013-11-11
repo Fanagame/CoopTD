@@ -41,7 +41,7 @@ NSString * const kTDPathFindingPathWasInvalidatedNotificationName = @"kTDPathFin
     return self;
 }
 
-- (id) initWithStartCoordinates:(CGPoint)coordA andEndCoordinates:(CGPoint)coordB {
+- (id) initWithStartCoordinates:(CGPoint)coordA andEndCoordinates:(CGPoint)coordB andType:(NSString *)type {
     self = [super init];
     
     if (self) {
@@ -50,6 +50,7 @@ NSString * const kTDPathFindingPathWasInvalidatedNotificationName = @"kTDPathFin
         
         self.startCoordinates = coordA;
         self.endCoordinates = coordB;
+        self.type = type;
     }
     
     return self;
@@ -152,15 +153,15 @@ static TDPathFinder *_sharedPathCache;
 
 #pragma mark - Public API
 
-- (TDPath *) pathFromSpawnPoint:(CGPoint)spawnPosition toGoalPoint:(CGPoint)goalPosition {
-    id key = [self keyForPointA:spawnPosition pointB:goalPosition];
+- (TDPath *) pathFromSpawnPoint:(CGPoint)spawnPosition toGoalPoint:(CGPoint)goalPosition withObject:(id<ExploringObjectDelegate>)object {
+    id key = [self keyForPointA:spawnPosition pointB:goalPosition objectType:[object exploringObjectType]];
     
     TDPath *path = self.cache[key];
     return path;
 }
 
-- (void) setPath:(TDPath *)path fromSpawnPoint:(CGPoint)spawnPosition toGoalPoint:(CGPoint)goalPosition {
-    id key = [self keyForPointA:spawnPosition pointB:goalPosition];
+- (void) cachePath:(TDPath *)path {
+    id key = [self keyForPointA:path.startCoordinates pointB:path.endCoordinates objectType:path.type];
     
     if (path) {
         [self.cache setObject:path forKey:key];
@@ -171,7 +172,7 @@ static TDPathFinder *_sharedPathCache;
 
 - (void) removePathFromCache:(TDPath *)path {
     [self.mainLock lock];
-    [self.cache removeObjectForKey:[self keyForPointA:path.startCoordinates pointB:path.endCoordinates]];
+    [self.cache removeObjectForKey:[self keyForPointA:path.startCoordinates pointB:path.endCoordinates objectType:path.type]];
     [self.mainLock unlock];
 }
 
@@ -183,17 +184,19 @@ static TDPathFinder *_sharedPathCache;
         TDPath *path = paths[i];
         
         if (!path.hasOwners) {
-            [self.cache removeObjectForKey:[self keyForPointA:path.startCoordinates pointB:path.endCoordinates]];
+            [self.cache removeObjectForKey:[self keyForPointA:path.startCoordinates pointB:path.endCoordinates objectType:path.type]];
         }
     }
     [self.mainLock unlock];
 }
 
-- (void) pathInExplorableWorld:(TDNewGameScene *)world fromA:(CGPoint)pointA toB:(CGPoint)pointB usingDiagonal:(BOOL)useDiagonal onSuccess:(void (^)(TDPath *))onSuccess {
+- (void)  pathInExplorableWorld:(TDNewGameScene *)world fromA:(CGPoint)pointA toB:(CGPoint)pointB usingDiagonal:(BOOL)useDiagonal withObject:(id<ExploringObjectDelegate>)exploringObject onSuccess:(void (^)(TDPath *))onSuccess {
+    
+    [self printCache];
     
     // Do we already have a path between those 2 points?
     [self.mainLock lock];
-    TDPath *path = [self pathFromSpawnPoint:pointA toGoalPoint:pointB];
+    TDPath *path = [self pathFromSpawnPoint:pointA toGoalPoint:pointB withObject:exploringObject];
     [self.mainLock unlock];
     
     if (!path || path.wasInvalidated) {
@@ -201,8 +204,8 @@ static TDPathFinder *_sharedPathCache;
         [self.mainLock lock];
         TDPath *newPath = path;
         if (!newPath) {
-            newPath = [[TDPath alloc] initWithStartCoordinates:pointA andEndCoordinates:pointB];
-            [self setPath:newPath fromSpawnPoint:pointA toGoalPoint:pointB];
+            newPath = [[TDPath alloc] initWithStartCoordinates:pointA andEndCoordinates:pointB andType:[exploringObject exploringObjectType]];
+            [self cachePath:newPath];
         }
         newPath.isBeingCalculated = YES;
         newPath.wasInvalidated = NO;
@@ -211,9 +214,11 @@ static TDPathFinder *_sharedPathCache;
         
         // Now calculate the path
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+#ifdef kTDPath_PRINT_CACHE_CONTENT
             NSDate *startDate = [NSDate date];
+#endif
             
-            NSArray *pathAsArray = [[PathFinder sharedInstance] pathInExplorableWorld:world fromA:pointA toB:pointB usingDiagonal:useDiagonal];
+            NSArray *pathAsArray = [[PathFinder sharedInstance] pathInExplorableWorld:world fromA:pointA toB:pointB usingDiagonal:useDiagonal andExploringObject:exploringObject];
             
 #ifdef kTDPath_PRINT_CACHE_CONTENT
             NSLog(@"*** PATHFINDING *** Found path in %f seconds!", -[startDate timeIntervalSinceNow]);
@@ -225,7 +230,7 @@ static TDPathFinder *_sharedPathCache;
                 // let's recalculate it!
                 
                 //TODO: do we need to do something about the multiple callbacks?
-                [[TDPathFinder sharedPathCache] pathInExplorableWorld:world fromA:pointA toB:pointB usingDiagonal:useDiagonal onSuccess:onSuccess];
+                [[TDPathFinder sharedPathCache] pathInExplorableWorld:world fromA:pointA toB:pointB usingDiagonal:useDiagonal withObject:exploringObject onSuccess:onSuccess];
                 
                 return;
             }
@@ -254,6 +259,10 @@ static TDPathFinder *_sharedPathCache;
     }
 }
 
+- (void) pathInExplorableWorld:(TDNewGameScene *)world fromA:(CGPoint)pointA toB:(CGPoint)pointB usingDiagonal:(BOOL)useDiagonal onSuccess:(void (^)(TDPath *))onSuccess {
+    [self pathInExplorableWorld:world fromA:pointA toB:pointB usingDiagonal:useDiagonal withObject:nil onSuccess:onSuccess];
+}
+
 - (NSArray *) cachedPaths {
     return self.cache.allValues;
 }
@@ -261,7 +270,6 @@ static TDPathFinder *_sharedPathCache;
 #pragma mark - DEBUG
 
 - (void) printCache {
-#if DEBUG
 #ifdef kTDPath_PRINT_CACHE_CONTENT
     NSLog(@"=========================================");
     NSLog(@"====    PathFinder cache content   ======");
@@ -269,17 +277,16 @@ static TDPathFinder *_sharedPathCache;
     
     NSLog(@"Amount of cached paths: %d", self.cachedPaths.count);
     for (TDPath *p in self.cachedPaths) {
-        NSLog(@"Path with key %@ is owned by %d units.", [self keyForPointA:p.startCoordinates pointB:p.endCoordinates], p.owners.count);
+        NSLog(@"Path with key %@ is owned by %d units.", [self keyForPointA:p.startCoordinates pointB:p.endCoordinates objectType:p.type], p.owners.count);
         NSLog(@"%@", p.description);
     }
-#endif
 #endif
 }
 
 #pragma mark - Private methods
 
-- (NSString *) keyForPointA:(CGPoint)pointA pointB:(CGPoint)pointB {
-    return [NSString stringWithFormat:@"(%f,%f)(%f,%f)", pointA.x, pointA.y, pointB.x, pointB.y];
+- (NSString *) keyForPointA:(CGPoint)pointA pointB:(CGPoint)pointB objectType:(NSString *)objectType {
+    return [NSString stringWithFormat:@"%@(%f,%f)(%f,%f)", objectType, pointA.x, pointA.y, pointB.x, pointB.y];
 }
 
 @end

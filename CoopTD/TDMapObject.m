@@ -11,6 +11,16 @@
 
 @implementation TDMapObject
 
+- (id) initWithObjectID:(NSInteger)objectID {
+    self = [super init];
+    
+    if (self) {
+        
+    }
+    
+    return self;
+}
+
 - (TDNewGameScene *)gameScene {
     TDNewGameScene *scene = (id)[self scene];
     

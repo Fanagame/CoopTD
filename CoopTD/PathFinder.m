@@ -74,14 +74,18 @@
 
 #pragma mark - Public API -
 
-- (void)pathInExplorableWorld:(id<ExplorableWorldDelegate>)world fromA:(CGPoint)pointA toB:(CGPoint)pointB usingDiagonal:(BOOL)useDiagonal onSuccess:(void (^)(NSArray *path))onSuccess {
+- (void)pathInExplorableWorld:(id<ExplorableWorldDelegate>)world fromA:(CGPoint)pointA toB:(CGPoint)pointB usingDiagonal:(BOOL)useDiagonal andExploringObject:(id<ExploringObjectDelegate>)exploringObject onSuccess:(void (^)(NSArray *))onSuccess {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        NSArray *path = [self pathInExplorableWorld:world fromA:pointA toB:pointB usingDiagonal:useDiagonal];
+        NSArray *path = [self pathInExplorableWorld:world fromA:pointA toB:pointB usingDiagonal:useDiagonal andExploringObject:exploringObject];
         onSuccess(path);
     });
 }
 
-- (NSArray *)pathInExplorableWorld:(id<ExplorableWorldDelegate>)world fromA:(CGPoint)pointA toB:(CGPoint)pointB usingDiagonal:(BOOL)useDiagonal {
+- (void)pathInExplorableWorld:(id<ExplorableWorldDelegate>)world fromA:(CGPoint)pointA toB:(CGPoint)pointB usingDiagonal:(BOOL)useDiagonal onSuccess:(void (^)(NSArray *path))onSuccess {
+    [self pathInExplorableWorld:world fromA:pointA toB:pointB usingDiagonal:useDiagonal andExploringObject:nil onSuccess:onSuccess];
+}
+
+- (NSArray *)pathInExplorableWorld:(id<ExplorableWorldDelegate>)world fromA:(CGPoint)pointA toB:(CGPoint)pointB usingDiagonal:(BOOL)useDiagonal andExploringObject:(id<ExploringObjectDelegate>)exploringObject {
 	
 	NSArray *path = nil;
 	
@@ -93,7 +97,7 @@
 	 *	  the open list.
 	 */
 	PathNode *startNode = [[PathNode alloc] initWithPosition:pointA];
-	startNode.hScore = [self heuristicForPosition:pointA goingToB:pointB inWorld:world];
+	startNode.hScore = [self heuristicForPosition:pointA goingToB:pointB inWorld:world forExploringObject:exploringObject];
 	[openedSet addObject:startNode];
 	
 	
@@ -119,7 +123,7 @@
 		/*
 		 * 4. For each neighbor (adjacent cell) which isn't in the closed list or the opened list:
 		 */
-		for (PathNode *neighbor in [self neighborsForNode:currentNode inExplorableWorld:world usingDiagonal:useDiagonal]) {
+		for (PathNode *neighbor in [self neighborsForNode:currentNode inExplorableWorld:world usingDiagonal:useDiagonal forExploringObject:exploringObject]) {
 			if (![self isNode:neighbor inSet:closedSet] && ![self isNode:neighbor inSet:openedSet]) {
 				/*
 				 * 5. Set its parent to current node. Will helps us find the way back
@@ -131,7 +135,7 @@
 				 * add it to the open list
 				 */
 				neighbor.gScore = neighbor.parent.gScore + 1;
-				neighbor.hScore = [self heuristicForPosition:neighbor.position goingToB:pointB inWorld:world];
+				neighbor.hScore = [self heuristicForPosition:neighbor.position goingToB:pointB inWorld:world forExploringObject:exploringObject];
                 
 				[openedSet addObject:neighbor];
 			}
@@ -174,50 +178,55 @@
 	return array;
 }
 
-- (NSSet *) neighborsForNode:(PathNode *)rootNode inExplorableWorld:(id<ExplorableWorldDelegate>)world usingDiagonal:(BOOL)usingDiagonal {
+- (NSSet *) neighborsForNode:(PathNode *)rootNode inExplorableWorld:(id<ExplorableWorldDelegate>)world usingDiagonal:(BOOL)usingDiagonal forExploringObject:(id<ExploringObjectDelegate>)exploringObject {
 	NSMutableSet *neighbors = [[NSMutableSet alloc] init];
 	
-    if ([world respondsToSelector:@selector(isWalkable:)]) {
+    BOOL useSimpleWalkingMethod = YES;
+    if ([world respondsToSelector:@selector(isWalkable:forExploringObject:)]) {
+        useSimpleWalkingMethod = NO;
+    }
+    
+    if ([world respondsToSelector:@selector(isWalkable:)] || [world respondsToSelector:@selector(isWalkable:forExploringObject:)]) {
 
         CGPoint position = CGPointZero;
         
         if (usingDiagonal) {
             position = CGPointMake(rootNode.position.x - 1, rootNode.position.y - 1);
-            if ([world isWalkable:position])
+            if ((useSimpleWalkingMethod && [world isWalkable:position]) || (!useSimpleWalkingMethod && [world isWalkable:position forExploringObject:exploringObject]))
                 [neighbors addObject:[[PathNode alloc] initWithPosition:position]];
         }
         
         position = CGPointMake(rootNode.position.x, rootNode.position.y - 1);
-        if ([world isWalkable:position])
+        if ((useSimpleWalkingMethod && [world isWalkable:position]) || (!useSimpleWalkingMethod && [world isWalkable:position forExploringObject:exploringObject]))
             [neighbors addObject:[[PathNode alloc] initWithPosition:position]];
         
         if (usingDiagonal) {
             position = CGPointMake(rootNode.position.x + 1, rootNode.position.y - 1);
-            if ([world isWalkable:position])
+            if ((useSimpleWalkingMethod && [world isWalkable:position]) || (!useSimpleWalkingMethod && [world isWalkable:position forExploringObject:exploringObject]))
                 [neighbors addObject:[[PathNode alloc] initWithPosition:position]];
         }
         
         position = CGPointMake(rootNode.position.x - 1, rootNode.position.y);
-        if ([world isWalkable:position])
+        if ((useSimpleWalkingMethod && [world isWalkable:position]) || (!useSimpleWalkingMethod && [world isWalkable:position forExploringObject:exploringObject]))
             [neighbors addObject:[[PathNode alloc] initWithPosition:position]];
         
         position = CGPointMake(rootNode.position.x + 1, rootNode.position.y);
-        if ([world isWalkable:position])
+        if ((useSimpleWalkingMethod && [world isWalkable:position]) || (!useSimpleWalkingMethod && [world isWalkable:position forExploringObject:exploringObject]))
             [neighbors addObject:[[PathNode alloc] initWithPosition:position]];
         
 		if (usingDiagonal) {
 			position = CGPointMake(rootNode.position.x + 1, rootNode.position.y + 1);
-			if ([world isWalkable:position])
+			if ((useSimpleWalkingMethod && [world isWalkable:position]) || [world isWalkable:position forExploringObject:exploringObject])
 				[neighbors addObject:[[PathNode alloc] initWithPosition:position]];
         }
 		
         position = CGPointMake(rootNode.position.x, rootNode.position.y + 1);
-        if ([world isWalkable:position])
+        if ((useSimpleWalkingMethod && [world isWalkable:position]) || (!useSimpleWalkingMethod && [world isWalkable:position forExploringObject:exploringObject]))
             [neighbors addObject:[[PathNode alloc] initWithPosition:position]];
         
 		if (usingDiagonal) {
 			position = CGPointMake(rootNode.position.x - 1, rootNode.position.y + 1);
-			if ([world isWalkable:position])
+			if ((useSimpleWalkingMethod && [world isWalkable:position]) || (!useSimpleWalkingMethod && [world isWalkable:position forExploringObject:exploringObject]))
 				[neighbors addObject:[[PathNode alloc] initWithPosition:position]];
 		}
     }
@@ -239,10 +248,12 @@
 	return candidate;
 }
 
-- (NSInteger) heuristicForPosition:(CGPoint)pointA goingToB:(CGPoint)pointB inWorld:(id<ExplorableWorldDelegate>)world {
+- (NSInteger) heuristicForPosition:(CGPoint)pointA goingToB:(CGPoint)pointB inWorld:(id<ExplorableWorldDelegate>)world forExploringObject:(id<ExploringObjectDelegate>)exploringObject {
 	NSInteger score = [self manhattanDistanceBetweenA:pointA andB:pointB];
 	
-	if ([world respondsToSelector:@selector(weightForTileAtPosition:)]) {
+    if ([world respondsToSelector:@selector(weightForTileAtPosition:forExploringObject:)]) {
+        score += [world weightForTileAtPosition:pointA forExploringObject:exploringObject];
+    } else if ([world respondsToSelector:@selector(weightForTileAtPosition:)]) {
 		score += [world weightForTileAtPosition:pointA];
 	}
 	

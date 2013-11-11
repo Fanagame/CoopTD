@@ -9,8 +9,9 @@
 #import "TDMapObject.h"
 
 #import "TDBaseBullet.h"
+#import "TDUnit.h"
 
-@class TDUnit;
+@class TDProgressBar;
 
 @interface TDBaseBuilding : TDMapObject
 
@@ -20,12 +21,21 @@
 @property (nonatomic, assign) CFTimeInterval timeIntervalBetweenShots;
 @property (nonatomic, assign) NSUInteger maxBulletsOnScreen;
 @property (nonatomic, assign) TDBulletType bulletType;
+@property (nonatomic, assign) TDUnitType attackableUnitType;
+@property (nonatomic, assign) NSUInteger health;
+@property (nonatomic, assign) NSUInteger maxHealth;
+@property (nonatomic, assign) CFTimeInterval timeToBuild;
 
 // properties used to make the game do its job
 @property (nonatomic, strong) NSMutableArray *unitsInRange;
 @property (nonatomic, strong) NSMutableArray *bullets;
 @property (nonatomic, strong) NSDate *lastShotDate;
+@property (nonatomic, strong) NSDate *dateConstructed;
 @property (nonatomic, readonly) TDBaseBullet *nextBullet;
+@property (nonatomic, assign) BOOL isConstructed;
+
+@property (nonatomic, strong) TDProgressBar *healthBar;
+@property (nonatomic, strong) TDProgressBar *constructionBar;
 
 - (BOOL) rangeIsVisibe;
 - (void) setRangeVisible:(BOOL)hidden;

@@ -10,6 +10,6 @@
 
 @interface TDGridNode : SKNode
 
-- (void) buildGrid;
+- (void) buildGridWithTileSize:(CGSize)tileSize;
 
 @end

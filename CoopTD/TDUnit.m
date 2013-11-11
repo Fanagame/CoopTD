@@ -16,7 +16,7 @@
 #import "TDUltimateGoal.h"
 #import "TDBaseBullet.h"
 #import "TDBaseBuilding.h"
-#import "TDHealthBar.h"
+#import "TDProgressBar.h"
 
 static const CGFloat kUnitMovingSpeed = 0.3f;
 NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
@@ -24,7 +24,7 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
 @interface TDUnit ()
 
 @property (nonatomic, strong) NSArray *path;
-@property (nonatomic, strong) TDHealthBar *healthBar;
+@property (nonatomic, strong) TDProgressBar *healthBar;
 
 @property (nonatomic, strong) NSPredicate *bulletFilter;
 
@@ -32,12 +32,50 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
 
 @implementation TDUnit
 
++ (uint32_t) physicsCategoryForUnitType:(TDUnitType)unitType {
+    uint32_t category;
+    
+    switch (unitType) {
+        case TDUnitType_Ground:
+            category = kPhysicsCategory_UnitType_Ground;
+            break;
+            
+        default:
+            category = kPhysicsCategory_UnitType_Air;
+            break;
+    }
+    
+    return category;
+}
+
++ (uint32_t) physicsCategoryForUnitWithType:(TDUnitType)unitType {
+    return (kPhysicsCategory_Unit | [TDUnit physicsCategoryForUnitType:unitType]);
+}
+
++ (TDUnit *) unitWithType:(TDUnitType)unitType {
+    NSString *baseCacheKey = (unitType == TDUnitType_Ground ? @"monster_ground_1" : @"monster_air_1");
+    TDUnit *unit = [[self alloc] initWithType:unitType andBaseCacheKey:baseCacheKey];
+    
+    return unit;
+}
+
+// This should eventually be the only method to load a mob
 - (id) init {
-    self = [super initWithImageNamed:@"pikachu-32"];
+    return [self initWithType:TDUnitType_Ground andBaseCacheKey:@"monster_ground_1"];
+}
+
+- (id) initWithObjectID:(NSInteger)objectID {
+    return [self init];
+}
+
+- (id) initWithType:(TDUnitType)unitType andBaseCacheKey:(NSString *)baseCacheKey {
+    self = [super initWithImageNamed:baseCacheKey];
     
     if (self) {
         // this should be made dynamic
-        self.displayName = @"Pikachu";
+        self.baseCacheKey = baseCacheKey;
+        self.type = unitType;
+        self.displayName = baseCacheKey;
         self.maxHealth = 200;
         self.health = self.maxHealth;
         self.softCurrencyEarningValue = 50;
@@ -48,13 +86,16 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
         self.intelligence = [[TDBaseUnitAI alloc] initWithCharacter:self andTarget:nil];
         
         // add health bar
-        self.healthBar = [[TDHealthBar alloc] initWithTotalHP:self.maxHealth aboveSprite:self];
+        self.healthBar = [[TDProgressBar alloc] initWithTotalTicks:self.maxHealth aboveSprite:self];
+#ifndef kTDUnit_ALWAYS_SHOW_HEALTH
+        self.healthBar.hideWhenFull = YES;
+#endif
         [self addChild:self.healthBar];
         
         // misc
         self.bulletFilter = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
             SKPhysicsBody *body = (SKPhysicsBody *)evaluatedObject;
-            if ([body.node.parent isKindOfClass:[TDBaseBullet class]]) {
+            if (body.categoryBitMask == (kPhysicsCategory_Bullet | [TDUnit physicsCategoryForUnitType:self.type]) && [body.node.parent isKindOfClass:[TDBaseBullet class]]) {
                 return YES;
             }
             return NO;
@@ -62,9 +103,9 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
         
         // setup physics
         self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:self.size];
-        self.physicsBody.categoryBitMask = kPhysicsCategory_Unit;
+        self.physicsBody.categoryBitMask = [TDUnit physicsCategoryForUnitWithType:self.type];
 //        self.physicsBody.usesPreciseCollisionDetection = YES; // VERY SLOW!!!
-        self.physicsBody.collisionBitMask = kPhysicsCategory_Building;
+        self.physicsBody.collisionBitMask = 0; // kPhysicsCategory_Building
         self.physicsBody.allowsRotation = NO;
         self.physicsBody.mass = 1000;
         self.physicsBody.restitution = 1;
@@ -93,17 +134,29 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
 - (void) setHealth:(NSUInteger)health {
     _health = health;
     
-    self.healthBar.currentHP = health;
+    self.healthBar.currentTick = health;
     
     if (_health == 0)
         [self die];
 }
 
+- (void) increaseHealth:(NSUInteger)amount {
+    amount = MIN(amount, self.maxHealth - self.health);
+    self.health += amount;
+}
+
+- (void) decreaseHealth:(NSUInteger)amount {
+    amount = MIN(self.health, amount);
+    self.health -= amount;
+}
+
 - (void) setMaxHealth:(NSUInteger)maxHealth {
     _maxHealth = maxHealth;
     
-    self.healthBar.totalHP = maxHealth;
+    self.healthBar.totalTicks = maxHealth;
 }
+
+#pragma mark - Updates
 
 - (void) updateWithTimeSinceLastUpdate:(CFTimeInterval)interval {
     [super updateWithTimeSinceLastUpdate:interval];
@@ -122,13 +175,11 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
     
     if (body.categoryBitMask == kPhysicsCategory_UltimateGoal && [body.node isKindOfClass:[TDUltimateGoal class]]) {
         [self reachedUltimateGoal];
-    } else if (body.categoryBitMask == kPhysicsCategory_Bullet) {
+    } else if (body.categoryBitMask == (kPhysicsCategory_Bullet | [TDUnit physicsCategoryForUnitType:self.type])) {
         TDBaseBullet *bullet = nil;
         
         if ([body.node isKindOfClass:[TDBaseBullet class]])
             bullet = (TDBaseBullet *)body.node;
-//        else if ([body.node.parent isKindOfClass:[TDBaseBullet class]])
-//            bullet = (TDBaseBullet *)body.node.parent;
         
         if (bullet)
             [self hitByBullet:bullet];
@@ -161,7 +212,13 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
 }
 
 - (void) hitByBullet:(TDBaseBullet *)bullet {
-    self.health -= bullet.attack;
+    [self decreaseHealth:bullet.attack];
+}
+
+#pragma mark - ExploringObjectDelegate
+
+- (NSString *) exploringObjectType {
+    return [NSString stringWithFormat:@"%d", self.type];
 }
 
 #pragma mark - Moving unit along a path
@@ -189,7 +246,7 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
         CGPoint destCoord = [self.gameScene tileCoordinatesForPositionInMap:mapPosition];
         
         __weak TDUnit *weakSelf = self;
-        [[TDPathFinder sharedPathCache] pathInExplorableWorld:self.gameScene fromA:selfCoord toB:destCoord usingDiagonal:NO onSuccess:^(TDPath *path) {
+        [[TDPathFinder sharedPathCache] pathInExplorableWorld:self.gameScene fromA:selfCoord toB:destCoord usingDiagonal:NO withObject:self onSuccess:^(TDPath *path) {
             weakSelf.pathToVictory = path;
             [weakSelf followArrayPath:path.positionsPathArray];
             weakSelf.status = TDUnitStatus_Moving;

@@ -7,6 +7,7 @@
 //
 
 #import "TDBaseBullet.h"
+#import "TDConstants.h"
 
 NSString * const kTDBulletDestroyedNotificationName = @"kTDBulletDestroyedNotificationName";
 
@@ -24,7 +25,24 @@ NSString * const kTDBulletDestroyedNotificationName = @"kTDBulletDestroyedNotifi
     return self.baseSplash + self.bonusSplash;
 }
 
+- (void) setAttackableUnitsType:(TDUnitType)attackableUnitsType {
+    if (attackableUnitsType != _attackableUnitsType) {
+        _attackableUnitsType = attackableUnitsType;
+        
+        // Update the physics body category (might need to override this in subclasses)
+        self.physicsBody.categoryBitMask = kPhysicsCategory_Bullet | [TDUnit physicsCategoryForUnitType:attackableUnitsType];
+        self.physicsBody.contactTestBitMask = [TDUnit physicsCategoryForUnitWithType:attackableUnitsType];
+    }
+}
+
+- (void) startAnimation {
+    
+}
+
 - (void) destroy {
+    // cancel all actions
+    [self removeAllActions];
+    
     // run some kind of animation maybe?
     
     // then disappear

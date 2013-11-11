@@ -55,6 +55,22 @@
     }
 }
 
+- (void) setAttackableUnitsType:(TDUnitType)attackableUnitsType {
+    [super setAttackableUnitsType:attackableUnitsType];
+    
+    self.laserTipNode.physicsBody.categoryBitMask = kPhysicsCategory_Bullet | [TDUnit physicsCategoryForUnitType:attackableUnitsType];
+    self.laserTipNode.physicsBody.contactTestBitMask = [TDUnit physicsCategoryForUnitWithType:attackableUnitsType];
+}
+
+- (void) startAnimation {
+//    static BOOL playing = NO;
+//    if (!playing && !self.soundAction) {
+//        self.soundAction = [SKAction playSoundFileNamed:@"bullets_laser_pulse.mp3" waitForCompletion:NO];
+//        [self runAction:self.soundAction];
+//        playing = YES;
+//    }
+}
+
 - (void) updateWidth:(CGFloat)width {
     if (abs(width - self.size.width) > kTDBeamBullet_DeltaUpdateInPx) {
         self.size = CGSizeMake(width, self.size.height);

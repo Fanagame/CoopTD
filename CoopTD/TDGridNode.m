@@ -15,20 +15,17 @@
 	
 	if (self) {
 		self.name = @"grid";
-		
-		[self buildGrid];
 	}
 	
 	return self;
 }
 
-- (void) buildGrid {
+- (void) buildGridWithTileSize:(CGSize)tileSize {
 	// Parent size
 	CGSize size = self.parent.calculateAccumulatedFrame.size;
 	
-	//TODO: get size of tiles dynamically
-	CGFloat tileWidth = 64;
-	CGFloat tileHeight = 64;
+	CGFloat tileWidth = tileSize.width;
+	CGFloat tileHeight = tileSize.height;
 	
 	NSInteger maxX = ceil(size.width / tileWidth);
 	NSInteger maxY = ceil(size.height / tileHeight);

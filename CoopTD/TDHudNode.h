@@ -8,12 +8,12 @@
 
 #import <SpriteKit/SpriteKit.h>
 
-@class SKButton;
+@class TDHudButton;
 
 @interface TDHudNode : SKNode
 
-@property (nonatomic, strong, readonly) SKButton *exitButton;
-@property (nonatomic, strong, readonly) SKButton *debugButton;
+@property (nonatomic, strong, readonly) TDHudButton *exitButton;
+@property (nonatomic, strong, readonly) TDHudButton *debugButton;
 
 @property (nonatomic, strong, readonly) SKLabelNode *playerNameLabel;
 @property (nonatomic, strong, readonly) SKLabelNode *playerSoftCurrencyLabel;

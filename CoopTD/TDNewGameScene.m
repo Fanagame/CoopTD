@@ -12,7 +12,6 @@
 #import "TDUltimateGoal.h"
 #import "TDTiledMap.h"
 #import "TDMapCache.h"
-#import "SKButton.h"
 #import "TDPathFinder.h"
 #import "TDGridNode.h"
 #import "TDBaseBuilding.h"
@@ -59,13 +58,13 @@
         // Initialize player
         [[TDPlayer localPlayer] setSoftCurrency:2000];
         [[TDPlayer localPlayer] setDisplayName:@"Remy"];
-        [[TDPlayer localPlayer] setRemainingLives:2];
+        [[TDPlayer localPlayer] setRemainingLives:200];
         
         
         // Initialize the world + hud
         [self buildWorld];
 		[self buildGrid];
-        [self buildHUD];
+//        [self buildHUD];
         
         // Initialize the camera
         [[TDCamera sharedCamera] setWorld:_world];
@@ -82,12 +81,18 @@
     return self;
 }
 
+- (void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)addNode:(SKNode *)node atWorldLayer:(TDWorldLayer)layer {
     SKNode *layerNode = self.layers[layer];
     [layerNode addChild:node];
 }
 
 - (void)didMoveToView:(SKView *)view {
+    [self buildHUD];
+    
     UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     panRecognizer.minimumNumberOfTouches = 1;
     panRecognizer.maximumNumberOfTouches = 1;
@@ -171,7 +176,7 @@
 
 - (void) buildGrid {
 #ifdef kTDGameScene_SHOW_GRID
-	[self.grid buildGrid];
+	[self.grid buildGridWithTileSize:self.backgroundMap.tiledMap.tileSize];
 #endif
 }
 
@@ -201,6 +206,24 @@
 }
 
 #pragma mark - Position conversion
+
+- (TDMapObject *) mapObjectAtPositionInMap:(CGPoint)position {
+    position = [self convertPoint:position fromNode:self.world];
+    
+    __block TDMapObject *object = nil;
+    
+    [self.physicsWorld enumerateBodiesAtPoint:position usingBlock:^(SKPhysicsBody *body, BOOL *stop) {
+        if (body.categoryBitMask != kPhysicsCategory_BuildingRange && body.categoryBitMask != kPhysicsCategory_Bullet) {
+            if ([body.node isKindOfClass:[TDMapObject class]]) {
+                object = (TDMapObject *)body.node;
+            } else if ([body.node.parent isKindOfClass:[TDMapObject class]]) {
+                object = (TDMapObject *)body.node.parent;
+            }
+        }
+    }];
+    
+    return object;
+}
 
 - (CGPoint) tileCoordinatesForPositionInMap:(CGPoint)position {
     return [self.backgroundMap tileCoordinatesForPosition:position];
@@ -285,8 +308,19 @@
         CGPoint position = [tap locationInView:tap.view];
         position = [self convertPointFromViewToMapPosition:position];
 
-        CGPoint coord = [self tileCoordinatesForPositionInMap:position];
-        [self addBuildingAtTileCoordinates:coord];
+        TDMapObject *tappedItem = [self mapObjectAtPositionInMap:position];
+        
+        if ([tappedItem isKindOfClass:[TDBaseBuilding class]]) {
+            // Show popup?
+            NSLog(@"you tapped on a building");
+        } else if ([tappedItem isKindOfClass:[TDUnit class]]) {
+            // Tell towers to attack this unit?
+            NSLog(@"You tapped on unit #%ld", (long)((TDUnit *)tappedItem).uniqueID);
+        } else if (!tappedItem) { // if we just tapped on the world
+            // Offer to place a building here!
+            CGPoint coord = [self tileCoordinatesForPositionInMap:position];
+            [self addBuildingAtTileCoordinates:coord];
+        }
     }
 }
 
@@ -302,7 +336,7 @@
 #pragma mark - Explorable world delegate
 
 - (BOOL)isConstructable:(CGPoint)coordinates {
-    BOOL ok = YES;
+    __block BOOL ok = YES;
     
 #ifndef kTDGameScene_DISABLE_CONSTRUCTABLE_CHECK
     // Is the terrain constructable?
@@ -321,6 +355,20 @@
         }
     }
     
+//    if (ok) {
+//        CGPoint position = [self tilePositionInMapForCoordinate:coordinates];
+//        position = [self convertPoint:position fromNode:self.world];
+//        CGSize size = CGSizeMake(self.backgroundMap.tiledMap.tileSize.width, self.backgroundMap.tiledMap.tileSize.height);
+//        CGRect rect = CGRectMake(position.x, position.y, size.width, size.height);
+//        [self.physicsWorld enumerateBodiesInRect:rect usingBlock:^(SKPhysicsBody *body, BOOL *stop) {
+//            if (body.categoryBitMask == kPhysicsCategory_Building || body.categoryBitMask == kPhysicsCategory_Unit || body.categoryBitMask == kPhysicsCategory_UltimateGoal) {
+//                ok = NO;
+//                *stop = YES;
+//            } else {
+//                NSLog(@"%@", body.node.class);
+//            }
+//        }];
+//    }
     // if it is, then do we already have a construction here?
     if (ok) {
         for (TDBaseBuilding *b in self.buildings) {
@@ -333,16 +381,35 @@
         }
     }
     
-    // or do we have an enemy there?
+    // or do we have an enemy/spawn there?
     if (ok) {
         for (TDSpawn *spawn in self.spawnPoints) {
+            CGPoint coord = [self tileCoordinatesForPositionInMap:spawn.position];
+            
+            if (CGPointEqualToPoint(coord, coordinates)) {
+                ok = NO;
+                break;
+            }
+            
             for (TDUnit *unit in spawn.units) {
-                CGPoint coord = [self tileCoordinatesForPositionInMap:unit.position];
+                coord = [self tileCoordinatesForPositionInMap:unit.position];
                 
                 if (CGPointEqualToPoint(coord, coordinates)) {
                     ok = NO;
                     break;
                 }
+            }
+        }
+    }
+    
+    // or is the goal point?
+    if (ok) {
+        for (TDUltimateGoal *goal in self.goalPoints) {
+            CGPoint coord = [self tileCoordinatesForPositionInMap:goal.position];
+            
+            if (CGPointEqualToPoint(coord, coordinates)) {
+                ok = NO;
+                break;
             }
         }
     }
@@ -366,13 +433,23 @@
     return hasBuilding;
 }
 
-- (BOOL)isWalkable:(CGPoint)coordinates {
+- (BOOL)isWalkable:(CGPoint)coordinates forExploringObject:(id<ExploringObjectDelegate>)exploringObject {
     BOOL walkable = YES;
     
     if (coordinates.x < 0 || coordinates.x > self.backgroundMap.tiledMap.mapSize.width - 1 || coordinates.y < 0 || coordinates.y > self.backgroundMap.tiledMap.mapSize.height - 1) {
         return NO;
     }
 #ifndef kTDGameScene_DISABLE_WALKABLE_CHECK
+    
+    // Air types can "walk" anywhere on the map
+    if ([exploringObject isKindOfClass:[TDUnit class]]) {
+        TDUnit *unit = (TDUnit *)exploringObject;
+        
+        if (unit.type == TDUnitType_Air) {
+            return YES;
+        }
+    }
+    
     if (self.backgroundMap.mainLayer.layerInfo) {
         TMXLayerInfo *layerInfo = self.backgroundMap.mainLayer.layerInfo;
         

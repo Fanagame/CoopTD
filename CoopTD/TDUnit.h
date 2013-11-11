@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <SpriteKit/SpriteKit.h>
 #import "TDMapObject.h"
+#import "TDPathFinder.h"
 
 extern NSString * const kTDUnitDiedNotificationName;
 
@@ -20,23 +21,37 @@ typedef enum TDUnitStatus : NSUInteger {
     TDUnitStatus_Moving
 } TDUnitStatus;
 
-@interface TDUnit : TDMapObject
+typedef enum TDUnitType : NSUInteger {
+    TDUnitType_Ground,
+    TDUnitType_Air
+} TDUnitType;
 
-@property (nonatomic, assign) NSInteger unitID;
+@interface TDUnit : TDMapObject<ExploringObjectDelegate>
+
+// properties from DB
 @property (nonatomic, strong) NSString *displayName;
+@property (nonatomic, assign) TDUnitType type;
 
 @property (nonatomic, assign) CFTimeInterval timeIntervalBetweenHits;
-@property (nonatomic, strong) NSDate* lastHitDate;
 @property (nonatomic, assign) NSUInteger health;
 @property (nonatomic, assign) NSUInteger maxHealth;
 
 @property (nonatomic, assign) NSInteger softCurrencyEarningValue;
 @property (nonatomic, assign) NSInteger softCurrencyBuyingValue;
 
+// properties to make the game work
+@property (nonatomic, strong) NSDate* lastHitDate;
 @property (nonatomic, assign) TDUnitStatus status;
 @property (nonatomic, strong, readonly) NSArray *path;
 @property (nonatomic, strong) TDPath *pathToVictory;
 @property (nonatomic, weak)   TDPlayer *player;
+
++ (uint32_t) physicsCategoryForUnitType:(TDUnitType)unitType;
++ (uint32_t) physicsCategoryForUnitWithType:(TDUnitType)unitType;
+
++ (TDUnit *) unitWithType:(TDUnitType)unitType;
+
+- (id) initWithType:(TDUnitType)unitType andBaseCacheKey:(NSString *)baseCacheKey;
 
 - (void) die;
 

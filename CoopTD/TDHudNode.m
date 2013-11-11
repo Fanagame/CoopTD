@@ -7,16 +7,14 @@
 //
 
 #import "TDHudNode.h"
+#import "TDHudButton.h"
 #import "TDNewGameScene.h"
-#import "SKButton.h"
 #import "TDPlayer.h"
-
-#define BUTTON_SIZE 32
 
 @interface TDHudNode ()
 
-@property (nonatomic, strong) SKButton *exitButton;
-@property (nonatomic, strong) SKButton *debugButton;
+@property (nonatomic, strong) TDHudButton *exitButton;
+@property (nonatomic, strong) TDHudButton *debugButton;
 
 @property (nonatomic, strong) SKLabelNode *playerNameLabel;
 @property (nonatomic, strong) SKLabelNode *playerSoftCurrencyLabel;
@@ -52,6 +50,10 @@
     }
     
     return self;
+}
+
+- (void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void) didMoveToScene {
@@ -90,18 +92,10 @@
     [self.topOverlayNode addChild:self.playerLivesLabel];
     
     // add buttons
-    self.exitButton = [[SKButton alloc] initWithImageNamedNormal:@"Circle_Red" selected:@"Circle_Red"];
-    self.exitButton.size = CGSizeMake(BUTTON_SIZE, BUTTON_SIZE);
-    self.exitButton.anchorPoint = CGPointMake(1, 1);
-    self.exitButton.position = CGPointMake(origin.x + scene.size.width - 50, origin.y + scene.size.height - 50);
+    self.exitButton = [[TDHudButton alloc] initWithTitle:@"Exit"];
+    self.exitButton.position = CGPointMake(10, 50);
     [self.exitButton addTarget:self action:@selector(didTapExit) forControlEvents:UIControlEventTouchUpInside];
-    [self addChild:self.exitButton];
-    
-    self.debugButton = [[SKButton alloc] initWithImageNamedNormal:@"Circle_Green" selected:@"Circle_Green"];
-    self.debugButton.size = CGSizeMake(BUTTON_SIZE, BUTTON_SIZE);
-    self.debugButton.position = CGPointMake(origin.x, origin.y + 100);
-    [self.debugButton addTarget:self action:@selector(didTapDebug) forControlEvents:UIControlEventTouchUpInside];
-    [self addChild:self.debugButton];
+    [self.gameScene.view addSubview:self.exitButton];
 }
 
 - (void) updateSoftCurrency {

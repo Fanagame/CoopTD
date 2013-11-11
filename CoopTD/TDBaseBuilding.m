@@ -7,11 +7,11 @@
 //
 
 #import "TDBaseBuilding.h"
-#import "TDUnit.h"
 #import "TDConstants.h"
 #import "TDProjectileBullet.h"
 #import "TDBeamBullet.h"
 #import "TDBaseBuildingAI.h"
+#import "TDProgressBar.h"
 
 @interface TDBaseBuilding ()
 
@@ -22,8 +22,16 @@
 
 @implementation TDBaseBuilding
 
+- (id) initWithObjectID:(NSInteger)objectID {
+    return [self init];
+}
+
 - (id) init {
-	self = [super initWithImageNamed:@"Tower-Single-Sprite"];
+    return [self initWithAttackableUnitsType:TDUnitType_Air andBaseCacheKey:@"tower_ground_1"];
+}
+
+- (id) initWithAttackableUnitsType:(TDUnitType)attackableUnitsType andBaseCacheKey:(NSString *)baseCacheKey {
+	self = [super initWithImageNamed:@"tower_unconstructed"];
     
 	if (self) {
         self.unitsInRange = [[NSMutableArray alloc] init];
@@ -31,12 +39,18 @@
         self.intelligence = [[TDBaseBuildingAI alloc] initWithCharacter:self andTarget:nil];
         
         //TODO: init this from database or something else
+        self.baseCacheKey = baseCacheKey;
+        self.health = 200;
+        self.maxHealth = 200;
         self.softCurrencyPrice = 200;
         self.timeIntervalBetweenShots = 0.2;
+        self.timeToBuild = 5;
+        self.attackableUnitType = attackableUnitsType;
         self.bulletType = TDBulletType_Beam;
         self.maxBulletsOnScreen = (self.bulletType != TDBulletType_Beam ? 3 : 1);
         self.range = (self.bulletType != TDBulletType_Beam ? 100.0f : 200.0f);
         
+        self.dateConstructed = [[NSDate alloc] initWithTimeIntervalSinceNow:0];
         self.bodyNode = [[SKShapeNode alloc] init];
         CGPathRef path = CGPathCreateWithRect(self.frame, NULL);
         self.bodyNode.path = path;
@@ -46,7 +60,8 @@
 #else
         self.bodyNode.strokeColor = [UIColor clearColor];
 #endif
-        self.bodyNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:self.size];
+//        self.bodyNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(self.size.width * 0.5 / (1 / 2 * [UIScreen mainScreen].scale), self.size.height * 0.5 * (1 / 2 * [UIScreen mainScreen].scale))];
+        self.bodyNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(self.bodyNode.frame.size.width * 0.5, self.bodyNode.frame.size.height * 0.5)];
         self.bodyNode.physicsBody.categoryBitMask = kPhysicsCategory_Building;
         self.bodyNode.physicsBody.collisionBitMask = 0; // kPhysicsCategory_Unit
         self.bodyNode.physicsBody.friction = 0;
@@ -57,11 +72,28 @@
 #ifdef kTDBuilding_SHOW_RANGE_BY_DEFAULT
         [self setRangeVisible:YES];
 #endif
+        
+        // add health bar
+        self.healthBar = [[TDProgressBar alloc] initWithTotalTicks:self.maxHealth fillColor:[UIColor greenColor] aboveSprite:self];
+#ifndef kTDBuilding_ALWAYS_SHOW_HEALTH
+        self.healthBar.hideWhenFull = YES;
+#endif
+        [self addChild:self.healthBar];
+        
+        // add construction bar
+        self.constructionBar = [[TDProgressBar alloc] initWithTotalTicks:100 fillColor:[UIColor cyanColor] aboveSprite:self];
+        self.constructionBar.currentTick = 0;
+        [self addChild:self.constructionBar];
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unitWasKilled:) name:kTDUnitDiedNotificationName object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bulletWasDestroyed:) name:kTDBulletDestroyedNotificationName object:nil];
 	}
 	
 	return self;
+}
+
+- (void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void) setupRange {
@@ -91,16 +123,78 @@
     self.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:self.range / [UIScreen mainScreen].scale];
     self.physicsBody.categoryBitMask = kPhysicsCategory_BuildingRange;
     self.physicsBody.collisionBitMask = 0;
-    self.physicsBody.contactTestBitMask = kPhysicsCategory_Unit;
+    self.physicsBody.contactTestBitMask = [TDUnit physicsCategoryForUnitWithType:self.attackableUnitType];
 }
 
 - (void) updateWithTimeSinceLastUpdate:(CFTimeInterval)interval {
     [super updateWithTimeSinceLastUpdate:interval];
     
+    if (!self.isConstructed) {
+        if (-[self.dateConstructed timeIntervalSinceNow] >= self.timeToBuild) {
+            self.isConstructed = YES;
+        } else {
+            [self updateConstructProgressBar];
+        }
+    }
+    
     if (self.unitsInRange.count == 0 && self.bulletType == TDBulletType_Beam && self.bullets.count > 0) {
         // destroy this laser bullet!
         [[self.bullets lastObject] destroy];
     }
+}
+
+- (void) updateConstructProgressBar {
+    double timeSpent = -[self.dateConstructed timeIntervalSinceNow];
+    double totalTime = self.timeToBuild;
+    double ticks = ceil(timeSpent / totalTime * 100);
+    self.constructionBar.currentTick = ticks;
+}
+
+- (void) setIsConstructed:(BOOL)isConstructed {
+    _isConstructed = isConstructed;
+    
+    if (isConstructed) {
+        self.texture = [SKTexture textureWithImageNamed:self.baseCacheKey];
+        [self.constructionBar removeFromParent];
+    } else {
+        self.texture = [SKTexture textureWithImageNamed:@"tower_unconstructed"];
+        
+        if (!self.constructionBar.parent)
+            [self addChild:self.constructionBar];
+    }
+}
+
+#pragma mark - Health
+
+- (void) setHealth:(NSUInteger)health {
+    _health = health;
+    
+    self.healthBar.currentTick = health;
+    
+    if (_health == 0)
+        [self die];
+}
+
+- (void) increaseHealth:(NSUInteger)amount {
+    amount = MIN(amount, self.maxHealth - self.health);
+    self.health += amount;
+}
+
+- (void) decreaseHealth:(NSUInteger)amount {
+    amount = MIN(self.health, amount);
+    self.health -= amount;
+}
+
+- (void) setMaxHealth:(NSUInteger)maxHealth {
+    _maxHealth = maxHealth;
+    
+    self.healthBar.totalTicks = maxHealth;
+}
+
+#pragma mark - Actions
+
+- (void) die {
+    // destroy the building
 }
 
 #pragma mark - Range detection
@@ -139,6 +233,8 @@
             break;
     }
     
+    b.attackableUnitsType = self.attackableUnitType;
+    
     return b;
 }
 
@@ -154,7 +250,7 @@
 
 - (void) attackTarget:(TDUnit *)target {
 #ifndef kTDBuilding_DISABLE_SHOOTING
-    if (target) {
+    if (target && self.isConstructed) {
         if (self.bulletType == TDBulletType_Beam) {
             
             TDBeamBullet *bullet = nil;
@@ -164,6 +260,7 @@
                 bullet.anchorPoint = CGPointMake(0, 0.5);
                 [self.gameScene addNode:bullet atWorldLayer:TDWorldLayerAboveCharacter];
                 [self.bullets addObject:bullet];
+                [bullet startAnimation];
             } else {
                 bullet = [self.bullets lastObject];
             }
@@ -209,8 +306,7 @@
 
 - (void) collidedWith:(SKPhysicsBody *)body contact:(SKPhysicsContact *)contact {
     [super collidedWith:body contact:contact];
-    
-    if (body.categoryBitMask == kPhysicsCategory_Unit && [body.node isKindOfClass:[TDUnit class]]) {
+    if (body.categoryBitMask == [TDUnit physicsCategoryForUnitWithType:self.attackableUnitType] && [body.node isKindOfClass:[TDUnit class]]) {
         [self addPossibleTarget:(TDUnit *)body.node];
     }
 }
