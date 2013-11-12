@@ -7,19 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
-typedef enum TDHudButtonShape : uint32_t {
-    TDHudButtonShape_Circle,
-    TDHudButtonShape_Rectangle
-} TDHudButtonShape;
-
-typedef enum TDHudButtonColor : uint32_t {
-    TDHudButtonColor_Red,
-    TDHudButtonColor_Orange,
-    TDHudButtonColor_Green,
-    TDHudButtonColor_Yellow,
-    TDHudButtonColor_Blue
-} TDHudButtonColor;
+#import "TDEnums.h"
 
 @interface TDHudButton : UIButton
 

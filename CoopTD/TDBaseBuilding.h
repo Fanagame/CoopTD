@@ -30,15 +30,20 @@
 @property (nonatomic, strong) NSMutableArray *unitsInRange;
 @property (nonatomic, strong) NSMutableArray *bullets;
 @property (nonatomic, strong) NSDate *lastShotDate;
-@property (nonatomic, strong) NSDate *dateConstructed;
+@property (nonatomic, strong) NSDate *dateConstructionStarted;
 @property (nonatomic, readonly) TDBaseBullet *nextBullet;
 @property (nonatomic, assign) BOOL isConstructed;
+@property (nonatomic, assign) BOOL isPlaced;
 
 @property (nonatomic, strong) TDProgressBar *healthBar;
 @property (nonatomic, strong) TDProgressBar *constructionBar;
 
+- (id) initWithAttackableUnitsType:(TDUnitType)attackableUnitsType;
+- (id) initWithAttackableUnitsType:(TDUnitType)attackableUnitsType andBaseCacheKey:(NSString *)baseCacheKey;
+
 - (BOOL) rangeIsVisibe;
 - (void) setRangeVisible:(BOOL)hidden;
+- (void) showRangeStatusWihtConstructableColor:(BOOL)isConstructable;
 
 - (void) attackTarget:(TDUnit *)target;
 

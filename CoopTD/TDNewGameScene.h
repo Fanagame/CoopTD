@@ -7,34 +7,18 @@
 //
 
 #import <SpriteKit/SpriteKit.h>
+#import "TDEnums.h"
 #import "PathFinder.h"
 #import "TDCamera.h"
 
 #define kMinTimeInterval (1.0f / 60.0f)
 #define kMinHeroToEdgeDistance 50
 
-typedef enum : uint8_t {
-	TDWorldLayerGround = 0,
-	TDWorldLayerGrid,
-    TDWorldLayerBuilding,
-	TDWorldLayerBelowCharacter,
-	TDWorldLayerCharacter,
-	TDWorldLayerAboveCharacter,
-	TDWorldLayerTop,
-	kWorldLayerCount
-} TDWorldLayer;
-
-typedef enum : uint8_t {
-    TDWorldModeDefault = 0,
-    TDWorldModePlaceBuilding,
-    TDWorldModeGameOver
-} TDWorldMode;
-
 /* Completion handler for callback after loading assets asynchronously. */
 typedef void (^TDAssetLoadCompletionHandler)(void);
 
 @class TDUnit, TDSpawn, TDUltimateGoal, TDTiledMap;
-@class TDGridNode, TDHudNode;
+@class TDGridNode, TDHudNode, TDBaseBuilding;
 
 @interface TDNewGameScene : SKScene<SKPhysicsContactDelegate, ExplorableWorldDelegate, TDCameraDelegate>
 
@@ -53,11 +37,15 @@ typedef void (^TDAssetLoadCompletionHandler)(void);
 @property (nonatomic, strong) TDUltimateGoal *defaultGoalPoint;
 @property (nonatomic, strong) TDSpawn *defaultSpawnPoint;
 @property (nonatomic, weak) TDUnit *targetUnit;
+@property (nonatomic, weak) TDBaseBuilding *pendingBuilding; // building that we're gonna try to place
+@property (nonatomic, weak) TDBaseBuilding *movingBuilding;
 
 @property (nonatomic, strong) NSMutableArray *spawnPoints;
 @property (nonatomic, strong) NSMutableArray *goalPoints;
 @property (nonatomic, strong) NSMutableArray *buildings;
 
+
+// Loading/Unloading
 + (void)loadSceneAssetsForMapName:(NSString *)mapName withCompletionHandler:(TDAssetLoadCompletionHandler)callback;
 + (void)loadSceneAssetsForMapName:(NSString *)mapName;
 + (void)releaseSceneAssetsForMapName:(NSString *)mapName;
@@ -68,9 +56,14 @@ typedef void (^TDAssetLoadCompletionHandler)(void);
 /* All sprites in the scene should be added through this method to ensure they are placed in the correct world layer. */
 - (void)addNode:(SKNode *)node atWorldLayer:(TDWorldLayer)layer;
 
+// Methods to handle tiled map interaction
 - (CGPoint) tileCoordinatesForPositionInMap:(CGPoint)position;
 - (CGPoint) tilePositionInMapForCoordinate:(CGPoint)position;
 - (void) convertCoordinatesArrayToPositionsInMapArray:(NSArray *)coords;
 
+
+// Methods to handle gameplay
+- (void) tryToPlaceBuildingOfType:(TDUnitType)buildingType;
+- (void) validatePendingBuilding;
 
 @end

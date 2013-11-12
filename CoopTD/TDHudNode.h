@@ -13,7 +13,8 @@
 @interface TDHudNode : SKNode
 
 @property (nonatomic, strong, readonly) TDHudButton *exitButton;
-@property (nonatomic, strong, readonly) TDHudButton *debugButton;
+@property (nonatomic, strong, readonly) TDHudButton *placeGroundBuildingButton;
+@property (nonatomic, strong, readonly) TDHudButton *placeAirBuildingButton;
 
 @property (nonatomic, strong, readonly) SKLabelNode *playerNameLabel;
 @property (nonatomic, strong, readonly) SKLabelNode *playerSoftCurrencyLabel;

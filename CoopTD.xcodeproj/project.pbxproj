@@ -144,6 +144,7 @@
 		44F5473C1814C4D8000459AB /* TDMapObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDMapObject.m; sourceTree = "<group>"; };
 		44F547401814CEE2000459AB /* TDSpawnAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDSpawnAI.h; sourceTree = "<group>"; };
 		44F547411814CEE2000459AB /* TDSpawnAI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSpawnAI.m; sourceTree = "<group>"; };
+		44F5A06B1831589200E9C615 /* TDEnums.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TDEnums.h; sourceTree = "<group>"; };
 		44FA5C34182DD33200AB979E /* TDBeamBullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBeamBullet.h; sourceTree = "<group>"; };
 		44FA5C35182DD33200AB979E /* TDBeamBullet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBeamBullet.m; sourceTree = "<group>"; };
 		44FA5C39182F1A8600AB979E /* bullets_laser_pulse.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = bullets_laser_pulse.mp3; path = Resources/Sounds/Bullets/bullets_laser_pulse.mp3; sourceTree = "<group>"; };
@@ -269,6 +270,7 @@
 			isa = PBXGroup;
 			children = (
 				44A434D31826A9310094A374 /* TDConstants.h */,
+				44F5A06B1831589200E9C615 /* TDEnums.h */,
 				4406EFD91813617400BA102D /* Abstract */,
 				44F547371814C466000459AB /* AI */,
 				72B8AC5A1824BE260071D0AE /* Buildings */,

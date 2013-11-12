@@ -10,21 +10,11 @@
 #import <SpriteKit/SpriteKit.h>
 #import "TDMapObject.h"
 #import "TDPathFinder.h"
+#import "TDEnums.h"
 
 extern NSString * const kTDUnitDiedNotificationName;
 
 @class TDSpawn, TDPath, TDPlayer;
-
-typedef enum TDUnitStatus : NSUInteger {
-    TDUnitStatus_Standy,
-    TDUnitStatus_CalculatingPath,
-    TDUnitStatus_Moving
-} TDUnitStatus;
-
-typedef enum TDUnitType : NSUInteger {
-    TDUnitType_Ground,
-    TDUnitType_Air
-} TDUnitType;
 
 @interface TDUnit : TDMapObject<ExploringObjectDelegate>
 

@@ -64,7 +64,6 @@
         // Initialize the world + hud
         [self buildWorld];
 		[self buildGrid];
-//        [self buildHUD];
         
         // Initialize the camera
         [[TDCamera sharedCamera] setWorld:_world];
@@ -150,25 +149,61 @@
 
 #pragma mark - Building helpers
 
-//TODO: maybe we should handle that somewhere else
-- (void) addBuildingAtTileCoordinates:(CGPoint)tileCoordinates {
-    if ([self isConstructable:tileCoordinates]) {
-        CGPoint position = [self tilePositionInMapForCoordinate:tileCoordinates];
+- (BOOL) addBuilding:(TDBaseBuilding *)building {
+    return [self addBuilding:building atPosition:building.position];
+}
+
+- (BOOL) addBuilding:(TDBaseBuilding *)building atPosition:(CGPoint)position {
+//    [self magnetizeMapObject:building]; // do we really need to do this again?
+    
+    CGPoint coordinates = [self tileCoordinatesForPositionInMap:building.position];
+    return [self addBuilding:building atTileCoordinates:coordinates];
+}
+
+- (BOOL) addBuilding:(TDBaseBuilding *)building atTileCoordinates:(CGPoint)tileCoordinates {
+    if (building && [self isConstructable:tileCoordinates]) {
+        building.isPlaced = YES;
+        [self.buildings addObject:building];
         
-        TDBaseBuilding *b = [[TDBaseBuilding alloc] init];
-        //    b.anchorPoint = CGPointMake(0, 0);
-        b.position = position;
-        [self addNode:b atWorldLayer:TDWorldLayerBuilding];
-        [self.buildings addObject:b];
-        
-        [[TDPlayer localPlayer] subtractSoftCurrency:b.softCurrencyPrice];
-        
-//        // is the building part of any cached path?
+        //TODO: invalidate only the cachedPaths for a given type of units...
+        // is the building part of any cached path?
         for (TDPath *path in [[TDPathFinder sharedPathCache] cachedPaths]) {
             if ([path containsCoordinates:tileCoordinates]) {
                 [path invalidate]; // then invalidate it!
             }
         }
+        
+        return YES;
+    }
+    
+    return NO;
+}
+
+// This is the method we should keep
+- (void) tryToPlaceBuildingWithObjectID:(NSInteger)objectID {
+    [self tryToPlaceBuildingOfType:TDUnitType_Ground];
+}
+
+// This is temp code
+- (void) tryToPlaceBuildingOfType:(TDUnitType)buildingType {
+    if (!self.pendingBuilding) {
+        TDBaseBuilding *b = [[TDBaseBuilding alloc] initWithAttackableUnitsType:buildingType];
+        b.position = CGPointMake(100, 100); // maybe put it in the center of the screen
+        [self addNode:b atWorldLayer:TDWorldLayerBuilding];
+        self.pendingBuilding = b;
+    } else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Validate your pending building first!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+    }
+}
+
+- (void) validatePendingBuilding {
+    if (![self addBuilding:self.pendingBuilding]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"No building to validate" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+    } else {
+        [[TDPlayer localPlayer] subtractSoftCurrency:self.pendingBuilding.softCurrencyPrice]; // this is where we pay
+        self.pendingBuilding = nil;
     }
 }
 
@@ -206,6 +241,11 @@
 }
 
 #pragma mark - Position conversion
+
+- (void) magnetizeMapObject:(TDMapObject *)object {
+    CGPoint coord = [self tileCoordinatesForPositionInMap:object.position];
+    object.position = [self tilePositionInMapForCoordinate:coord];
+}
 
 - (TDMapObject *) mapObjectAtPositionInMap:(CGPoint)position {
     position = [self convertPoint:position fromNode:self.world];
@@ -280,15 +320,48 @@
 
 #pragma mark - Event Handling - iOS
 
+- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    UITouch *tap = [touches anyObject];
+
+    CGPoint position = [tap locationInView:tap.view];
+    position = [self convertPointFromViewToMapPosition:position];
+    
+    TDMapObject *tappedItem = [self mapObjectAtPositionInMap:position];
+    
+    if ([tappedItem isKindOfClass:[TDBaseBuilding class]]) {
+        TDBaseBuilding *b = (TDBaseBuilding *)tappedItem;
+        
+        if (!b.isPlaced) {
+            self.movingBuilding = b;
+        }
+    }
+}
+
 - (void) handlePan:(UIPanGestureRecognizer *)pan {
     // get the translation info
     CGPoint trans = [pan translationInView:pan.view];
     
-    // move the camera
-    [[TDCamera sharedCamera] moveCameraBy:trans];
+    // Are we moving the camera or an element?
+    if (self.movingBuilding) {
+        CGPoint pt = self.movingBuilding.position;
+        self.movingBuilding.position = CGPointMake(pt.x + trans.x, pt.y - trans.y);
+        [self.movingBuilding showRangeStatusWihtConstructableColor:[self isConstructable:[self tileCoordinatesForPositionInMap:self.movingBuilding.position]]];
+    } else {
+        // move the camera
+        [[TDCamera sharedCamera] moveCameraBy:trans];
+    }
     
     // "reset" the translation
     [pan setTranslation:CGPointZero inView:pan.view];
+    
+    
+    // If the pan ended, stop moving the building
+    if (pan.state == UIGestureRecognizerStateEnded) {
+        if (self.movingBuilding) {
+            [self magnetizeMapObject:self.movingBuilding];
+        }
+        self.movingBuilding = nil;
+    }
 }
 
 - (void) handlePinch:(UIPinchGestureRecognizer *)pinch {
@@ -311,15 +384,16 @@
         TDMapObject *tappedItem = [self mapObjectAtPositionInMap:position];
         
         if ([tappedItem isKindOfClass:[TDBaseBuilding class]]) {
+            TDBaseBuilding *b = (TDBaseBuilding *)tappedItem;
             // Show popup?
-            NSLog(@"you tapped on a building");
+            NSLog(@"you tapped on a building (placed => %d, constructed => %d)", b.isPlaced, b.isConstructed);
         } else if ([tappedItem isKindOfClass:[TDUnit class]]) {
             // Tell towers to attack this unit?
             NSLog(@"You tapped on unit #%ld", (long)((TDUnit *)tappedItem).uniqueID);
         } else if (!tappedItem) { // if we just tapped on the world
-            // Offer to place a building here!
-            CGPoint coord = [self tileCoordinatesForPositionInMap:position];
-            [self addBuildingAtTileCoordinates:coord];
+            // Offer to place a building here! => we need menus for that!!
+//            CGPoint coord = [self tileCoordinatesForPositionInMap:position];
+//            [self addBuildingAtTileCoordinates:coord];
         }
     }
 }

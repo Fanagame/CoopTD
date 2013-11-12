@@ -13,6 +13,8 @@
 #import "TDBaseBuildingAI.h"
 #import "TDProgressBar.h"
 
+NSString * const kConstructingBuildingImageName = @"tower_unconstructed";
+
 @interface TDBaseBuilding ()
 
 @property (nonatomic, strong) SKShapeNode *rangeNode;
@@ -27,11 +29,16 @@
 }
 
 - (id) init {
-    return [self initWithAttackableUnitsType:TDUnitType_Air andBaseCacheKey:@"tower_ground_1"];
+    return [self initWithAttackableUnitsType:TDUnitType_Ground andBaseCacheKey:@"tower_ground_1"];
+}
+
+- (id) initWithAttackableUnitsType:(TDUnitType)attackableUnitsType {
+    NSString *baseCacheKey = (attackableUnitsType == TDUnitType_Ground ? @"tower_ground_1" : @"tower_air_1");
+    return [self initWithAttackableUnitsType:attackableUnitsType andBaseCacheKey:baseCacheKey];
 }
 
 - (id) initWithAttackableUnitsType:(TDUnitType)attackableUnitsType andBaseCacheKey:(NSString *)baseCacheKey {
-	self = [super initWithImageNamed:@"tower_unconstructed"];
+	self = [super initWithImageNamed:kConstructingBuildingImageName];
     
 	if (self) {
         self.unitsInRange = [[NSMutableArray alloc] init];
@@ -50,7 +57,6 @@
         self.maxBulletsOnScreen = (self.bulletType != TDBulletType_Beam ? 3 : 1);
         self.range = (self.bulletType != TDBulletType_Beam ? 100.0f : 200.0f);
         
-        self.dateConstructed = [[NSDate alloc] initWithTimeIntervalSinceNow:0];
         self.bodyNode = [[SKShapeNode alloc] init];
         CGPathRef path = CGPathCreateWithRect(self.frame, NULL);
         self.bodyNode.path = path;
@@ -69,6 +75,7 @@
         [self addChild:self.bodyNode];
         
         [self setupRange];
+        self.isPlaced = NO; // sets up range visible and all that shit
 #ifdef kTDBuilding_SHOW_RANGE_BY_DEFAULT
         [self setRangeVisible:YES];
 #endif
@@ -129,8 +136,8 @@
 - (void) updateWithTimeSinceLastUpdate:(CFTimeInterval)interval {
     [super updateWithTimeSinceLastUpdate:interval];
     
-    if (!self.isConstructed) {
-        if (-[self.dateConstructed timeIntervalSinceNow] >= self.timeToBuild) {
+    if (!self.isConstructed && self.isPlaced) {
+        if (-[self.dateConstructionStarted timeIntervalSinceNow] >= self.timeToBuild) {
             self.isConstructed = YES;
         } else {
             [self updateConstructProgressBar];
@@ -144,7 +151,7 @@
 }
 
 - (void) updateConstructProgressBar {
-    double timeSpent = -[self.dateConstructed timeIntervalSinceNow];
+    double timeSpent = -[self.dateConstructionStarted timeIntervalSinceNow];
     double totalTime = self.timeToBuild;
     double ticks = ceil(timeSpent / totalTime * 100);
     self.constructionBar.currentTick = ticks;
@@ -157,10 +164,34 @@
         self.texture = [SKTexture textureWithImageNamed:self.baseCacheKey];
         [self.constructionBar removeFromParent];
     } else {
-        self.texture = [SKTexture textureWithImageNamed:@"tower_unconstructed"];
+        self.texture = [SKTexture textureWithImageNamed:kConstructingBuildingImageName];
         
         if (!self.constructionBar.parent)
             [self addChild:self.constructionBar];
+    }
+}
+
+- (void) setIsPlaced:(BOOL)isPlaced {
+    _isPlaced = isPlaced;
+    
+    // Change some visual things
+    
+    // Not placed? Grey out the building, but show the actual building image
+    if (!_isPlaced) {
+        self.texture = [SKTexture textureWithImageNamed:self.baseCacheKey];
+        // add some kind of effect
+        
+        [self setRangeVisible:YES];
+    } else  {
+        // We just placed it!
+        
+        // If it wasn't already constructed (maybe we just moved it afterwards), start constructing it!
+        if (!self.isConstructed) {
+            self.dateConstructionStarted = [[NSDate alloc] initWithTimeIntervalSinceNow:0];
+        }
+        
+        self.isConstructed = self.isConstructed; // might look silly, but this just refreshes the right sprite
+        [self setRangeVisible:NO];
     }
 }
 
@@ -175,11 +206,13 @@
         [self die];
 }
 
+// do we really need this?
 - (void) increaseHealth:(NSUInteger)amount {
     amount = MIN(amount, self.maxHealth - self.health);
     self.health += amount;
 }
 
+// do we really need this?
 - (void) decreaseHealth:(NSUInteger)amount {
     amount = MIN(self.health, amount);
     self.health -= amount;
@@ -210,8 +243,8 @@
         [self.rangeNode removeFromParent];
 }
 
-- (void) updateRangeStatus { // might not keep this until the end
-    if (self.unitsInRange.count > 0)
+- (void) showRangeStatusWihtConstructableColor:(BOOL)isConstructable {
+    if (!isConstructable)
         self.rangeNode.fillColor = [UIColor redColor];
     else
         self.rangeNode.fillColor = [UIColor greenColor];
@@ -240,12 +273,10 @@
 
 - (void) addPossibleTarget:(TDUnit *)target {
     [self.unitsInRange addObject:target];
-    [self updateRangeStatus];
 }
 
 - (void) removePossibleTarget:(TDUnit *)target {
     [self.unitsInRange removeObject:target];
-    [self updateRangeStatus];
 }
 
 - (void) attackTarget:(TDUnit *)target {

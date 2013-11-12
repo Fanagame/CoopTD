@@ -7,14 +7,10 @@
 //
 
 #import "TDMapObject.h"
+#import "TDEnums.h"
 #import "TDUnit.h"
 
 extern NSString * const kTDBulletDestroyedNotificationName;
-
-typedef enum : uint8_t {
-    TDBulletType_Projectile,
-    TDBulletType_Beam
-} TDBulletType;
 
 @interface TDBaseBullet : TDMapObject
 

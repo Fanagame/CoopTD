@@ -10,11 +10,13 @@
 #import "TDHudButton.h"
 #import "TDNewGameScene.h"
 #import "TDPlayer.h"
+#import "TDUnit.h"
 
 @interface TDHudNode ()
 
 @property (nonatomic, strong) TDHudButton *exitButton;
-@property (nonatomic, strong) TDHudButton *debugButton;
+@property (nonatomic, strong) TDHudButton *placeGroundBuildingButton;
+@property (nonatomic, strong) TDHudButton *placeAirBuildingButton;
 
 @property (nonatomic, strong) SKLabelNode *playerNameLabel;
 @property (nonatomic, strong) SKLabelNode *playerSoftCurrencyLabel;
@@ -96,6 +98,22 @@
     self.exitButton.position = CGPointMake(10, 50);
     [self.exitButton addTarget:self action:@selector(didTapExit) forControlEvents:UIControlEventTouchUpInside];
     [self.gameScene.view addSubview:self.exitButton];
+    
+    self.placeGroundBuildingButton = [[TDHudButton alloc] initWithTitle:@"Ground building" shape:TDHudButtonShape_Circle color:TDHudButtonColor_Blue];
+    self.placeGroundBuildingButton.position = CGPointMake(10, 100);
+    [self.placeGroundBuildingButton addTarget:self action:@selector(didTapPlaceBuilding:) forControlEvents:UIControlEventTouchUpInside];
+    [self.gameScene.view addSubview:self.placeGroundBuildingButton];
+    
+    
+    self.placeAirBuildingButton = [[TDHudButton alloc] initWithTitle:@"Air building" shape:TDHudButtonShape_Circle color:TDHudButtonColor_Blue];
+    self.placeAirBuildingButton.position = CGPointMake(10, 150);
+    [self.placeAirBuildingButton addTarget:self action:@selector(didTapPlaceBuilding:) forControlEvents:UIControlEventTouchUpInside];
+    [self.gameScene.view addSubview:self.placeAirBuildingButton];
+    
+    TDHudButton *btn = [[TDHudButton alloc] initWithTitle:@"Validate building" shape:TDHudButtonShape_Circle color:TDHudButtonColor_Green];
+    btn.position = CGPointMake(10, 200);
+    [btn addTarget:self action:@selector(didTapValidateBuilding:) forControlEvents:UIControlEventTouchUpInside];
+    [self.gameScene.view addSubview:btn];
 }
 
 - (void) updateSoftCurrency {
@@ -110,6 +128,22 @@
 
 - (void) didTapExit {
 	[self.gameScene.parentViewController.navigationController popViewControllerAnimated:YES];
+}
+
+- (void) didTapPlaceBuilding:(id)sender {
+    if ([self.gameScene respondsToSelector:@selector(tryToPlaceBuildingOfType:)]) {
+        if (sender == self.placeGroundBuildingButton) {
+            [self.gameScene tryToPlaceBuildingOfType:TDUnitType_Ground];
+        } else {
+            [self.gameScene tryToPlaceBuildingOfType:TDUnitType_Air];
+        }
+    }
+}
+
+- (void) didTapValidateBuilding:(id)sender {
+    if ([self.gameScene respondsToSelector:@selector(validatePendingBuilding)]) {
+        [self.gameScene validatePendingBuilding];
+    }
 }
 
 - (void) didTapDebug {
