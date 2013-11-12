@@ -36,7 +36,7 @@
 }
 
 - (CGFloat) topOverlayHeight {
-    return 30;
+    return 30 / [UIScreen mainScreen].scale;
 }
 
 #pragma mark - Init
@@ -76,8 +76,8 @@
     self.playerNameLabel = [[SKLabelNode alloc] initWithFontNamed:@"Helvetica Neue Ultralight"];
     self.playerNameLabel.text = [TDPlayer localPlayer].displayName;
     self.playerNameLabel.color = [UIColor whiteColor];
-    self.playerNameLabel.fontSize = 16.0;
-    self.playerNameLabel.position = CGPointMake(origin.x + 30, -origin.y - 25);
+    self.playerNameLabel.fontSize = 16.0 / [UIScreen mainScreen].scale;
+    self.playerNameLabel.position = CGPointMake(origin.x + 30, -origin.y - self.topOverlayHeight + 5 / [UIScreen mainScreen].scale);
     [self.topOverlayNode addChild:self.playerNameLabel];
     
     // Total gold in top right

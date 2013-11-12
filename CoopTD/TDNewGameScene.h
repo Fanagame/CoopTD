@@ -61,6 +61,8 @@ typedef void (^TDAssetLoadCompletionHandler)(void);
 - (CGPoint) tilePositionInMapForCoordinate:(CGPoint)position;
 - (void) convertCoordinatesArrayToPositionsInMapArray:(NSArray *)coords;
 
+//Other
+- (BOOL)isConstructable:(CGPoint)coordinates;
 
 // Methods to handle gameplay
 - (void) tryToPlaceBuildingOfType:(TDUnitType)buildingType;

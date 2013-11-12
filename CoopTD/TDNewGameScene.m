@@ -18,6 +18,7 @@
 #import "TDHudNode.h"
 #import "TDPlayer.h"
 #import "TDConstants.h"
+#import "TDBuildingManager.h"
 
 @interface TDNewGameScene () {
     CGSize _cachedMapSizeForCamera;
@@ -60,9 +61,11 @@
         [[TDPlayer localPlayer] setDisplayName:@"Remy"];
         [[TDPlayer localPlayer] setRemainingLives:200];
         
-        
+        // Configure various managers
+		[[TDBuildingManager sharedManager] setGameScene:self];
+		
         // Initialize the world + hud
-        [self buildWorld];
+		[self buildWorld];
 		[self buildGrid];
         
         // Initialize the camera
@@ -149,35 +152,7 @@
 
 #pragma mark - Building helpers
 
-- (BOOL) addBuilding:(TDBaseBuilding *)building {
-    return [self addBuilding:building atPosition:building.position];
-}
 
-- (BOOL) addBuilding:(TDBaseBuilding *)building atPosition:(CGPoint)position {
-//    [self magnetizeMapObject:building]; // do we really need to do this again?
-    
-    CGPoint coordinates = [self tileCoordinatesForPositionInMap:building.position];
-    return [self addBuilding:building atTileCoordinates:coordinates];
-}
-
-- (BOOL) addBuilding:(TDBaseBuilding *)building atTileCoordinates:(CGPoint)tileCoordinates {
-    if (building && [self isConstructable:tileCoordinates]) {
-        building.isPlaced = YES;
-        [self.buildings addObject:building];
-        
-        //TODO: invalidate only the cachedPaths for a given type of units...
-        // is the building part of any cached path?
-        for (TDPath *path in [[TDPathFinder sharedPathCache] cachedPaths]) {
-            if ([path containsCoordinates:tileCoordinates]) {
-                [path invalidate]; // then invalidate it!
-            }
-        }
-        
-        return YES;
-    }
-    
-    return NO;
-}
 
 // This is the method we should keep
 - (void) tryToPlaceBuildingWithObjectID:(NSInteger)objectID {
@@ -198,7 +173,7 @@
 }
 
 - (void) validatePendingBuilding {
-    if (![self addBuilding:self.pendingBuilding]) {
+    if (![[TDBuildingManager sharedManager] addBuilding:self.pendingBuilding]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"No building to validate" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
     } else {
@@ -344,7 +319,7 @@
     // Are we moving the camera or an element?
     if (self.movingBuilding) {
         CGPoint pt = self.movingBuilding.position;
-        self.movingBuilding.position = CGPointMake(pt.x + trans.x, pt.y - trans.y);
+        self.movingBuilding.position = CGPointMake(pt.x + trans.x * [UIScreen mainScreen].scale, pt.y - trans.y * [UIScreen mainScreen].scale);
         [self.movingBuilding showRangeStatusWihtConstructableColor:[self isConstructable:[self tileCoordinatesForPositionInMap:self.movingBuilding.position]]];
     } else {
         // move the camera

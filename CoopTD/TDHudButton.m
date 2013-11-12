@@ -36,10 +36,10 @@
     
     if (self) {
         self.frame = CGRectMake(0, 0, BUTTON_SIZE, BUTTON_SIZE);
-        self.contentEdgeInsets = UIEdgeInsetsMake(-3, 20, 0, 20);
+        self.contentEdgeInsets = UIEdgeInsetsMake(0, 20, 0, 20);
         self.shape = buttonShape;
         self.color = color;
-        self.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0];
+        self.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0 / [UIScreen mainScreen].scale];
         UIImage *bgImage = [UIImage imageNamed:[self buttonImageName]];
         [self setBackgroundImage:[bgImage stretchableImageWithLeftCapWidth:bgImage.size.width * 0.5 topCapHeight:bgImage.size.height * 0.5] forState:UIControlStateNormal];
         [self setTitle:title forState:UIControlStateNormal];

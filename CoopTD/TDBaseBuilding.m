@@ -179,12 +179,18 @@ NSString * const kConstructingBuildingImageName = @"tower_unconstructed";
     // Not placed? Grey out the building, but show the actual building image
     if (!_isPlaced) {
         self.texture = [SKTexture textureWithImageNamed:self.baseCacheKey];
+		
         // add some kind of effect
+		self.color = [UIColor grayColor];
+		self.colorBlendFactor = 1;
         
         [self setRangeVisible:YES];
     } else  {
         // We just placed it!
-        
+		
+		self.color = nil;
+		self.colorBlendFactor = 0;
+	    
         // If it wasn't already constructed (maybe we just moved it afterwards), start constructing it!
         if (!self.isConstructed) {
             self.dateConstructionStarted = [[NSDate alloc] initWithTimeIntervalSinceNow:0];
