@@ -35,6 +35,12 @@ NSString * const kTDBulletDestroyedNotificationName = @"kTDBulletDestroyedNotifi
     }
 }
 
+#pragma mark - Public API
+
+- (void) attackTarget:(TDMapObject *)target fromObject:(TDMapObject *)attacker {
+    // Should be overriden in subclasses
+}
+
 - (void) startAnimation {
     
 }

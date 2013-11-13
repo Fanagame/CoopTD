@@ -10,6 +10,7 @@
 #import "TDConstants.h"
 #import "TDProjectileBullet.h"
 #import "TDBeamBullet.h"
+#import "TDFreezeBeamBullet.h"
 #import "TDBaseBuildingAI.h"
 #import "TDProgressBar.h"
 
@@ -51,7 +52,7 @@ NSString * const kConstructingBuildingImageName = @"tower_unconstructed";
         self.maxHealth = 200;
         self.softCurrencyPrice = 200;
         self.timeIntervalBetweenShots = 0.2;
-        self.timeToBuild = 5;
+        self.timeToBuild = 0.7;
         self.attackableUnitType = attackableUnitsType;
         self.bulletType = TDBulletType_Beam;
         self.maxBulletsOnScreen = (self.bulletType != TDBulletType_Beam ? 3 : 1);
@@ -264,7 +265,7 @@ NSString * const kConstructingBuildingImageName = @"tower_unconstructed";
     
     switch (self.bulletType) {
         case TDBulletType_Beam:
-            b = [[TDBeamBullet alloc] init];
+            b = [[TDFreezeBeamBullet alloc] init];
             break;
             
         default:
@@ -302,24 +303,14 @@ NSString * const kConstructingBuildingImageName = @"tower_unconstructed";
                 bullet = [self.bullets lastObject];
             }
             
-            // update the height of the bullet, then the angle
-            CGFloat deltaX = target.position.x - self.position.x;
-            CGFloat deltaY = target.position.y - self.position.y;
-            CGFloat width = sqrtf(deltaX * deltaX + deltaY * deltaY);
-            [bullet updateWidth:width];
-            bullet.zRotation = atan2f(deltaY, deltaX);
-            
+            [bullet attackTarget:target fromObject:self];
         } else if ((!self.lastShotDate || [self.lastShotDate timeIntervalSinceNow] < -self.timeIntervalBetweenShots) && self.bullets.count <= self.maxBulletsOnScreen) {
             self.lastShotDate = [NSDate date];
             
             // shoot
             TDBaseBullet *bullet = self.nextBullet;
-            bullet.position = self.position;
-            [self.gameScene addNode:bullet atWorldLayer:TDWorldLayerAboveCharacter];
             [self.bullets addObject:bullet];
-            
-            // we need to move the bullet now! use physics
-            [bullet.physicsBody applyImpulse:CGVectorMake((target.position.x - self.position.x) * bullet.speed, (target.position.y - self.position.y) * bullet.speed)];
+            [bullet attackTarget:target fromObject:self];
         }
     }
 #endif

@@ -23,9 +23,7 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
 
 @interface TDUnit ()
 
-@property (nonatomic, strong) NSArray *path;
 @property (nonatomic, strong) TDProgressBar *healthBar;
-
 @property (nonatomic, strong) NSPredicate *bulletFilter;
 
 @end
@@ -81,6 +79,7 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
         self.softCurrencyEarningValue = 50;
         self.softCurrencyBuyingValue = 200;
         self.timeIntervalBetweenHits = 0;
+        self.statusEffectsImmunity = kTDBulletEffect_Fire | kTDBulletEffect_Poison;
         
         // setup intelligence
         self.intelligence = [[TDBaseUnitAI alloc] initWithCharacter:self andTarget:nil];
@@ -104,7 +103,6 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
         // setup physics
         self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:self.size];
         self.physicsBody.categoryBitMask = [TDUnit physicsCategoryForUnitWithType:self.type];
-//        self.physicsBody.usesPreciseCollisionDetection = YES; // VERY SLOW!!!
         self.physicsBody.collisionBitMask = 0; // kPhysicsCategory_Building
         self.physicsBody.allowsRotation = NO;
         self.physicsBody.mass = 1000;
@@ -119,16 +117,26 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
 
 - (void) dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    self.path = nil; // releases the cache
 }
 
 /// @description Change the unit status. Going to standby cancels any of its ongoing actions.
-- (void) setStatus:(TDUnitStatus)status {
-    if (status == TDUnitStatus_Standy || status == TDUnitStatus_CalculatingPath) {
+- (void) setPathFindingStatus:(TDUnitPathFindingStatus)status {
+    if (status == TDUnitPathFindingStatus_Standy || status == TDUnitPathFindingStatus_CalculatingPath) {
         self.path = nil;
         [self removeAllActions];
     }
     
-    _status = status;
+    _pathFindingStatus = status;
+}
+
+- (void) setPath:(TDPath *)path {
+    [self.path removeOwner:self];
+    
+    _path = path;
+    
+    [self.path addOwner:self];
 }
 
 - (void) setHealth:(NSUInteger)health {
@@ -166,6 +174,8 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
     for (SKPhysicsBody *body in beamBullets) {
         [self hitByBullet:(TDBaseBullet *)body.node.parent];
     }
+    
+    //TODO: take status effects into account here
 }
 
 #pragma mark - Handle collisions 
@@ -195,7 +205,6 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
 - (void) reachedUltimateGoal {
     [[NSNotificationCenter defaultCenter] postNotificationName:kTDUnitDiedNotificationName object:self];
     [self removeFromParent];
-    [self.pathToVictory removeOwner:self]; // releases cache
     
     if (self.player != [TDPlayer localPlayer])
         self.player.remainingLives++;
@@ -206,13 +215,35 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
 - (void) die {
     [[NSNotificationCenter defaultCenter] postNotificationName:kTDUnitDiedNotificationName object:self];
     [self removeFromParent];
-    [self.pathToVictory removeOwner:self]; // releases cache
     
     [[TDPlayer localPlayer] addSoftCurrency:self.softCurrencyEarningValue];
 }
 
 - (void) hitByBullet:(TDBaseBullet *)bullet {
     [self decreaseHealth:bullet.attack];
+    [self updateStatusEffects:bullet];
+}
+
+/*
+ * Attack : 0000 0011
+ * Immune : 0000 0110
+ * A&I    : 0000 0010
+ * A^(A&I): 0000 0001 (XOR)
+ */
+- (void) updateStatusEffects:(TDBaseBullet *)bullet {
+    uint32_t statusEffectsToApply = bullet.attackEffect ^ (bullet.attackEffect & self.statusEffectsImmunity);
+    
+//    NSLog(@"Attack %d", bullet.attackEffect); // 3 => Freeze + Fire
+//    NSLog(@"Immune %d", self.statusEffectsImmunity); // 6 => Fire + Poison
+//    NSLog(@"Applied %d", statusEffectsToApply); // 1 => Freeze
+    
+    uint32_t newStatusEffects = self.currentStatusEffects | statusEffectsToApply;
+    
+    if (newStatusEffects != self.currentStatusEffects) {
+        self.currentStatusEffects |= statusEffectsToApply;
+
+        // do something special?
+    }
 }
 
 #pragma mark - ExploringObjectDelegate
@@ -225,12 +256,10 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
 
 - (void) pathDidUpdate:(NSNotification *)notification {
     if ([notification.object isKindOfClass:[TDPath class]]) {
-        if (self.pathToVictory == notification.object) {
-            CGPoint oldDestination = [[self.path lastObject] position];
+        if (self.path == notification.object) {
+            CGPoint oldDestination = [[self.path.positionsPathArray lastObject] position];
             
-            [self.pathToVictory removeOwner:self];
             self.path = nil;
-            self.pathToVictory = nil;
             [self removeAllActions];
             
             [self moveTowards:oldDestination withTimeInterval:0];
@@ -239,28 +268,25 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
 }
 
 - (void) moveTowards:(CGPoint)mapPosition withTimeInterval:(CFTimeInterval)interval {
-    if (self.status != TDUnitStatus_CalculatingPath) {
-        self.status = TDUnitStatus_CalculatingPath;
+    if (self.pathFindingStatus != TDUnitPathFindingStatus_CalculatingPath) {
+        self.pathFindingStatus = TDUnitPathFindingStatus_CalculatingPath;
         
         CGPoint selfCoord = [self.gameScene tileCoordinatesForPositionInMap:self.position];
         CGPoint destCoord = [self.gameScene tileCoordinatesForPositionInMap:mapPosition];
         
         __weak TDUnit *weakSelf = self;
         [[TDPathFinder sharedPathCache] pathInExplorableWorld:self.gameScene fromA:selfCoord toB:destCoord usingDiagonal:NO withObject:self onSuccess:^(TDPath *path) {
-            weakSelf.pathToVictory = path;
-            [weakSelf followArrayPath:path.positionsPathArray];
-            weakSelf.status = TDUnitStatus_Moving;
-            [weakSelf.pathToVictory addOwner:self];
+            [weakSelf followPath:path];
+            weakSelf.pathFindingStatus = TDUnitPathFindingStatus_Moving;
         }];
     }
 }
 
-/// @description Makes a unit follow a path from point A to point B
-- (void) followArrayPath:(NSArray *)path withCompletionHandler:(void (^)())onComplete {
+- (void) followPath:(TDPath *)path withCompletionHandler:(void (^)())onComplete {
     self.path = path;
     
     NSMutableArray *moveActions = [[NSMutableArray alloc] init];
-    for (PathNode *node in path) {
+    for (PathNode *node in path.positionsPathArray) {
         SKAction *action = [SKAction moveTo:node.position duration:kUnitMovingSpeed];
         [moveActions addObject:action];
     }
@@ -268,9 +294,8 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
     [self runAction:[SKAction sequence:moveActions] completion:onComplete];
 }
 
-/// @description Makes a unit follow a path from point A to point B
-- (void) followArrayPath:(NSArray *)path {
-    [self followArrayPath:path withCompletionHandler:nil];
+- (void) followPath:(TDPath *)path {
+    [self followPath:path withCompletionHandler:nil];
 }
 
 @end

@@ -37,7 +37,12 @@ static TDBuildingManager *_sharedManager;
 
 - (BOOL) addBuilding:(TDBaseBuilding *)building atTileCoordinates:(CGPoint)tileCoordinates {
     if (building && [self.gameScene isConstructable:tileCoordinates]) {
+        building.position = [self.gameScene tilePositionInMapForCoordinate:tileCoordinates];
         building.isPlaced = YES;
+        
+        if (!building.parent)
+            [self.gameScene addNode:building atWorldLayer:TDWorldLayerBuilding];
+        
         [self.gameScene.buildings addObject:building];
         
         //TODO: invalidate only the cachedPaths for a given type of units...

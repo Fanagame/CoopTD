@@ -25,7 +25,7 @@
         
         if (self.target) {
             // could complexify the AI later on with target priorities and stuff
-            if (unit.status == TDUnitStatus_Standy) {
+            if (unit.pathFindingStatus == TDUnitPathFindingStatus_Standy) {
                 [unit moveTowards:self.target.position withTimeInterval:interval];
             }
         }

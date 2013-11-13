@@ -44,10 +44,10 @@ typedef enum : uint8_t {
 } TDBulletType;
 
 typedef enum : uint8_t {
-    TDUnitStatus_Standy,
-    TDUnitStatus_CalculatingPath,
-    TDUnitStatus_Moving
-} TDUnitStatus;
+    TDUnitPathFindingStatus_Standy,
+    TDUnitPathFindingStatus_CalculatingPath,
+    TDUnitPathFindingStatus_Moving
+} TDUnitPathFindingStatus;
 
 typedef enum : uint8_t {
     TDUnitType_Ground,

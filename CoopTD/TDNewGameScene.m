@@ -367,8 +367,11 @@
             NSLog(@"You tapped on unit #%ld", (long)((TDUnit *)tappedItem).uniqueID);
         } else if (!tappedItem) { // if we just tapped on the world
             // Offer to place a building here! => we need menus for that!!
-//            CGPoint coord = [self tileCoordinatesForPositionInMap:position];
-//            [self addBuildingAtTileCoordinates:coord];
+#ifdef kTDGameScene_ENABLE_QUICK_TD_BUILD
+            CGPoint coord = [self tileCoordinatesForPositionInMap:position];
+            TDBaseBuilding *b = [[TDBaseBuilding alloc] initWithAttackableUnitsType:TDUnitType_Air];
+            [[TDBuildingManager sharedManager] addBuilding:b atTileCoordinates:coord];
+#endif
         }
     }
 }

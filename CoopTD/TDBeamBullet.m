@@ -27,10 +27,15 @@
         self.baseSpeed = 0; // infinite speed?
         self.baseSplash = 0;
         
+        self.size = CGSizeMake(0, [self heightForBeam]);
         [self setupPhysics];
     }
     
     return self;
+}
+
+- (CGFloat) heightForBeam {
+    return 4;
 }
 
 - (void) setupPhysics {
@@ -62,21 +67,34 @@
     self.laserTipNode.physicsBody.contactTestBitMask = [TDUnit physicsCategoryForUnitWithType:attackableUnitsType];
 }
 
-- (void) startAnimation {
-//    static BOOL playing = NO;
-//    if (!playing && !self.soundAction) {
-//        self.soundAction = [SKAction playSoundFileNamed:@"bullets_laser_pulse.mp3" waitForCompletion:NO];
-//        [self runAction:self.soundAction];
-//        playing = YES;
-//    }
-}
-
 - (void) updateWidth:(CGFloat)width {
     if (abs(width - self.size.width) > kTDBeamBullet_DeltaUpdateInPx) {
         self.size = CGSizeMake(width, self.size.height);
         self.laserTipNode.position = CGPointMake(self.size.width - self.laserTipNode.frame.size.width, -self.laserTipNode.frame.size.height * 0.5);
     }
 }
+
+#pragma mark - Public API
+
+- (void) startAnimation {
+    //    static BOOL playing = NO;
+    //    if (!playing && !self.soundAction) {
+    //        self.soundAction = [SKAction playSoundFileNamed:@"bullets_laser_pulse.mp3" waitForCompletion:NO];
+    //        [self runAction:self.soundAction];
+    //        playing = YES;
+    //    }
+}
+
+- (void) attackTarget:(TDMapObject *)target fromObject:(TDMapObject *)attacker {
+    // update the length of the laser, then the angle
+    CGFloat deltaX = target.position.x - attacker.position.x;
+    CGFloat deltaY = target.position.y - attacker.position.y;
+    CGFloat width = sqrtf(deltaX * deltaX + deltaY * deltaY);
+    [self updateWidth:width];
+    self.zRotation = atan2f(deltaY, deltaX);
+}
+
+#pragma mark - Collisions handling
 
 - (void) collidedWith:(SKPhysicsBody *)body contact:(SKPhysicsContact *)contact {
     // do nothing (don't call super method or we'll get destroyed!

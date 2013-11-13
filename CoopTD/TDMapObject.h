@@ -16,6 +16,7 @@
 
 @property (nonatomic, assign) NSInteger objectID;
 @property (nonatomic, assign) NSInteger uniqueID;
+@property (nonatomic, strong) NSString *displayName;
 @property (nonatomic, strong) NSString *baseCacheKey;
 @property (nonatomic, strong) TDArtificialIntelligence *intelligence;
 

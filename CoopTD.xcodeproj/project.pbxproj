@@ -58,6 +58,7 @@
 		44FA5C87183088DB00AB979E /* btn_rect_yellow.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FA5C81183088DB00AB979E /* btn_rect_yellow.png */; };
 		44FA5C88183088DB00AB979E /* btn_rect_yellow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FA5C82183088DB00AB979E /* btn_rect_yellow@2x.png */; };
 		44FA5C8A18308ED500AB979E /* tower_air_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FA5C8918308ED500AB979E /* tower_air_1.png */; };
+		44FE66991832AE55004300E0 /* TDFreezeBeamBullet.m in Sources */ = {isa = PBXBuildFile; fileRef = 44FE66981832AE55004300E0 /* TDFreezeBeamBullet.m */; };
 		7290766718321B2600166F93 /* TDBuildingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7290766618321B2600166F93 /* TDBuildingManager.m */; };
 		7290766A18321D2B00166F93 /* TDCalloutMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 7290766918321D2B00166F93 /* TDCalloutMenu.m */; };
 		72A6FEEF181A0EC200B74119 /* TDMapSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 72A6FEEE181A0EC200B74119 /* TDMapSelectorViewController.m */; };
@@ -170,6 +171,8 @@
 		44FA5C81183088DB00AB979E /* btn_rect_yellow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = btn_rect_yellow.png; path = Resources/HUD/Rectangle/btn_rect_yellow.png; sourceTree = "<group>"; };
 		44FA5C82183088DB00AB979E /* btn_rect_yellow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn_rect_yellow@2x.png"; path = "Resources/HUD/Rectangle/btn_rect_yellow@2x.png"; sourceTree = "<group>"; };
 		44FA5C8918308ED500AB979E /* tower_air_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tower_air_1.png; path = Resources/images/tower_air_1.png; sourceTree = "<group>"; };
+		44FE66971832AE55004300E0 /* TDFreezeBeamBullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDFreezeBeamBullet.h; sourceTree = "<group>"; };
+		44FE66981832AE55004300E0 /* TDFreezeBeamBullet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDFreezeBeamBullet.m; sourceTree = "<group>"; };
 		7290766518321B2600166F93 /* TDBuildingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBuildingManager.h; sourceTree = "<group>"; };
 		7290766618321B2600166F93 /* TDBuildingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBuildingManager.m; sourceTree = "<group>"; };
 		7290766818321D2B00166F93 /* TDCalloutMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDCalloutMenu.h; sourceTree = "<group>"; };
@@ -378,6 +381,8 @@
 				4483FF0C18276E3300FF4126 /* TDProjectileBullet.m */,
 				44FA5C34182DD33200AB979E /* TDBeamBullet.h */,
 				44FA5C35182DD33200AB979E /* TDBeamBullet.m */,
+				44FE66971832AE55004300E0 /* TDFreezeBeamBullet.h */,
+				44FE66981832AE55004300E0 /* TDFreezeBeamBullet.m */,
 			);
 			name = Bullets;
 			sourceTree = "<group>";
@@ -761,6 +766,7 @@
 				4406EFD3181271F900BA102D /* TDUnit.m in Sources */,
 				4483FF0918276E1100FF4126 /* TDBaseBullet.m in Sources */,
 				44F547311814B941000459AB /* TDTiledMap.m in Sources */,
+				44FE66991832AE55004300E0 /* TDFreezeBeamBullet.m in Sources */,
 				44F5470E181370AA000459AB /* TDUltimateGoal.m in Sources */,
 				72D99A861811038C00AB5B9D /* TDAppDelegate.m in Sources */,
 				72A6FEEF181A0EC200B74119 /* TDMapSelectorViewController.m in Sources */,

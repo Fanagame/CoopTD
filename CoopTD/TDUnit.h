@@ -19,22 +19,20 @@ extern NSString * const kTDUnitDiedNotificationName;
 @interface TDUnit : TDMapObject<ExploringObjectDelegate>
 
 // properties from DB
-@property (nonatomic, strong) NSString *displayName;
 @property (nonatomic, assign) TDUnitType type;
-
 @property (nonatomic, assign) CFTimeInterval timeIntervalBetweenHits;
 @property (nonatomic, assign) NSUInteger health;
 @property (nonatomic, assign) NSUInteger maxHealth;
-
 @property (nonatomic, assign) NSInteger softCurrencyEarningValue;
 @property (nonatomic, assign) NSInteger softCurrencyBuyingValue;
+@property (nonatomic, assign) uint32_t statusEffectsImmunity;
 
 // properties to make the game work
 @property (nonatomic, strong) NSDate* lastHitDate;
-@property (nonatomic, assign) TDUnitStatus status;
-@property (nonatomic, strong, readonly) NSArray *path;
-@property (nonatomic, strong) TDPath *pathToVictory;
+@property (nonatomic, assign) TDUnitPathFindingStatus pathFindingStatus;
+@property (nonatomic, strong) TDPath *path;
 @property (nonatomic, weak)   TDPlayer *player;
+@property (nonatomic, assign) uint32_t currentStatusEffects;
 
 + (uint32_t) physicsCategoryForUnitType:(TDUnitType)unitType;
 + (uint32_t) physicsCategoryForUnitWithType:(TDUnitType)unitType;
@@ -46,7 +44,7 @@ extern NSString * const kTDUnitDiedNotificationName;
 - (void) die;
 
 - (void) moveTowards:(CGPoint)mapPosition withTimeInterval:(CFTimeInterval)interval;
-- (void) followArrayPath:(NSArray *)path withCompletionHandler:(void (^)())onComplete;
-- (void) followArrayPath:(NSArray *)path;
+- (void) followPath:(TDPath *)path withCompletionHandler:(void (^)())onComplete;
+- (void) followPath:(TDPath *)path;
 
 @end

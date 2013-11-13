@@ -31,4 +31,13 @@
     return self;
 }
 
+- (void) attackTarget:(TDMapObject *)target fromObject:(TDMapObject *)attacker {
+    
+    self.position = attacker.position;
+    [self.gameScene addNode:self atWorldLayer:TDWorldLayerAboveCharacter];
+    
+    // we need to move the bullet now! use physics
+    [self.physicsBody applyImpulse:CGVectorMake((target.position.x - self.position.x) * self.speed, (target.position.y - attacker.position.y) * self.speed)];
+}
+
 @end
