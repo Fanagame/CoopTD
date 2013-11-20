@@ -34,3 +34,4 @@ static const uint32_t kTDBulletEffect_Poison            = 0x1 << 2; // 4
 //#define kTDBeamBullet_SHOW_PHYSICS_BODY
 #define kTDUnit_ALWAYS_SHOW_HEALTH
 //#define kTDBuilding_ALWAYS_SHOW_HEALTH
+//#define kTDGameScene_SKIP_MAP_SELECTION

@@ -59,6 +59,9 @@
 		44FA5C88183088DB00AB979E /* btn_rect_yellow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FA5C82183088DB00AB979E /* btn_rect_yellow@2x.png */; };
 		44FA5C8A18308ED500AB979E /* tower_air_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FA5C8918308ED500AB979E /* tower_air_1.png */; };
 		44FE66991832AE55004300E0 /* TDFreezeBeamBullet.m in Sources */ = {isa = PBXBuildFile; fileRef = 44FE66981832AE55004300E0 /* TDFreezeBeamBullet.m */; };
+		7217BDA0183CABB6006AA2AD /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7217BD9F183CABB6006AA2AD /* GameKit.framework */; };
+		7217BDA2183CAC8E006AA2AD /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7217BDA1183CAC8E006AA2AD /* MultipeerConnectivity.framework */; };
+		7217BDA5183CB424006AA2AD /* TDMultiplayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7217BDA4183CB424006AA2AD /* TDMultiplayerManager.m */; };
 		7290766718321B2600166F93 /* TDBuildingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7290766618321B2600166F93 /* TDBuildingManager.m */; };
 		7290766A18321D2B00166F93 /* TDCalloutMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 7290766918321D2B00166F93 /* TDCalloutMenu.m */; };
 		72A6FEEF181A0EC200B74119 /* TDMapSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 72A6FEEE181A0EC200B74119 /* TDMapSelectorViewController.m */; };
@@ -173,6 +176,10 @@
 		44FA5C8918308ED500AB979E /* tower_air_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tower_air_1.png; path = Resources/images/tower_air_1.png; sourceTree = "<group>"; };
 		44FE66971832AE55004300E0 /* TDFreezeBeamBullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDFreezeBeamBullet.h; sourceTree = "<group>"; };
 		44FE66981832AE55004300E0 /* TDFreezeBeamBullet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDFreezeBeamBullet.m; sourceTree = "<group>"; };
+		7217BD9F183CABB6006AA2AD /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		7217BDA1183CAC8E006AA2AD /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
+		7217BDA3183CB424006AA2AD /* TDMultiplayerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDMultiplayerManager.h; sourceTree = "<group>"; };
+		7217BDA4183CB424006AA2AD /* TDMultiplayerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDMultiplayerManager.m; sourceTree = "<group>"; };
 		7290766518321B2600166F93 /* TDBuildingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBuildingManager.h; sourceTree = "<group>"; };
 		7290766618321B2600166F93 /* TDBuildingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBuildingManager.m; sourceTree = "<group>"; };
 		7290766818321D2B00166F93 /* TDCalloutMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDCalloutMenu.h; sourceTree = "<group>"; };
@@ -211,9 +218,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7217BDA2183CAC8E006AA2AD /* MultipeerConnectivity.framework in Frameworks */,
 				4406EFBB181253F900BA102D /* libz.dylib in Frameworks */,
 				72D99A761811038C00AB5B9D /* CoreGraphics.framework in Frameworks */,
 				72D99A781811038C00AB5B9D /* UIKit.framework in Frameworks */,
+				7217BDA0183CABB6006AA2AD /* GameKit.framework in Frameworks */,
 				72D99A7A1811038C00AB5B9D /* SpriteKit.framework in Frameworks */,
 				72D99A741811038C00AB5B9D /* Foundation.framework in Frameworks */,
 			);
@@ -554,6 +563,8 @@
 		72D99A721811038C00AB5B9D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7217BDA1183CAC8E006AA2AD /* MultipeerConnectivity.framework */,
+				7217BD9F183CABB6006AA2AD /* GameKit.framework */,
 				4406EFBA181253F900BA102D /* libz.dylib */,
 				72D99A731811038C00AB5B9D /* Foundation.framework */,
 				72D99A751811038C00AB5B9D /* CoreGraphics.framework */,
@@ -577,6 +588,8 @@
 				72D99A851811038C00AB5B9D /* TDAppDelegate.m */,
 				72D99A951811038C00AB5B9D /* Images.xcassets */,
 				72D99A7C1811038C00AB5B9D /* Supporting Files */,
+				7217BDA3183CB424006AA2AD /* TDMultiplayerManager.h */,
+				7217BDA4183CB424006AA2AD /* TDMultiplayerManager.m */,
 			);
 			path = CoopTD;
 			sourceTree = "<group>";
@@ -671,6 +684,11 @@
 				TargetAttributes = {
 					72D99A6F1811038B00AB5B9D = {
 						DevelopmentTeam = 84Z9446XM8;
+						SystemCapabilities = {
+							com.apple.GameCenter = {
+								enabled = 1;
+							};
+						};
 					};
 					72D99A9A1811038C00AB5B9D = {
 						TestTargetID = 72D99A6F1811038B00AB5B9D;
@@ -781,6 +799,7 @@
 				44FA5C6C183083E700AB979E /* TDHudButton.m in Sources */,
 				4406EFA71812477100BA102D /* TDAssetManager.m in Sources */,
 				44F547421814CEE2000459AB /* TDSpawnAI.m in Sources */,
+				7217BDA5183CB424006AA2AD /* TDMultiplayerManager.m in Sources */,
 				72D99A821811038C00AB5B9D /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -908,6 +927,7 @@
 		72D99AAD1811038C00AB5B9D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -925,6 +945,7 @@
 		72D99AAE1811038C00AB5B9D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";

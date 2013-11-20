@@ -8,6 +8,8 @@
 
 #import "TDMapSelectorViewController.h"
 #import "TDViewController.h"
+#import "TDConstants.h"
+#import "TDMultiplayerManager.h"
 
 #define kDefaultMapName @"sample"
 
@@ -54,11 +56,13 @@
 	self.title = @"Map list";
 	[[UIApplication sharedApplication] setStatusBarHidden:YES];
 	
-#if DEBUG
+#ifdef kTDGameScene_SKIP_MAP_SELECTION
 	[self performSegueWithIdentifier:@"loadMap" sender:nil];
 #else
 	[self loadMaps];
 #endif
+	
+	[self loadPicker];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -127,7 +131,7 @@
 	
 	NSString *mapName = nil;
 	if (path.row >= self.maps.count) {
-#if DEBUG
+#ifdef kTDGameScene_SKIP_MAP_SELECTION
 		mapName = kDefaultMapName;
 #else
 		return;
@@ -141,6 +145,17 @@
 		TDViewController *vc = segue.destinationViewController;
 		vc.mapFilename = mapName;
 	}
+}
+
+#pragma mark - Handle Peer connections
+
+- (void) loadPicker {
+	[[TDMultiplayerManager sharedManager] setPresentingViewController:self];
+	[[TDMultiplayerManager sharedManager] startLookingForPlayersWithSuccessBlock:^{
+		
+	} andFailureBlock:^{
+		
+	}];
 }
 
 @end
