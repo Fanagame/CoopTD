@@ -264,10 +264,14 @@ NSString * const kConstructingBuildingImageName = @"tower_unconstructed";
     TDBaseBullet *b = nil;
     
     switch (self.bulletType) {
-        case TDBulletType_Beam:
+        case TDBulletType_Beam: {
+#ifdef kTDBullet_BEAM_IS_FREEZERAY
             b = [[TDFreezeBeamBullet alloc] init];
+#else
+			b = [[TDBeamBullet alloc] init];
+#endif
             break;
-            
+		}
         default:
             b = [[TDProjectileBullet alloc] init];
             break;
