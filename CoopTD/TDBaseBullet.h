@@ -23,9 +23,7 @@ extern NSString * const kTDBulletDestroyedNotificationName;
 @property (nonatomic, assign) CGFloat baseSplash;
 @property (nonatomic, assign) CGFloat bonusSplash;
 
-@property (nonatomic, assign) uint32_t attackEffect; //TODO: review, should we really keep it like this?
-@property (nonatomic, assign) CGFloat  attackEffectPerSec;
-@property (nonatomic, assign) CFTimeInterval attackEffectDuration;
+@property (nonatomic, strong) NSMutableDictionary *buffs;
 
 @property (nonatomic, readonly) CGFloat attack;
 @property (nonatomic, readonly) CGFloat speed;
@@ -33,8 +31,11 @@ extern NSString * const kTDBulletDestroyedNotificationName;
 
 @property (nonatomic, assign) TDUnitType attackableUnitsType;
 
+@property (nonatomic, readonly) NSString *key;
+
 - (void) attackTarget:(TDMapObject *)target fromObject:(TDMapObject *)attacker;
 - (void) startAnimation;
+- (void) stopAnimation;
 - (void) destroy;
 
 @end

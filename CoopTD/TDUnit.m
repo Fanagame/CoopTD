@@ -17,14 +17,20 @@
 #import "TDBaseBullet.h"
 #import "TDBaseBuilding.h"
 #import "TDProgressBar.h"
+#import "TDBaseBuff.h"
+#import "TDTimelapseManager.h"
 
 static const CGFloat kUnitMovingSpeed = 0.3f;
 NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
+NSString * const kTDUnitMovingActionKey = @"unitMoveAction";
+NSString * const kTDUnitSlowDownActionKey = @"unitSlowDownAction";
 
 @interface TDUnit ()
 
 @property (nonatomic, strong) TDProgressBar *healthBar;
 @property (nonatomic, strong) NSPredicate *bulletFilter;
+
+@property (nonatomic, strong) SKSpriteNode *frictionNode;
 
 @end
 
@@ -70,6 +76,10 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
     self = [super initWithImageNamed:baseCacheKey];
     
     if (self) {
+        // init
+        self.currentBuffs = [[NSMutableDictionary alloc] init];
+        self.buffImmunities = [[NSMutableDictionary alloc] init];
+        
         // this should be made dynamic
         self.baseCacheKey = baseCacheKey;
         self.type = unitType;
@@ -79,7 +89,7 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
         self.softCurrencyEarningValue = 50;
         self.softCurrencyBuyingValue = 200;
         self.timeIntervalBetweenHits = 0;
-        self.statusEffectsImmunity = kTDBulletEffect_Fire | kTDBulletEffect_Poison;
+        [TDBaseBuff addImmunity:[[TDBaseBuff alloc] initFireBuff] toImmunityList:self.buffImmunities]; // immune to fire
         
         // setup intelligence
         self.intelligence = [[TDBaseUnitAI alloc] initWithCharacter:self andTarget:nil];
@@ -115,6 +125,7 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
     return self;
 }
 
+#warning TODO: find out where the retain cycle for TDUnit is
 - (void) dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
@@ -148,12 +159,12 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
         [self die];
 }
 
-- (void) increaseHealth:(NSUInteger)amount {
+- (void) increaseHealth:(CGFloat)amount {
     amount = MIN(amount, self.maxHealth - self.health);
     self.health += amount;
 }
 
-- (void) decreaseHealth:(NSUInteger)amount {
+- (void) decreaseHealth:(CGFloat)amount {
     amount = MIN(self.health, amount);
     self.health -= amount;
 }
@@ -175,7 +186,66 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
         [self hitByBullet:(TDBaseBullet *)body.node.parent];
     }
     
-    //TODO: take status effects into account here
+    // Update buffs status here
+    BOOL immunitiesChanged = [TDBaseBuff checkForExpiredBuffsInList:self.buffImmunities];
+    BOOL buffsChanged = [TDBaseBuff checkForExpiredBuffsInList:self.currentBuffs];
+    if (immunitiesChanged | buffsChanged) {
+        [self appliedBuffsDidChange];
+    }
+    
+    // Apply buffs effects
+    for (TDBaseBuff *buff in self.currentBuffs.allValues) {
+        
+        if (buff.type == TDBuffType_Poison) {
+            // remove HP for poison for example
+            [self decreaseHealth:[TDTimelapseManager convertPerSecondFloat:buff.effectPerSec toFrameWithInterval:interval]];
+        }
+    }
+}
+
+- (void) appliedBuffsDidChange {
+    self.color = [UIColor clearColor];
+    self.colorBlendFactor = 0;
+    
+    // Color the sprite, change speed, etc.
+    
+    // Freeze
+    if ([TDBaseBuff buffs:self.currentBuffs containsBuffOfType:TDBuffType_Freeze]) {
+        
+        TDBaseBuff *buff = [TDBaseBuff buffOfType:TDBuffType_Freeze inBuffs:self.currentBuffs];
+        
+        self.color = [UIColor blueColor];
+        self.colorBlendFactor = 0.5;
+        
+        // Cancel the previous slow down
+        if ([self actionForKey:kTDUnitSlowDownActionKey]) {
+            [self removeActionForKey:kTDUnitSlowDownActionKey];
+        }
+        
+        // Then make a new one!
+        [self runAction:[SKAction speedTo:buff.effectPerSec duration:buff.duration]];
+    } else {
+        [self removeActionForKey:kTDUnitSlowDownActionKey];
+        [self runAction:[SKAction speedTo:1.0 duration:0] withKey:kTDUnitSlowDownActionKey];
+    }
+    
+    
+    // Poison
+    if ([TDBaseBuff buffs:self.currentBuffs containsBuffOfType:TDBuffType_Poison]) {
+        self.color = [UIColor greenColor];
+        self.colorBlendFactor = 0.5;
+    } else {
+        // Any thing to reset?
+    }
+    
+    
+    // Fire
+    if ([TDBaseBuff buffs:self.currentBuffs containsBuffOfType:TDBuffType_Fire]) {
+        self.color = [UIColor redColor];
+        self.colorBlendFactor = 0.5;
+    } else {
+        // Anything to reset?
+    }
 }
 
 #pragma mark - Handle collisions 
@@ -220,29 +290,10 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
 }
 
 - (void) hitByBullet:(TDBaseBullet *)bullet {
-    [self decreaseHealth:bullet.attack];
-    [self updateStatusEffects:bullet];
-}
-
-/*
- * Attack : 0000 0011
- * Immune : 0000 0110
- * A&I    : 0000 0010
- * A^(A&I): 0000 0001 (XOR)
- */
-- (void) updateStatusEffects:(TDBaseBullet *)bullet {
-    uint32_t statusEffectsToApply = bullet.attackEffect ^ (bullet.attackEffect & self.statusEffectsImmunity);
+//    [self decreaseHealth:bullet.attack];
     
-//    NSLog(@"Attack %d", bullet.attackEffect); // 3 => Freeze + Fire
-//    NSLog(@"Immune %d", self.statusEffectsImmunity); // 6 => Fire + Poison
-//    NSLog(@"Applied %d", statusEffectsToApply); // 1 => Freeze
-    
-    uint32_t newStatusEffects = self.currentStatusEffects | statusEffectsToApply;
-    
-    if (newStatusEffects != self.currentStatusEffects) {
-        self.currentStatusEffects |= statusEffectsToApply;
-
-        // do something special?
+    if ([TDBaseBuff addBuffs:bullet.buffs toBuffList:self.currentBuffs withImmunities:self.buffImmunities]) {
+        [self appliedBuffsDidChange];
     }
 }
 
@@ -291,7 +342,8 @@ NSString * const kTDUnitDiedNotificationName = @"kUnitDiedNotificationName";
         [moveActions addObject:action];
     }
     
-    [self runAction:[SKAction sequence:moveActions] completion:onComplete];
+//    [self runAction:self.currentMoveAction completion:onComplete];
+    [self runAction:[SKAction sequence:moveActions] withKey:kTDUnitMovingActionKey];
 }
 
 - (void) followPath:(TDPath *)path {

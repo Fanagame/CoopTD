@@ -54,7 +54,7 @@ NSString * const kConstructingBuildingImageName = @"tower_unconstructed";
         self.timeIntervalBetweenShots = 0.2;
         self.timeToBuild = 0.7;
         self.attackableUnitType = attackableUnitsType;
-        self.bulletType = TDBulletType_Beam;
+        self.bulletType = (self.attackableUnitType == TDUnitType_Air ? TDBulletType_Beam : TDBulletType_Projectile);
         self.maxBulletsOnScreen = (self.bulletType != TDBulletType_Beam ? 3 : 1);
         self.range = (self.bulletType != TDBulletType_Beam ? 100.0f : 200.0f);
         
@@ -309,6 +309,7 @@ NSString * const kConstructingBuildingImageName = @"tower_unconstructed";
             
             // shoot
             TDBaseBullet *bullet = self.nextBullet;
+            [self.gameScene addNode:bullet atWorldLayer:TDWorldLayerAboveCharacter];
             [self.bullets addObject:bullet];
             [bullet attackTarget:target fromObject:self];
         }

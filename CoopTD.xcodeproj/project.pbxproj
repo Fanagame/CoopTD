@@ -21,6 +21,12 @@
 		4406EFD81813614D00BA102D /* TDSpawn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4406EFD71813614D00BA102D /* TDSpawn.m */; };
 		4406EFE31813621F00BA102D /* TDTMXObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4406EFE21813621F00BA102D /* TDTMXObject.m */; };
 		442967F21815937600BD20BA /* TDCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 442967F11815937600BD20BA /* TDCamera.m */; };
+		4438E2AE185D7C7800B04214 /* TDTimelapseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4438E2AD185D7C7800B04214 /* TDTimelapseManager.m */; };
+		4438E2B1185E5A8500B04214 /* TDSoundManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4438E2B0185E5A8500B04214 /* TDSoundManager.m */; };
+		4438E2B3185E5BCB00B04214 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4438E2B2185E5BCB00B04214 /* AVFoundation.framework */; };
+		4438E2B5185E5BD400B04214 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4438E2B4185E5BD400B04214 /* CoreAudio.framework */; };
+		4438E2B8185E5CF500B04214 /* preview.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4438E2B7185E5CF500B04214 /* preview.mp3 */; };
+		4438E2BA185E681800B04214 /* gunshot.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4438E2B9185E681800B04214 /* gunshot.mp3 */; };
 		444C6CF618309A420086769E /* tower_unconstructed.png in Resources */ = {isa = PBXBuildFile; fileRef = 444C6CF518309A420086769E /* tower_unconstructed.png */; };
 		44562FB218296F71004F1098 /* TDBaseBuildingAI.m in Sources */ = {isa = PBXBuildFile; fileRef = 44562FB118296F71004F1098 /* TDBaseBuildingAI.m */; };
 		4483FF0918276E1100FF4126 /* TDBaseBullet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4483FF0818276E1100FF4126 /* TDBaseBullet.m */; };
@@ -59,6 +65,7 @@
 		44FA5C88183088DB00AB979E /* btn_rect_yellow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FA5C82183088DB00AB979E /* btn_rect_yellow@2x.png */; };
 		44FA5C8A18308ED500AB979E /* tower_air_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 44FA5C8918308ED500AB979E /* tower_air_1.png */; };
 		44FE66991832AE55004300E0 /* TDFreezeBeamBullet.m in Sources */ = {isa = PBXBuildFile; fileRef = 44FE66981832AE55004300E0 /* TDFreezeBeamBullet.m */; };
+		44FE67371833F95D004300E0 /* TDBaseBuff.m in Sources */ = {isa = PBXBuildFile; fileRef = 44FE67361833F95D004300E0 /* TDBaseBuff.m */; };
 		7217BDA0183CABB6006AA2AD /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7217BD9F183CABB6006AA2AD /* GameKit.framework */; };
 		7217BDA2183CAC8E006AA2AD /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7217BDA1183CAC8E006AA2AD /* MultipeerConnectivity.framework */; };
 		7217BDA5183CB424006AA2AD /* TDMultiplayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7217BDA4183CB424006AA2AD /* TDMultiplayerManager.m */; };
@@ -118,6 +125,14 @@
 		4406EFE21813621F00BA102D /* TDTMXObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDTMXObject.m; sourceTree = "<group>"; };
 		442967F01815937600BD20BA /* TDCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDCamera.h; sourceTree = "<group>"; };
 		442967F11815937600BD20BA /* TDCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDCamera.m; sourceTree = "<group>"; };
+		4438E2AC185D7C7800B04214 /* TDTimelapseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDTimelapseManager.h; sourceTree = "<group>"; };
+		4438E2AD185D7C7800B04214 /* TDTimelapseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDTimelapseManager.m; sourceTree = "<group>"; };
+		4438E2AF185E5A8500B04214 /* TDSoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDSoundManager.h; sourceTree = "<group>"; };
+		4438E2B0185E5A8500B04214 /* TDSoundManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSoundManager.m; sourceTree = "<group>"; };
+		4438E2B2185E5BCB00B04214 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		4438E2B4185E5BD400B04214 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		4438E2B7185E5CF500B04214 /* preview.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = preview.mp3; path = Resources/Music/preview.mp3; sourceTree = "<group>"; };
+		4438E2B9185E681800B04214 /* gunshot.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = gunshot.mp3; path = Resources/Sounds/Bullets/gunshot.mp3; sourceTree = "<group>"; };
 		444C6CF518309A420086769E /* tower_unconstructed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tower_unconstructed.png; path = Resources/images/tower_unconstructed.png; sourceTree = "<group>"; };
 		44562FB018296F71004F1098 /* TDBaseBuildingAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBaseBuildingAI.h; sourceTree = "<group>"; };
 		44562FB118296F71004F1098 /* TDBaseBuildingAI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBaseBuildingAI.m; sourceTree = "<group>"; };
@@ -176,6 +191,8 @@
 		44FA5C8918308ED500AB979E /* tower_air_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tower_air_1.png; path = Resources/images/tower_air_1.png; sourceTree = "<group>"; };
 		44FE66971832AE55004300E0 /* TDFreezeBeamBullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDFreezeBeamBullet.h; sourceTree = "<group>"; };
 		44FE66981832AE55004300E0 /* TDFreezeBeamBullet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDFreezeBeamBullet.m; sourceTree = "<group>"; };
+		44FE67351833F95D004300E0 /* TDBaseBuff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBaseBuff.h; sourceTree = "<group>"; };
+		44FE67361833F95D004300E0 /* TDBaseBuff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBaseBuff.m; sourceTree = "<group>"; };
 		7217BD9F183CABB6006AA2AD /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		7217BDA1183CAC8E006AA2AD /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
 		7217BDA3183CB424006AA2AD /* TDMultiplayerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDMultiplayerManager.h; sourceTree = "<group>"; };
@@ -218,6 +235,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4438E2B5185E5BD400B04214 /* CoreAudio.framework in Frameworks */,
+				4438E2B3185E5BCB00B04214 /* AVFoundation.framework in Frameworks */,
 				7217BDA2183CAC8E006AA2AD /* MultipeerConnectivity.framework in Frameworks */,
 				4406EFBB181253F900BA102D /* libz.dylib in Frameworks */,
 				72D99A761811038C00AB5B9D /* CoreGraphics.framework in Frameworks */,
@@ -266,6 +285,7 @@
 		4406EF9B1812428600BA102D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4438E2B6185E5CAC00B04214 /* Music */,
 				44FA5C37182F1A7300AB979E /* Sounds */,
 				4406EFCA18125E5200BA102D /* Tilesets */,
 				4406EFBC181257F000BA102D /* Maps */,
@@ -287,22 +307,16 @@
 		4406EF9D1812429D00BA102D /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				44A434D31826A9310094A374 /* TDConstants.h */,
-				44F5A06B1831589200E9C615 /* TDEnums.h */,
 				4406EFD91813617400BA102D /* Abstract */,
 				44F547371814C466000459AB /* AI */,
 				72B8AC5A1824BE260071D0AE /* Buildings */,
 				4483FF0A18276E1500FF4126 /* Bullets */,
-				4483FF0E18280DC700FF4126 /* Components */,
+				44FE67341833F945004300E0 /* Buffs */,
 				44F547361814C44E000459AB /* Enemies */,
 				44F5473E1814C542000459AB /* Objects from TMX files */,
 				44A434CC1825F0950094A374 /* Player */,
 				44F5472F1814B941000459AB /* TDTiledMap.h */,
 				44F547301814B941000459AB /* TDTiledMap.m */,
-				442967F01815937600BD20BA /* TDCamera.h */,
-				442967F11815937600BD20BA /* TDCamera.m */,
-				44862B56181DD01700DE9C1E /* TDPathFinder.h */,
-				44862B57181DD01700DE9C1E /* TDPathFinder.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -331,8 +345,6 @@
 				4406EFA3181242E100BA102D /* PathFinder.m */,
 				4406EFA51812477100BA102D /* TDAssetManager.h */,
 				4406EFA61812477100BA102D /* TDAssetManager.m */,
-				44FA5C6A183083E700AB979E /* TDHudButton.h */,
-				44FA5C6B183083E700AB979E /* TDHudButton.m */,
 			);
 			name = Homemade;
 			sourceTree = "<group>";
@@ -381,6 +393,40 @@
 				44F547391814C486000459AB /* TDArtificialIntelligence.m */,
 			);
 			name = Abstract;
+			sourceTree = "<group>";
+		};
+		4438E2AA185D7BA400B04214 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				44F547321814BD0D000459AB /* Caches */,
+				442967F01815937600BD20BA /* TDCamera.h */,
+				442967F11815937600BD20BA /* TDCamera.m */,
+				44862B56181DD01700DE9C1E /* TDPathFinder.h */,
+				44862B57181DD01700DE9C1E /* TDPathFinder.m */,
+				4438E2AC185D7C7800B04214 /* TDTimelapseManager.h */,
+				4438E2AD185D7C7800B04214 /* TDTimelapseManager.m */,
+				4438E2AF185E5A8500B04214 /* TDSoundManager.h */,
+				4438E2B0185E5A8500B04214 /* TDSoundManager.m */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
+		4438E2AB185D7BD700B04214 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				4483FF0E18280DC700FF4126 /* Components */,
+				44FA5C6A183083E700AB979E /* TDHudButton.h */,
+				44FA5C6B183083E700AB979E /* TDHudButton.m */,
+			);
+			name = UI;
+			sourceTree = "<group>";
+		};
+		4438E2B6185E5CAC00B04214 /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				4438E2B7185E5CF500B04214 /* preview.mp3 */,
+			);
+			name = Music;
 			sourceTree = "<group>";
 		};
 		4483FF0A18276E1500FF4126 /* Bullets */ = {
@@ -478,6 +524,7 @@
 		44FA5C38182F1A7700AB979E /* Bullets */ = {
 			isa = PBXGroup;
 			children = (
+				4438E2B9185E681800B04214 /* gunshot.mp3 */,
 				44FA5C39182F1A8600AB979E /* bullets_laser_pulse.mp3 */,
 			);
 			name = Bullets;
@@ -513,6 +560,15 @@
 				44FA5C82183088DB00AB979E /* btn_rect_yellow@2x.png */,
 			);
 			name = "rectangle buttons";
+			sourceTree = "<group>";
+		};
+		44FE67341833F945004300E0 /* Buffs */ = {
+			isa = PBXGroup;
+			children = (
+				44FE67351833F95D004300E0 /* TDBaseBuff.h */,
+				44FE67361833F95D004300E0 /* TDBaseBuff.m */,
+			);
+			name = Buffs;
 			sourceTree = "<group>";
 		};
 		72B8AC511824B71D0071D0AE /* circle buttons */ = {
@@ -563,6 +619,8 @@
 		72D99A721811038C00AB5B9D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4438E2B4185E5BD400B04214 /* CoreAudio.framework */,
+				4438E2B2185E5BCB00B04214 /* AVFoundation.framework */,
 				7217BDA1183CAC8E006AA2AD /* MultipeerConnectivity.framework */,
 				7217BD9F183CABB6006AA2AD /* GameKit.framework */,
 				4406EFBA181253F900BA102D /* libz.dylib */,
@@ -578,10 +636,13 @@
 		72D99A7B1811038C00AB5B9D /* CoopTD */ = {
 			isa = PBXGroup;
 			children = (
-				44F547321814BD0D000459AB /* Caches */,
+				44A434D31826A9310094A374 /* TDConstants.h */,
+				44F5A06B1831589200E9C615 /* TDEnums.h */,
+				4438E2AA185D7BA400B04214 /* Utils */,
 				4406EF9E181242A400BA102D /* Libraries */,
 				4406EF9D1812429D00BA102D /* Model */,
 				4406EF9B1812428600BA102D /* Resources */,
+				4438E2AB185D7BD700B04214 /* UI */,
 				4406EF9A1812427400BA102D /* Scenes */,
 				4406EF991812426200BA102D /* Root */,
 				72D99A841811038C00AB5B9D /* TDAppDelegate.h */,
@@ -724,6 +785,7 @@
 				72A6FEF1181A112C00B74119 /* TileMap.tmx in Resources */,
 				444C6CF618309A420086769E /* tower_unconstructed.png in Resources */,
 				44FA5C3A182F1A8600AB979E /* bullets_laser_pulse.mp3 in Resources */,
+				4438E2BA185E681800B04214 /* gunshot.mp3 in Resources */,
 				72D99A961811038C00AB5B9D /* Images.xcassets in Resources */,
 				4406EFBE181257FE00BA102D /* Demo.tmx in Resources */,
 				44FA5C8A18308ED500AB979E /* tower_air_1.png in Resources */,
@@ -748,6 +810,7 @@
 				44FA5C7A183088D200AB979E /* btn_circle_orange@2x.png in Resources */,
 				44FA5C4818306EEA00AB979E /* tower_ground_1.png in Resources */,
 				44FA5C7C183088D200AB979E /* btn_circle_red@2x.png in Resources */,
+				4438E2B8185E5CF500B04214 /* preview.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -767,6 +830,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4406EFD81813614D00BA102D /* TDSpawn.m in Sources */,
+				4438E2AE185D7C7800B04214 /* TDTimelapseManager.m in Sources */,
 				72D99A8F1811038C00AB5B9D /* TDViewController.m in Sources */,
 				44F547351814BD20000459AB /* TDMapCache.m in Sources */,
 				44F5473D1814C4D8000459AB /* TDMapObject.m in Sources */,
@@ -786,6 +850,7 @@
 				4406EFB51812513900BA102D /* JSTileMap.m in Sources */,
 				4406EFD3181271F900BA102D /* TDUnit.m in Sources */,
 				4483FF0918276E1100FF4126 /* TDBaseBullet.m in Sources */,
+				4438E2B1185E5A8500B04214 /* TDSoundManager.m in Sources */,
 				44F547311814B941000459AB /* TDTiledMap.m in Sources */,
 				44FE66991832AE55004300E0 /* TDFreezeBeamBullet.m in Sources */,
 				44F5470E181370AA000459AB /* TDUltimateGoal.m in Sources */,
@@ -793,6 +858,7 @@
 				72A6FEEF181A0EC200B74119 /* TDMapSelectorViewController.m in Sources */,
 				4406EFA4181242E100BA102D /* PathFinder.m in Sources */,
 				4483FF0D18276E3300FF4126 /* TDProjectileBullet.m in Sources */,
+				44FE67371833F95D004300E0 /* TDBaseBuff.m in Sources */,
 				44A434CF1825F0A20094A374 /* TDPlayer.m in Sources */,
 				7290766A18321D2B00166F93 /* TDCalloutMenu.m in Sources */,
 				4406EFB8181253D200BA102D /* LFCGzipUtility.m in Sources */,

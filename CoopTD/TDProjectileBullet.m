@@ -8,15 +8,19 @@
 
 #import "TDProjectileBullet.h"
 #import "TDConstants.h"
+#import "TDSoundManager.h"
 
 @implementation TDProjectileBullet
 
 - (id) init {
-    self = [super initWithColor:[UIColor purpleColor] size:CGSizeMake(16, 16)];
+    self = [super init];
     
     if (self) {
+        self.size = CGSizeMake(16, 16);
+        self.color = [UIColor purpleColor];
+        
         self.baseAttack = 20;
-        self.baseSpeed = 2;
+        self.baseSpeed = 1;
         self.baseSplash = 0;
         
         self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:self.size];
@@ -32,12 +36,19 @@
 }
 
 - (void) attackTarget:(TDMapObject *)target fromObject:(TDMapObject *)attacker {
+    [self startAnimation];
     
     self.position = attacker.position;
-    [self.gameScene addNode:self atWorldLayer:TDWorldLayerAboveCharacter];
     
     // we need to move the bullet now! use physics
     [self.physicsBody applyImpulse:CGVectorMake((target.position.x - self.position.x) * self.speed, (target.position.y - attacker.position.y) * self.speed)];
+}
+
+- (void) startAnimation {
+    [[TDSoundManager sharedManager] playSoundNamed:@"gunshot" withLoop:NO andKey:self.key];
+}
+
+- (void) stopAnimation {
 }
 
 @end

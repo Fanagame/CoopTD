@@ -19,6 +19,7 @@
 #import "TDPlayer.h"
 #import "TDConstants.h"
 #import "TDBuildingManager.h"
+#import "TDSoundManager.h"
 
 @interface TDNewGameScene () {
     CGSize _cachedMapSizeForCamera;
@@ -94,6 +95,8 @@
 
 - (void)didMoveToView:(SKView *)view {
     [self buildHUD];
+    
+    [self startMusic];
     
     UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     panRecognizer.minimumNumberOfTouches = 1;
@@ -196,6 +199,10 @@
     _hud = [[TDHudNode alloc] init];
     [self addChild:_hud];
     [_hud didMoveToScene];
+}
+
+- (void) startMusic {
+    [[TDSoundManager sharedManager] playBackgroundMusicNamed:@"preview"];
 }
 
 #pragma mark - TDCameraDelegate
@@ -582,6 +589,8 @@
 }
 
 + (void)releaseSceneAssetsForMapName:(NSString *)mapName {
+    [[TDSoundManager sharedManager] stopBackgroundMusic];
+    [[TDSoundManager sharedManager] stopAllSounds];
 	[[TDMapCache sharedCache] invalidateCacheForMapNamed:mapName];
 }
 

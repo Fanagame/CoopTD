@@ -44,6 +44,13 @@ typedef enum : uint8_t {
 } TDBulletType;
 
 typedef enum : uint8_t {
+    TDBuffType_Freeze,
+    TDBuffType_Poison,
+    TDBuffType_Fire,
+    TDBuffType_Heal
+} TDBuffType;
+
+typedef enum : uint8_t {
     TDUnitPathFindingStatus_Standy,
     TDUnitPathFindingStatus_CalculatingPath,
     TDUnitPathFindingStatus_Moving

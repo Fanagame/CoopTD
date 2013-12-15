@@ -20,9 +20,12 @@
 @implementation TDBeamBullet
 
 - (id) init {
-    self = [super initWithColor:[UIColor redColor] size:CGSizeMake(0, 4)];
+    self = [super init];
     
     if (self) {
+        self.color = [UIColor redColor];
+        self.size = CGSizeMake(0, 4);
+        
         self.baseAttack = 1; // dmg/sec
         self.baseSpeed = 0; // infinite speed?
         self.baseSplash = 0;

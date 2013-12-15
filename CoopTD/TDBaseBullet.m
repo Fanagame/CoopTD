@@ -13,6 +13,16 @@ NSString * const kTDBulletDestroyedNotificationName = @"kTDBulletDestroyedNotifi
 
 @implementation TDBaseBullet
 
+- (id) init {
+    self = [super init];
+    
+    if (self) {
+        self.buffs = [[NSMutableDictionary alloc] init];
+    }
+    
+    return self;
+}
+
 - (CGFloat) attack {
     return self.baseAttack + self.bonusAttack;
 }
@@ -45,17 +55,26 @@ NSString * const kTDBulletDestroyedNotificationName = @"kTDBulletDestroyedNotifi
     
 }
 
+- (void) stopAnimation {
+    
+}
+
 - (void) destroy {
     // cancel all actions
     [self removeAllActions];
     
     // run some kind of animation maybe?
+    [self stopAnimation];
     
     // then disappear
     [self removeFromParent];
     
     // tell the world about it!
     [[NSNotificationCenter defaultCenter] postNotificationName:kTDBulletDestroyedNotificationName object:self];
+}
+
+- (NSString *) key {
+    return [NSString stringWithFormat:@"%p", self];
 }
 
 #pragma mark - Handle collisions

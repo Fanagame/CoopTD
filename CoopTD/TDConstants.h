@@ -16,6 +16,7 @@ static const uint32_t kPhysicsCategory_Building         = 0x1 << 4; // 16
 static const uint32_t kPhysicsCategory_BuildingRange    = 0x1 << 5; // 32
 static const uint32_t kPhysicsCategory_Bullet           = 0x1 << 6; // 64
 static const uint32_t kPhysicsCategory_UltimateGoal     = 0x1 << 7; // 128
+static const uint32_t kPhysicsCategory_UnitFriction     = 0x1 << 8; // 256
 
 static const uint32_t kTDBulletEffect_Freeze            = 0x1 << 0; // 1
 static const uint32_t kTDBulletEffect_Fire              = 0x1 << 1; // 2
@@ -34,4 +35,4 @@ static const uint32_t kTDBulletEffect_Poison            = 0x1 << 2; // 4
 //#define kTDBeamBullet_SHOW_PHYSICS_BODY
 #define kTDUnit_ALWAYS_SHOW_HEALTH
 //#define kTDBuilding_ALWAYS_SHOW_HEALTH
-//#define kTDGameScene_SKIP_MAP_SELECTION
+#define kTDGameScene_SKIP_MAP_SELECTION

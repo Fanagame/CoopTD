@@ -150,12 +150,12 @@
 #pragma mark - Handle Peer connections
 
 - (void) loadPicker {
-	[[TDMultiplayerManager sharedManager] setPresentingViewController:self];
-	[[TDMultiplayerManager sharedManager] startLookingForPlayersWithSuccessBlock:^{
-		
-	} andFailureBlock:^{
-		
-	}];
+//	[[TDMultiplayerManager sharedManager] setPresentingViewController:self];
+//	[[TDMultiplayerManager sharedManager] startLookingForPlayersWithSuccessBlock:^{
+//		
+//	} andFailureBlock:^{
+//		
+//	}];
 }
 
 @end

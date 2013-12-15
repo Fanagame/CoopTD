@@ -25,14 +25,14 @@ extern NSString * const kTDUnitDiedNotificationName;
 @property (nonatomic, assign) NSUInteger maxHealth;
 @property (nonatomic, assign) NSInteger softCurrencyEarningValue;
 @property (nonatomic, assign) NSInteger softCurrencyBuyingValue;
-@property (nonatomic, assign) uint32_t statusEffectsImmunity;
+@property (nonatomic, strong) NSMutableDictionary *buffImmunities;
 
 // properties to make the game work
 @property (nonatomic, strong) NSDate* lastHitDate;
 @property (nonatomic, assign) TDUnitPathFindingStatus pathFindingStatus;
 @property (nonatomic, strong) TDPath *path;
 @property (nonatomic, weak)   TDPlayer *player;
-@property (nonatomic, assign) uint32_t currentStatusEffects;
+@property (nonatomic, strong) NSMutableDictionary *currentBuffs;
 
 + (uint32_t) physicsCategoryForUnitType:(TDUnitType)unitType;
 + (uint32_t) physicsCategoryForUnitWithType:(TDUnitType)unitType;
