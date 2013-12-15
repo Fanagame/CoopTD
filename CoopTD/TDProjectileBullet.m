@@ -41,7 +41,7 @@
     self.position = attacker.position;
     
     // we need to move the bullet now! use physics
-    [self.physicsBody applyImpulse:CGVectorMake((target.position.x - self.position.x) * self.speed, (target.position.y - attacker.position.y) * self.speed)];
+//    [self.physicsBody applyImpulse:CGVectorMake((target.position.x - self.position.x) * self.speed, (target.position.y - attacker.position.y) * self.speed)];
 }
 
 - (void) startAnimation {

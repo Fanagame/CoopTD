@@ -68,7 +68,6 @@
 		44FE67371833F95D004300E0 /* TDBaseBuff.m in Sources */ = {isa = PBXBuildFile; fileRef = 44FE67361833F95D004300E0 /* TDBaseBuff.m */; };
 		7217BDA0183CABB6006AA2AD /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7217BD9F183CABB6006AA2AD /* GameKit.framework */; };
 		7217BDA2183CAC8E006AA2AD /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7217BDA1183CAC8E006AA2AD /* MultipeerConnectivity.framework */; };
-		7217BDA5183CB424006AA2AD /* TDMultiplayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7217BDA4183CB424006AA2AD /* TDMultiplayerManager.m */; };
 		7290766718321B2600166F93 /* TDBuildingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7290766618321B2600166F93 /* TDBuildingManager.m */; };
 		7290766A18321D2B00166F93 /* TDCalloutMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 7290766918321D2B00166F93 /* TDCalloutMenu.m */; };
 		72A6FEEF181A0EC200B74119 /* TDMapSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 72A6FEEE181A0EC200B74119 /* TDMapSelectorViewController.m */; };
@@ -195,8 +194,6 @@
 		44FE67361833F95D004300E0 /* TDBaseBuff.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBaseBuff.m; sourceTree = "<group>"; };
 		7217BD9F183CABB6006AA2AD /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		7217BDA1183CAC8E006AA2AD /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
-		7217BDA3183CB424006AA2AD /* TDMultiplayerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDMultiplayerManager.h; sourceTree = "<group>"; };
-		7217BDA4183CB424006AA2AD /* TDMultiplayerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDMultiplayerManager.m; sourceTree = "<group>"; };
 		7290766518321B2600166F93 /* TDBuildingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBuildingManager.h; sourceTree = "<group>"; };
 		7290766618321B2600166F93 /* TDBuildingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBuildingManager.m; sourceTree = "<group>"; };
 		7290766818321D2B00166F93 /* TDCalloutMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDCalloutMenu.h; sourceTree = "<group>"; };
@@ -649,8 +646,6 @@
 				72D99A851811038C00AB5B9D /* TDAppDelegate.m */,
 				72D99A951811038C00AB5B9D /* Images.xcassets */,
 				72D99A7C1811038C00AB5B9D /* Supporting Files */,
-				7217BDA3183CB424006AA2AD /* TDMultiplayerManager.h */,
-				7217BDA4183CB424006AA2AD /* TDMultiplayerManager.m */,
 			);
 			path = CoopTD;
 			sourceTree = "<group>";
@@ -865,7 +860,6 @@
 				44FA5C6C183083E700AB979E /* TDHudButton.m in Sources */,
 				4406EFA71812477100BA102D /* TDAssetManager.m in Sources */,
 				44F547421814CEE2000459AB /* TDSpawnAI.m in Sources */,
-				7217BDA5183CB424006AA2AD /* TDMultiplayerManager.m in Sources */,
 				72D99A821811038C00AB5B9D /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

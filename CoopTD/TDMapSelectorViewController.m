@@ -9,7 +9,6 @@
 #import "TDMapSelectorViewController.h"
 #import "TDViewController.h"
 #import "TDConstants.h"
-#import "TDMultiplayerManager.h"
 
 #define kDefaultMapName @"sample"
 
@@ -150,12 +149,7 @@
 #pragma mark - Handle Peer connections
 
 - (void) loadPicker {
-//	[[TDMultiplayerManager sharedManager] setPresentingViewController:self];
-//	[[TDMultiplayerManager sharedManager] startLookingForPlayersWithSuccessBlock:^{
-//		
-//	} andFailureBlock:^{
-//		
-//	}];
+
 }
 
 @end
